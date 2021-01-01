@@ -84,6 +84,7 @@ instantiate.univariate.forecast.training = function(){
 #' and a observation date column (named 'date'), while outputting a data frame with a date column and
 #' one column per forecast method selected.
 #'
+#' @param Data            data.frame: data frame of variable to forecast and a date column
 #' @param forecast.dates  date: dates forecasts are created
 #' @param methods         string or vector: models to estimate forecasts with; currently supports all and only functions from the `forecast` package
 #' @param periods         int: number of periods to forecast
@@ -96,6 +97,7 @@ instantiate.univariate.forecast.training = function(){
 #' @export
 
 forecast_univariate = function(
+  Data,                   # data.frame: data frame of variable to forecast and a date column
   forecast.dates,         # date: dates forecasts are created
   methods,                # string or vector: models to estimate forecasts with; currently supports all and only functions from the `forecast` package
   periods,                # int: number of periods to forecast

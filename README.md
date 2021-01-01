@@ -12,7 +12,7 @@ However, this paradigm is meant to provide a structured approach to out-of-sampl
 a common, important, and subtle task. This package further provides a modern and comprehensive set of forecast 
 combination tools and forecast comparison metrics. 
 
-## Workflow and Available Tools
+## Workflow and available Tools
 ### 1. Forecasting models 
 Univariate 
 1. Random Walk 
@@ -59,9 +59,22 @@ Forecast Comparison Methods
 2. Diebold-Mariano Test (for unnested models)
 3. Clark and West Test (for nested models)
 
-## Machine learning accessibility
+## Model estimation flexibility and accessibility
 
-Users may edit the ML training routines through accessing a list of caret arguments including: tuning grid, control grid, method, and accuracy metric. A brief example using the random forest to combine forecasts is shown:   
+Users may edit any model training routines through accessing a list of function arguments. For machine learning techniques, this entails editing [caret](https://github.com/topepo/caret) arguments including: tuning grid, control grid, method, and accuracy metric. For univariate time series forecasting, this entails passing arguments to [forecast](https://github.com/robjhyndman/forecast) package model functions. 
+
+A brief example using an `Arima` model to forecast univariate time series:   
+
+	# 1. create the central list of univariate model training arguments, univariate.forecast.training  
+	univariate.forecast.training = instantiate.univariate.forecast.training()  
+
+	# 2. select an item to edit, for example the Arima order to create an ARMA(1,1)   
+		# view default model arguments (there are none)  
+		univariate.forecast.training$arguments[['Arima']] 
+		# add our own function arguments  
+		univariate.forecast.training$arguments[['Arima']]$order = c(1,0,1) 
+
+A brief example using the `Random Forest` to combine forecasts:   
 
 	# 1. create the central list of ML training arguments, forecast.combinations.ml.training  
 	forecast.combinations.ml.training = instantiate.forecast.combinations.ml.training()  
@@ -71,29 +84,100 @@ Users may edit the ML training routines through accessing a list of caret argume
 		forecast.combinations.ml.training$tune.grid[['RF']]  
 		# edit tuning grid   
 		forecast.combinations.ml.training$tune.grid[['RF']] <- expand.grid(mtry = c(1:6))  
-	
+
+## Basic usage example
+
+	#----------------------------------------
+	### Univariate example
+	#----------------------------------------
+	# set data
+	quantmod::getSymbols.FRED('UNRATE', env = globalenv())
+	Data = data.frame(UNRATE, date = zoo::index(UNRATE))
+
+	# run univariate forecasts 
+	forecast.unemployment = 
+		forecast_univariate(
+			Data = Data,
+			forecast.dates = tail(Data$date,5),  
+			rolling.window = NA,                 
+			freq = 'month',                      
+			method = c('auto.arima', 'ets'),      
+			periods = 1,                         
+			recursive = FALSE)
+
+	# flatten point estimates into a matrix
+	forecasts = forecast_flatten(forecast.unemployment)
+
+	# add in observed values
+	forecasts = dplyr::left_join(forecasts, Data, by = 'date') %>%
+	dplyr::rename(observed = UNRATE)
+
+	# forecast combinations 
+	combinations = 
+	forecast_combine(
+		forecasts, 
+		method = c('uniform','median','trimmed.mean',
+					'n.best','lasso','peLasso','RF'), 
+		burn.in = 4, 
+		n.max = 3)
+
+	# forecast comparison measured with MSE ratio
+	mse_ratio = 
+		forecast_comparison(
+		baseline.forecast = forecasts$naive,
+		alternative.forecast = combinations$uniform,
+		observed = forecasts$observed)
+
+	#----------------------------------------
+	### Multivariate example
+	#----------------------------------------
+	# set data
+	quantmod::getSymbols.FRED(c('UNRATE','INDPRO','GS10'), env = globalenv())
+	Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
+	Data = 
+		data.frame(Data, date = zoo::index(Data)) %>%
+		dplyr::filter(lubridate::year(date) >= 1990)
+
+	# create forecasts
+	forecast.indpro = 
+	forecast_multivariate(
+		Data = Data,           
+		forecast.date = tail(Data$date),
+		target = 'INDPRO',
+		method = c('ols','lasso','ridge','elastic','GBM'),        
+		rolling.window = NA,    
+		freq = 'month',                    
+		horizon = 1            
+	)
+
+	# add in observed values
+	forecasts.indpro = 
+		dplyr::left_join(forecast.indpro, Data[,c('date','INDPRO')], by = 'date') %>%
+		dplyr::rename(observed = INDPRO)
+
+	# forecast combinations 
+	combinations.indpro = 
+	forecast_combine(
+		forecasts, 
+		method = c('uniform','median','trimmed.mean',
+				'n.best','lasso','peLasso','RF'), 
+		burn.in = 4, 
+		n.max = 2)
+
+	# forecast comparison with Diebold-Mariano test
+	DM_test = 
+		forecast_comparison(
+		baseline.forecast = forecasts$naive,
+		alternative.forecast = combinations$uniform,
+		observed = forecasts$observed,
+		method = 'DM',
+		horizon = 1)
+
+
+
 ---
 
-## Function List
-1. forecast_univariate
-2. forecast_multivariate
-3. forecast_flatten
-4. forecast_combine
-5. forecast_accuracy
-6. forecast_comparison
-
-## Notes
-univariate forecasting models 
-1. STL models require seasonal ts objects
-2. nnetar models do not estimate a standard error
-
 ## To-do
-proper package
-1. Create a vingette
-2. Proper documentation
-3. Proper warnings and errors
-
-Second stage  
 1. Add a basic genetic algorithm for forecast combinations  
 2. Upgrade ML functionality   
 	1. deep NN via Keras  
@@ -101,7 +185,7 @@ Second stage
 	3. univariate ts model error correction via NN  
 3. Add dimension reduction routines (pca, pls, dfm)  
 4. Add basic plotting functionality
-5. Demonstrate create a new function for each piece of the framework
+5. Demonstrate how to create user-define forecasting methods
 6. Multivariate automatic lag selection
 7. Multivariate joint estimation via trees and NN
-8. convert to tidymodels framework where possible
+8. Convert to tidymodels framework where possible  (maybe)

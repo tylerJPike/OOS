@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_univariate.R
 \name{instantiate.univariate.forecast.training}
 \alias{instantiate.univariate.forecast.training}
-\title{instantiate.univariate.forecast.training}
+\title{Instantiate univariate.forecast.training}
 \usage{
 instantiate.univariate.forecast.training()
 }

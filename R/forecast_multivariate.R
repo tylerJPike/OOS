@@ -9,12 +9,13 @@
 #----------------------------------------------
 # multivariate forecasting arguments - ML
 #----------------------------------------------
-#' instantiate.multivariate.forecast.ml.training
+#' Instantiate multivariate.forecast.ml.training
 #'
 #' A function to create the multivariate forecast methods
 #' arguments list for user manipulation.
 #'
 #' @return multivariate.forecast.ml.training
+#'
 #' @export
 
 instantiate.multivariate.forecast.ml.training = function(){
@@ -89,7 +90,7 @@ instantiate.multivariate.forecast.ml.training = function(){
 #----------------------------------------------
 # multivariate forecasting arguments - VAR
 #----------------------------------------------
-#' instantiate.multivariate.forecast.var.training
+#' Instantiate multivariate.forecast.var.training
 #'
 #' A function to create the multivariate forecast methods
 #' arguments list for user manipulation.
@@ -116,7 +117,7 @@ instantiate.multivariate.forecast.var.training = function(){
 #---------------------------------------------
 # Multivariate Forecast
 #---------------------------------------------
-#' forecast_multivariate
+#' Forecast with multivariate models
 #'
 #' A function to estimate multivariate forecasts out-of-sample. Methods available include:
 #' vector auto-regression, linear regression, lasso regression, ridge regression, elastic net,
@@ -126,7 +127,7 @@ instantiate.multivariate.forecast.var.training = function(){
 #'
 #' @param Data             data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
 #' @param forecast.dates   date: dates forecasts are created
-#' @param target           string: column name in `Data` of variable to forecast
+#' @param target           string: column name in Data of variable to forecast
 #' @param method           string or vector: methods to use; 'var', 'ols', 'ridge', 'lasso', 'elastic', 'RF', 'GBM', 'NN'
 #' @param rolling.window   int: size of rolling window, NA if expanding window is used
 #' @param freq             string: time series frequency; day, week, month, quarter, year
@@ -134,7 +135,7 @@ instantiate.multivariate.forecast.var.training = function(){
 #'
 #' @return  data.frame with a date column and one column per forecast method selected
 #'
-#' @eport
+#' @export
 
 forecast_multivariate = function(
   Data,                 # data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
@@ -151,18 +152,18 @@ forecast_multivariate = function(
 
   # training parameter creation and warnings
   if(exists("multivariate.forecast.ml.training")){
-    print(warningCondition('forecast.combinations.ml.training exists and will be used for ML forecast combination techniques in its present state.'))
+    print(warningCondition('forecast.combinations.ml.training exists and will be used for ML model estimation in its present state.'))
   }else{
     multivariate.forecast.ml.training = instantiate.multivariate.forecast.ml.training()
-    print(warningCondition('multivariate.forecast.ml.training was instantiated and default values will be used to train ML forecast combination techniques.'))
+    print(warningCondition('multivariate.forecast.ml.training was instantiated and default values will be used for ML model estimation.'))
   }
 
   # VAR parameters and warnings
   if(exists("multivariate.forecast.var.training")){
-    print(warningCondition('forecast.combinations.var.training exists and will be used for ML forecast combination techniques in its present state.'))
+    print(warningCondition('forecast.combinations.var.training exists and will be used for VAR model estimation in its present state.'))
   }else{
     multivariate.forecast.var.training = instantiate.multivariate.forecast.var.training()
-    print(warningCondition('multivariate.forecast.var.training was instantiated and default values will be used to train ML forecast combination techniques.'))
+    print(warningCondition('multivariate.forecast.var.training was instantiated and default values will be used for VAR model estimation.'))
   }
 
   # Create forecasts

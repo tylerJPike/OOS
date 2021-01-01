@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_combinations.R
 \name{forecast_combine}
 \alias{forecast_combine}
-\title{forecast_combine}
+\title{Combine forecasts}
 \usage{
 forecast_combine(
   forecasts,
@@ -13,6 +13,22 @@ forecast_combine(
   burn.in = 1
 )
 }
+\arguments{
+\item{forecasts}{data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods}
+
+\item{method}{string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'}
+
+\item{n.max}{int: maximum number of forecasts to select}
+
+\item{window}{int: size of rolling window to evaluate forecast error over, use entire period if NA}
+
+\item{trim}{numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)}
+
+\item{burn.in}{int: the number of periods to use in the first model estimation}
+}
+\value{
+data.frame with a date column and one column per forecast method selected
+}
 \description{
 A function to combine forecasts out-of-sample. Methods available include:
 uniform weights, median forecast, trimmed (winsorized) mean, n-best,
@@ -21,16 +37,4 @@ random forest, tree-based gradient boosting machine, and single-layer neural net
 The function will take in a data frame of forecasts, observed values (named 'observed', when the method requires it),
 and the observation date (i.e. the foretasted date, named 'date'), while outputting a data frame
 with a date column and one column per combination method selected.
-}
-\details{
-@param forecasts   data.frame: data frame of forecasted values to combine, assumes \code{date} and \code{observed} columns, but `observed' is not necessary for all methods
-@param method      string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'
-@param n.max       int: maximum number of forecasts to select
-@param window      int: size of rolling window to evaluate forecast error over, use entire period if NA
-@param trim        numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)
-@param burn.in     int: the number of periods to use in the first model estimation
-
-@return  data.frame with a date column and one column per forecast method selected
-
-@export
 }

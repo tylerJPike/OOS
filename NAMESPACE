@@ -2,8 +2,10 @@
 
 export(NBest)
 export(forecast_accuracy)
+export(forecast_combine)
 export(forecast_comparison)
 export(forecast_flatten)
+export(forecast_multivariate)
 export(forecast_univariate)
 export(instantiate.forecast.combinations.ml.training)
 export(instantiate.multivariate.forecast.ml.training)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_multivariate.R
 \name{instantiate.multivariate.forecast.ml.training}
 \alias{instantiate.multivariate.forecast.ml.training}
-\title{instantiate.multivariate.forecast.ml.training}
+\title{Instantiate multivariate.forecast.ml.training}
 \usage{
 instantiate.multivariate.forecast.ml.training()
 }

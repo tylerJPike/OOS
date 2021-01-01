@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_metrics.R
 \name{forecast_accuracy}
 \alias{forecast_accuracy}
-\title{forecast_accuracy}
+\title{Forecast accuracy}
 \usage{
 forecast_accuracy(forecast, observed, metric = "MSE")
 }

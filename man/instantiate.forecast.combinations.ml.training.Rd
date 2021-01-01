@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_combinations.R
 \name{instantiate.forecast.combinations.ml.training}
 \alias{instantiate.forecast.combinations.ml.training}
-\title{instantiate.forecast.combinations.ml.training}
+\title{Instantiate forecast.combinations.ml.training}
 \usage{
 instantiate.forecast.combinations.ml.training()
 }

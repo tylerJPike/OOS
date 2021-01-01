@@ -10,7 +10,7 @@
 #----------------------------------------------
 # univariate forecasting arguments
 #----------------------------------------------
-#' instantiate.univariate.forecast.training
+#' Instantiate univariate.forecast.training
 #'
 #' A function to create the univariate forecast method arguments list
 #' for user manipulation.
@@ -77,7 +77,7 @@ instantiate.univariate.forecast.training = function(){
 #----------------------------------------------
 # univariate time series forecasting function
 #----------------------------------------------
-#' forecast_univariate
+#' Forecast with univariate models
 #'
 #' A function to estimate univariate forecasts out-of-sample. Methods available include all forecast
 #' methods from the `forecast` package. The function will take in a data frame of the target variable,
@@ -86,7 +86,7 @@ instantiate.univariate.forecast.training = function(){
 #'
 #' @param Data            data.frame: data frame of variable to forecast and a date column
 #' @param forecast.dates  date: dates forecasts are created
-#' @param methods         string or vector: models to estimate forecasts with; currently supports all and only functions from the `forecast` package
+#' @param methods         string or vector: models to estimate forecasts
 #' @param periods         int: number of periods to forecast
 #' @param rolling.window  int: size of rolling window, NA if expanding window is used
 #' @param freq            string: time series frequency; day, week, month, quarter, year
@@ -111,7 +111,7 @@ forecast_univariate = function(
     print(warningCondition('univariate.forecast.training exists and will be used for model estimation in its present state.'))
   }else{
     univariate.forecast.training = instantiate.univariate.forecast.training()
-    print(warningCondition('univariate.forecast.training was instantiated and default values will be used to model estimation.'))
+    print(warningCondition('univariate.forecast.training was instantiated and default values will be used for model estimation.'))
   }
 
   # forecast routine
@@ -158,62 +158,64 @@ forecast_univariate = function(
             methods %>% purrr::map(
               .f = function(engine){
 
-              # make predictions
-              # 1. using direct projections
-              if(recursive == FALSE){
+                # make predictions
+                # 1. using direct projections
+                if(recursive == FALSE){
 
-                # set data
-                univariate.forecast.training$arguments[[engine]]$y = information.set
-
-                # estimate model
-                model =  do.call(what = univariate.forecast.training$method[[engine]],
-                                 args = univariate.forecast.training$arguments[[engine]])
-
-                # create forecasts
-                predictions = forecast::forecast(model, h = periods)
-
-                # set results
-                if(is.null(predictions$lower)){predictions$lower = predictions$upper = t(c(NA,NA))} # nnetar does not create se by default
-                predictions = data.frame(predictions$mean, predictions$lower, predictions$upper)
-                names(predictions) = c( 'forecast','lower.80','lower.95', 'upper.80', 'upper.95')
-
-              # 2. using recursive forecasts
-              }else{
-
-                predictions = list()
-                univariate.forecast.training$arguments[[engine]]$y = information.set
-
-                for(i in 1:periods){
+                  # set data
+                  univariate.forecast.training$arguments[[engine]]$y = information.set
 
                   # estimate model
                   model =  do.call(what = univariate.forecast.training$method[[engine]],
                                    args = univariate.forecast.training$arguments[[engine]])
 
-                  # create forecast
-                  prediction = forecast::forecast(model, h = 1)
-                  if(is.null(prediction$lower)){prediction$lower = prediction$upper = t(c(NA,NA))} # nnetar does not create se by default
-                  predictions[[i]] = data.frame(forecast = prediction$mean, prediction$lower, prediction$upper)
+                  # create forecasts
+                  predictions = forecast::forecast(model, h = periods)
 
-                  # update information set
-                  information.set = rbind(information.set, prediction$mean[1]) %>% as.ts()
+                  # set results
+                  if(is.null(predictions$lower)){predictions$lower = predictions$upper = t(c(NA,NA))} # nnetar does not create se by default
+                  predictions = data.frame(predictions$mean, predictions$lower, predictions$upper)
+                  names(predictions) = c( 'forecast','lower.80','lower.95', 'upper.80', 'upper.95')
+
+                # 2. using recursive forecasts
+                }else{
+
+                  predictions = list()
                   univariate.forecast.training$arguments[[engine]]$y = information.set
+
+                  for(i in 1:periods){
+
+                    # estimate model
+                    model =  do.call(what = univariate.forecast.training$method[[engine]],
+                                     args = univariate.forecast.training$arguments[[engine]])
+
+                    # create forecast
+                    prediction = forecast::forecast(model, h = 1)
+                    if(is.null(prediction$lower)){prediction$lower = prediction$upper = t(c(NA,NA))} # nnetar does not create se by default
+                    predictions[[i]] = data.frame(forecast = prediction$mean, prediction$lower, prediction$upper)
+
+                    # update information set
+                    information.set = rbind(information.set, prediction$mean[1]) %>% as.ts()
+                    univariate.forecast.training$arguments[[engine]]$y = information.set
+
+                  }
+
+                  # collapse results
+                  predictions = purrr::reduce(predictions, dplyr::bind_rows) %>% data.frame()
+                  names(predictions) = c( 'forecast','lower.80','lower.95', 'upper.80', 'upper.95')
 
                 }
 
-                # collapse results
-                predictions = purrr::reduce(predictions, dplyr::bind_rows) %>% data.frame()
-                names(predictions) = c( 'forecast','lower.80','lower.95', 'upper.80', 'upper.95')
+                # add forecast dates
+                predictions$forecast.date = forecast.date
+                predictions$date = seq.Date(from = forecast.date, by = freq, length.out = periods+1)[2:(periods+1)]
 
+                # return results
+                return(predictions)
               }
-
-              # add forecast dates
-              predictions$forecast.date = forecast.date
-              predictions$date = seq.Date(from = forecast.date, by = freq, length.out = periods+1)[2:(periods+1)]
-
-              # return results
-              return(predictions)
-            }
           )
+
+        names(results) = methods
 
         #---------------------------
         # Estimate forecasting model

@@ -98,35 +98,36 @@ A brief example using the `Random Forest` to combine forecasts:
 	forecast.unemployment = 
 		forecast_univariate(
 			Data = Data,
-			forecast.dates = tail(Data$date,5),  
+			forecast.dates = tail(Data$date,15),  
 			rolling.window = NA,                 
 			freq = 'month',                      
-			method = c('auto.arima', 'ets'),      
+			method = c('naive','auto.arima', 'ets'),      
 			periods = 1,                         
 			recursive = FALSE)
 
 	# flatten point estimates into a matrix
-	forecasts = forecast_flatten(forecast.unemployment)
+	forecast.unemployment = forecast_flatten(forecast.unemployment)
 
 	# add in observed values
-	forecasts = dplyr::left_join(forecasts, Data, by = 'date') %>%
-	dplyr::rename(observed = UNRATE)
+	forecast.unemployment = 
+		dplyr::left_join(forecast.unemployment, Data, by = 'date') %>%
+		dplyr::rename(observed = UNRATE)
 
 	# forecast combinations 
-	combinations = 
-	forecast_combine(
-		forecasts, 
-		method = c('uniform','median','trimmed.mean',
+	combinations.urate = 
+		forecast_combine(
+			forecast.unemployment, 
+			method = c('uniform','median','trimmed.mean',
 					'n.best','lasso','peLasso','RF'), 
-		burn.in = 4, 
-		n.max = 3)
+			burn.in = 10, 
+			n.max = 3)
 
 	# forecast comparison measured with MSE ratio
 	mse_ratio = 
 		forecast_comparison(
-		baseline.forecast = forecasts$naive,
-		alternative.forecast = combinations$uniform,
-		observed = forecasts$observed)
+			baseline.forecast = forecasts$naive,
+			alternative.forecast = combinations.urate$uniform,
+			observed = forecast.unemployment$observed)
 
 	#----------------------------------------
 	### Multivariate example
@@ -134,21 +135,20 @@ A brief example using the `Random Forest` to combine forecasts:
 	# set data
 	quantmod::getSymbols.FRED(c('UNRATE','INDPRO','GS10'), env = globalenv())
 	Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
-	Data = 
-		data.frame(Data, date = zoo::index(Data)) %>%
+	Data = data.frame(Data, date = zoo::index(Data)) %>%
 		dplyr::filter(lubridate::year(date) >= 1990)
 
 	# create forecasts
 	forecast.indpro = 
-	forecast_multivariate(
-		Data = Data,           
-		forecast.date = tail(Data$date),
-		target = 'INDPRO',
-		method = c('ols','lasso','ridge','elastic','GBM'),        
-		rolling.window = NA,    
-		freq = 'month',                    
-		horizon = 1            
-	)
+		forecast_multivariate(
+			Data = Data,           
+			forecast.date = tail(Data$date),
+			target = 'INDPRO',
+			method = c('ols','lasso','ridge','elastic','GBM'),        
+			rolling.window = NA,    
+			freq = 'month',                    
+			horizon = 1            
+		)
 
 	# add in observed values
 	forecasts.indpro = 
@@ -157,35 +157,37 @@ A brief example using the `Random Forest` to combine forecasts:
 
 	# forecast combinations 
 	combinations.indpro = 
-	forecast_combine(
-		forecasts, 
-		method = c('uniform','median','trimmed.mean',
-				'n.best','lasso','peLasso','RF'), 
-		burn.in = 4, 
-		n.max = 2)
+		forecast_combine(
+			forecasts, 
+			method = c('uniform','median','trimmed.mean',
+					'n.best','lasso','peLasso','RF'), 
+			burn.in = 4, 
+			n.max = 2)
 
 	# forecast comparison with Diebold-Mariano test
 	DM_test = 
 		forecast_comparison(
-		baseline.forecast = forecasts$naive,
-		alternative.forecast = combinations$uniform,
-		observed = forecasts$observed,
-		method = 'DM',
-		horizon = 1)
+			baseline.forecast = forecasts.indpro$ols,
+			alternative.forecast = combinations.indpro$uniform,
+			observed = forecasts.indpro$observed,
+			test = 'DM',
+			horizon = 1)
 
 
 
 ---
 
-## To-do
+## Future Extensions
 1. Add a basic genetic algorithm for forecast combinations  
 2. Upgrade ML functionality   
 	1. deep NN via Keras  
 	2. xgboost, grf, quantile trees, ect.  
-	3. univariate ts model error correction via NN  
-3. Add dimension reduction routines (pca, pls, dfm)  
+	3. univariate ts model error correction via NN 
+3. Expand multivariate functionality
+	1. Add dimension reduction routines (pca, pls, dfm)  
+	2. Multivariate automatic lag selection
+	3. Multivariate joint estimation via trees and NN
+	4. Create standard errors
 4. Add basic plotting functionality
 5. Demonstrate how to create user-define forecasting methods
-6. Multivariate automatic lag selection
-7. Multivariate joint estimation via trees and NN
-8. Convert to tidymodels framework where possible  (maybe)
+6. Convert to tidymodels framework where possible  (maybe)

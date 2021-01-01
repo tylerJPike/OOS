@@ -2,16 +2,11 @@ Package: OOS
 Title: Out-Of-Sample Time Series Forecasting Workbench
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = Tyler,
-           family = Pike,
+    person(given = "Tyler",
+           family = "Pike",
            role = c("aut", "cre"),
            email = "tjpike7@gmail.com")
-Description: 
-In many ways, this package is merely a wrapper for the excellent exant time series forecasting routines on 
-CRAN -- including both traditional econometric time series models and modern machine learning techniques. 
-However, this paradigm is meant to provide a structured approach to out-of-sample time series  forecasting, 
-a common, important, and subtle task. This package further provides a modern and comprehensive set of forecast 
-combination tools and forecast comparison metrics. 
+Description: In many ways, this package is merely a wrapper for the excellent exant time series forecasting routines on CRAN -- including both traditional econometric time series models and modern machine learning techniques.  However, this paradigm is meant to provide a structured approach to out-of-sample time series  forecasting, a common, important, and subtle task. This package further provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

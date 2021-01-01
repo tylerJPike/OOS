@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_combinations.R
 \name{NBest}
 \alias{NBest}
-\title{NBest}
+\title{Select N-best forecasts}
 \usage{
 NBest(forecasts, n.max, window = NA)
 }

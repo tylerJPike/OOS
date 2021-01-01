@@ -7,7 +7,7 @@
 #-------------------------------------------
 # forecast accuracy
 #-------------------------------------------
-#' forecast_accuracy
+#' Forecast accuracy
 #'
 #' A function to calculate various error loss functions. Options include:
 #' MSE, RMSE, MAE, and  MAPE. The default is MSE loss.
@@ -43,7 +43,7 @@ forecast_accuracy = function(
 #-------------------------------------------
 # forecast comparison
 #-------------------------------------------
-#' forecast_comparison
+#' Compare forecasts
 #'
 #' A function to compare two forecasts. Options include: simple forecast error ratios,
 #' Diebold-Mariano test, and Clark and West test for nested models
@@ -74,7 +74,7 @@ forecast_comparison = function(
     DM.statistic =
       forecast::dm.test(
         e1 = na.omit(baseline.forecast - observed),
-        e2 = na.omit(alternative.forecast = observed),
+        e2 = na.omit(alternative.forecast - observed),
         alternative = 'less')$statistic[1]
 
     return(DM.statistic)

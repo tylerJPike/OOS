@@ -2,9 +2,10 @@
 % Please edit documentation in R/forecast_univariate.R
 \name{forecast_univariate}
 \alias{forecast_univariate}
-\title{forecast_univariate}
+\title{Forecast with univariate models}
 \usage{
 forecast_univariate(
+  Data,
   forecast.dates,
   methods,
   periods,
@@ -14,9 +15,11 @@ forecast_univariate(
 )
 }
 \arguments{
+\item{Data}{data.frame: data frame of variable to forecast and a date column}
+
 \item{forecast.dates}{date: dates forecasts are created}
 
-\item{methods}{string or vector: models to estimate forecasts with; currently supports all and only functions from the \code{forecast} package}
+\item{methods}{string or vector: models to estimate forecasts}
 
 \item{periods}{int: number of periods to forecast}
 

@@ -2,10 +2,7 @@
 % Please edit documentation in R/forecast_formatting.R
 \name{forecast_flatten}
 \alias{forecast_flatten}
-\title{forecast_flatten
-A function to extract point estimates for each model at each date in a list output
-from forecast_univariate and converts them into a matrix for forecast combination routines
-or accuracy calculations}
+\title{Convert a forecast list to forecast data.frame}
 \usage{
 forecast_flatten(forecasts)
 }
@@ -16,7 +13,6 @@ forecast_flatten(forecasts)
 data.frame of forecast point estiamtes
 }
 \description{
-forecast_flatten
 A function to extract point estimates for each model at each date in a list output
 from forecast_univariate and converts them into a matrix for forecast combination routines
 or accuracy calculations

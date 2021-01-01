@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_multivariate.R
 \name{forecast_multivariate}
 \alias{forecast_multivariate}
-\title{forecast_multivariate}
+\title{Forecast with multivariate models}
 \usage{
 forecast_multivariate(
   Data,
@@ -19,7 +19,7 @@ forecast_multivariate(
 
 \item{forecast.dates}{date: dates forecasts are created}
 
-\item{target}{string: column name in \code{Data} of variable to forecast}
+\item{target}{string: column name in Data of variable to forecast}
 
 \item{method}{string or vector: methods to use; 'var', 'ols', 'ridge', 'lasso', 'elastic', 'RF', 'GBM', 'NN'}
 

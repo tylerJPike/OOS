@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_combinations.R
 \name{winsorize}
 \alias{winsorize}
-\title{winsorize}
+\title{Winsorize}
 \usage{
 winsorize(X, bounds)
 }

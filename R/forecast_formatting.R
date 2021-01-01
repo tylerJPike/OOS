@@ -1,4 +1,5 @@
-#' forecast_flatten
+#' Convert a forecast list to forecast data.frame
+#' 
 #' A function to extract point estimates for each model at each date in a list output
 #' from forecast_univariate and converts them into a matrix for forecast combination routines
 #' or accuracy calculations

@@ -8,7 +8,7 @@
 #---------------------------------------------
 # Forecast combination helper functions
 #---------------------------------------------
-#' NBest
+#' Select N-best forecasts
 #'
 #' A function to subset the n-best forecasts;
 #' assumes column named observed.
@@ -18,6 +18,7 @@
 #' @param window    int: size of rolling window to evaluate forecast error over, use entire period if NA
 #'
 #' @return data.frame with n columns of the historically best forecasts
+#'
 #' @export
 
 NBest = function(
@@ -46,7 +47,7 @@ NBest = function(
   return(nBest)
 }
 
-#' winsorize
+#' Winsorize
 #'
 #' A function to winsorize the cross-section of forecasts
 #'
@@ -67,7 +68,7 @@ winsorize = function(X, bounds){
 #---------------------------------------------
 # Forecast combination method arguments
 #----------------------------------------------
-#' instantiate.forecast.combinations.ml.training
+#' Instantiate forecast.combinations.ml.training
 #'
 #' A function to create the forecast combination technique arguments list
 #' for user manipulation.
@@ -115,7 +116,7 @@ instantiate.forecast.combinations.ml.training = function(){
       alpha = 1,
       lambda = 10^seq(-3, 3, length = 100)),
 
-    elastic = NULL,
+    elastic = NULL
   )
 
   # hyperparameter selection routine
@@ -144,7 +145,7 @@ instantiate.forecast.combinations.ml.training = function(){
 #---------------------------------------------
 # Forecast combination methods
 #---------------------------------------------
-#' forecast_combine
+#' Combine forecasts
 #'
 #' A function to combine forecasts out-of-sample. Methods available include:
 #' uniform weights, median forecast, trimmed (winsorized) mean, n-best,
@@ -154,16 +155,16 @@ instantiate.forecast.combinations.ml.training = function(){
 #' and the observation date (i.e. the foretasted date, named 'date'), while outputting a data frame
 #' with a date column and one column per combination method selected.
 #'
-#'  @param forecasts   data.frame: data frame of forecasted values to combine, assumes `date` and `observed` columns, but `observed' is not necessary for all methods
-#'  @param method      string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'
-#'  @param n.max       int: maximum number of forecasts to select
-#'  @param window      int: size of rolling window to evaluate forecast error over, use entire period if NA
-#'  @param trim        numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)
-#'  @param burn.in     int: the number of periods to use in the first model estimation
+#' @param forecasts   data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods
+#' @param method      string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'
+#' @param n.max       int: maximum number of forecasts to select
+#' @param window      int: size of rolling window to evaluate forecast error over, use entire period if NA
+#' @param trim        numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)
+#' @param burn.in     int: the number of periods to use in the first model estimation
 #'
-#'  @return  data.frame with a date column and one column per forecast method selected
+#' @return  data.frame with a date column and one column per forecast method selected
 #'
-#'  @export
+#' @export
 
 # assumes a column named observed
 forecast_combine = function(
@@ -218,40 +219,41 @@ forecast_combine = function(
   }
 
   # peLASSO
-  if(method == 'peLasso'){
+  if('peLasso' %in% method){
+    combination =
+      forecasts$date[burn.in : nrow(forecasts)] %>%
+      purrr::map(
+        .f = function(forecast.date){
 
-    forecasts$date[burn.in : nrow(forecasts)] %>%
-    purrr::map(
-      .f = function(forecast.date){
+          # set data
+          information.set = dplyr::filter(forecasts, forecast.date > date)
+          current.forecasts = dplyr::filter(forecasts, forecast.date == date)
 
-        # set data
-        information.set = dplyr::filter(forecasts, forecast.date > date)
-        current.forecasts = dplyr::filter(forecasts, forecast.date == date)
+          # calculate peLasso method
+          # stage 1, shrink to 0,
+          # y-f -> eLasso to select subset of regressors
+          x = as.matrix(dplyr::select(information.set , -observed, -date))
+          y = information.set$observed - rowMeans(x)
+          model = glmnet::cv.glmnet(x, y, alpha = 1, intercept = F, parallel = T)
+          covariates = colnames(x)[which(as.vector(coef(model, s = 'lambda.min')) != 0)-1]
 
-        # calculate peLasso method
-        # stage 1, shrink to 0,
-        # y-f -> eLasso to select subset of regressors
-        x = as.matrix(dplyr::select(information.set , -observed, -date))
-        y = information.set$observed - rowMeans(x)
-        model = glmnet::cv.glmnet(x, y, alpha = 1, intercept = F, parallel = T)
-        covariates = colnames(x)[which(as.vector(coef(model, s = 'lambda.min')) != 0)-1]
+          # stage 2, shrink to 1/k,
+          # y-f -> eRidge to shrink subset of regressors to uniform weights
+          if(length(covariates) > 1){
+            model = glmnet::cv.glmnet(x[,covariates], y, alpha = 0, intercept = F)
+          }else{
+            covariates = colnames(x)
+          }
 
-        # stage 2, shrink to 1/k,
-        # y-f -> eRidge to shrink subset of regressors to uniform weights
-        if(length(covariates) > 1){
-          model = glmnet::cv.glmnet(x[,covariates], y, alpha = 0, intercept = F)
-        }else{
-          covariates = colnames(x)
+          # calculate forecast
+          peLasso = predict(model, newx = as.matrix(current.forecasts[,covariates]), s = 'lambda.min') + rowMeans(dplyr::select(current.forecasts , -observed, -date))
+          results = data.frame(date = current.forecasts$date, peLasso)
+          colnames(results)[colnames(results) == 'X1'] = 'peLasso'
+          return(results)
+
         }
-
-        # calculate forecast
-        peLasso = predict(model, newx = as.matrix(current.forecasts[,covariates]), s = 'lambda.min') + rowMeans(dplyr::select(current.forecasts , -observed, -date))
-        results = data.frame(date = current.forecasts$date, peLasso)
-        return(results)
-
-      }
-    ) %>%
-    purrr::reduce(dplyr::bind_rows)
+      ) %>%
+      purrr::reduce(dplyr::bind_rows)
 
     results.list[['peLasso']] = combination
   }

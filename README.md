@@ -6,10 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
-In many ways, this package is merely a wrapper for the excellent exant time series forecasting routines on 
-CRAN -- including both traditional econometric time series models and modern machine learning techniques. 
-However, this paradigm is meant to provide a structured approach to out-of-sample time series  forecasting, 
-a common, important, and subtle task. This package further provides a modern and comprehensive set of forecast 
+This package creates a paradigm to provide a structured and automatd approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent exant time series forecasting routines on CRAN -- including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast 
 combination tools and forecast comparison metrics. 
 
 ## Workflow and available Tools
@@ -61,7 +58,7 @@ Forecast Comparison Methods
 
 ## Model estimation flexibility and accessibility
 
-Users may edit any model training routines through accessing a list of function arguments. For machine learning techniques, this entails editing [caret](https://github.com/topepo/caret) arguments including: tuning grid, control grid, method, and accuracy metric. For univariate time series forecasting, this entails passing arguments to [forecast](https://github.com/robjhyndman/forecast) package model functions. 
+Users may edit any model training routine through accessing a list of function arguments. For machine learning techniques, this entails editing [caret](https://github.com/topepo/caret) arguments including: tuning grid, control grid, method, and accuracy metric. For univariate time series forecasting, this entails passing arguments to [forecast](https://github.com/robjhyndman/forecast) package model functions. 
 
 A brief example using an `Arima` model to forecast univariate time series:   
 

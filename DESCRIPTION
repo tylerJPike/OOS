@@ -6,7 +6,7 @@ Authors@R:
            family = "Pike",
            role = c("aut", "cre"),
            email = "tjpike7@gmail.com")
-Description: In many ways, this package is merely a wrapper for the excellent exant time series forecasting routines on CRAN -- including both traditional econometric time series models and modern machine learning techniques.  However, this paradigm is meant to provide a structured approach to out-of-sample time series  forecasting, a common, important, and subtle task. This package further provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics. 
+Description: This package creates a paradigm to provide a structured and automatd approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent exant time series forecasting routines on CRAN -- including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

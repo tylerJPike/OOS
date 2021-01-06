@@ -10,6 +10,11 @@ This package creates a paradigm to provide a structured and automatd approach to
 combination tools and forecast comparison metrics. 
 
 ## Workflow and available Tools
+
+### 0. Dimension Reduction
+1. Principal Components
+2. Partial Least Square Scores
+
 ### 1. Forecasting models 
 Univariate 
 1. Random Walk 
@@ -137,6 +142,16 @@ A brief example using the `Random Forest` to combine forecasts:
 	Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
 	Data = data.frame(Data, date = zoo::index(Data)) %>%
 		dplyr::filter(lubridate::year(date) >= 1990)
+	
+	# create OOS principal components
+	Data.factors =
+		dimension_reduction(
+			Data = Data,
+			forecast.date = tail(Data$date),
+			target = 'INDPRO',
+			method = 'pc',
+			ncomp = 2
+		)
 
 	# create forecasts
 	forecast.indpro = 

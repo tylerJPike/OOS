@@ -28,7 +28,9 @@ instantiate.multivariate.forecast.ml.training = function(){
     elastic = 'glmnet',
     RF = 'rf',
     GBM = 'gbm',
-    NN = 'avNNet'
+    NN = 'avNNet',
+    pls = 'pls',
+    pcr = 'pcr'
   )
 
   # tuning grids
@@ -61,7 +63,16 @@ instantiate.multivariate.forecast.ml.training = function(){
       expand.grid(
         size = seq(2,10,1),
         decay = c(.01,.001),
-        bag = c(100, 250, 500))
+        bag = c(100, 250, 500)),
+
+    pls =
+      expand.grid(
+        ncomp = c(1:5)),
+
+    pcr =
+      expand.grid(
+        ncomp = c(1:5))
+
   )
 
   # hyperparameter selection routine
@@ -232,7 +243,7 @@ forecast_multivariate = function(
               }else{
                 model =
                   vars::VAR(
-                    y       = Data,
+                    y       =  Data,
                     p       =  multivariate.forecast.var.training$p,
                     max.lag =  multivariate.forecast.var.training$max.lag,
                     ic      =  multivariate.forecast.var.training$ic,

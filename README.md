@@ -15,10 +15,11 @@ Univariate
 1. Random Walk 
 2. ARIMA
 3. ETS  
-4. Theta Method
-5. TBATS
-6. STL           
-7. AR Perceptron 
+4. Spline
+5. Theta Method
+6. TBATS
+7. STL           
+8. AR Perceptron 
 
 Multivariate  
 1. Vector Autoregression (VAR)  
@@ -26,9 +27,11 @@ Multivariate
 3. LASSO Regression  
 4. Ridge Regression  
 5. Elastic Net   
-6. Random Forest
-7. Tree-Based Gradient Boosting Machine 
-8. Single Layered Neural Network  
+6. Principal Component Regression  
+7. Partial Least Squares Regression  
+8. Random Forest
+9. Tree-Based Gradient Boosting Machine 
+10. Single Layered Neural Network  
 
 ### 2. Forecast combination techniques
 1. Mean

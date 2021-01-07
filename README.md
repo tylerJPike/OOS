@@ -116,12 +116,27 @@ A brief example using the `Random Forest` to combine forecasts:
 	forecast.unemployment = 
 		forecast_univariate(
 			Data = Data,
-			forecast.dates = tail(Data$date,15),  
-			rolling.window = NA,                 
-			freq = 'month',                      
+			forecast.dates = tail(Data$date,15), 
 			method = c('naive','auto.arima', 'ets'),      
 			periods = 1,                         
-			recursive = FALSE)
+			recursive = FALSE,
+
+			# information set       
+			rolling.window = NA,    
+			freq = 'month',                   
+			
+			# outlier cleaning
+			outlier.clean = TRUE,
+			outlier.variables = NULL,
+			outlier.bounds = c(0.05, 0.95),
+			outlier.trim = FALSE,
+			outlier.cross_section = FALSE,
+			
+			# impute missing
+			impute.missing = TRUE,
+			impute.method = 'kalman',
+			impute.variables = NULL,
+			impute.verbose = FALSE) 
 
 	# flatten point estimates into a matrix
 	forecast.unemployment = forecast_flatten(forecast.unemployment)

@@ -143,7 +143,7 @@ instantiate.multivariate.forecast.var.training = function(){
 #' @param rolling.window   int: size of rolling window, NA if expanding window is used
 #' @param freq             string: time series frequency; day, week, month, quarter, year
 #' @param horizon          int: number of periods into the future to forecast
-#' @param  outlier.clean   boolean: if TRUE then clean outliers
+#' @param outlier.clean         boolean: if TRUE then clean outliers
 #' @param outlier.variables     string: vector of variables to standardize, default is all but 'date' column
 #' @param outlier.bounds        double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
 #' @param outlier.trim          boolean: if TRUE then replace outliers with NA instead of winsorizing bound

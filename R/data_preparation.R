@@ -26,10 +26,10 @@ winsorize = function(X, bounds, replacement = TRUE){
     qq = quantile(X, probs = bounds, na.rm = TRUE)
 
     if(replacement == TRUE){
-      X[X <= qq[2]] = qq[1]
+      X[X <= qq[1]] = qq[1]
       X[X >= qq[2]] = qq[2]
     }else{
-      X[X <= qq[2]] = NA
+      X[X <= qq[1]] = NA
       X[X >= qq[2]] = NA
     }
 
@@ -104,29 +104,33 @@ data_subset = function(
 #' @export
 data_outliers = function(
   Data,                           # data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
-  variables,                      # string: vector of variables to standardize, default is all but 'date' column
+  variables = NULL,               # string: vector of variables to standardize, default is all but 'date' column
   w.bounds = c(0.05, 0.95),       # double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
   trim = FALSE,                   # boolean: if TRUE then replace outliers with NA instead of winsorizing bound
   cross_section = FALSE           # boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)
 ){
 
+
+  # set variables to all if default
+  if(is.null(variables) == TRUE){
+    variables = names(dplyr::select(Data, is.numeric))
+  }
+
   # target variables must be numeric
-  if(setdiff(variables, names(dplyr::select_if(Data, is.numeric))) != 0){
+  if(length(setdiff(variables, names(dplyr::select_if(Data, is.numeric)))) != 0){
     print(errorCondition('Variables cleaned for outliers must be numeric.'))
   }
 
   # clean outliers (column wise)
   if(cross_section == FALSE){
     Data = Data %>%
-      dplyr::mutate_at(vars(variables), winsorize, bounds = w.bounds, replacement = trim) %>%
-      filter(date == cleaning.date)
+      dplyr::mutate_at(dplyr::vars(variables), winsorize, bounds = w.bounds, replacement = trim)
 
   # clean outliers (row wise)
   }else{
     Data = Data %>%
       dplyr::rowwise() %>%
-      dplyr::mutate_at(vars(variables), winsorize, bounds = w.bounds, replacement = trim) %>%
-      filter(date == cleaning.date)
+      dplyr::mutate_at(dplyr::vars(variables), winsorize, bounds = w.bounds, replacement = trim)
   }
 
   # return results
@@ -146,18 +150,19 @@ data_outliers = function(
 #'
 #' @export
 instantiate.impute.missing.routine = function(){
+
   # methods
   methods = list(
-    interpolation = imputeTS::na_interpolation,
+    interpolation = 'imputeTS::na_interpolation',
     kalman = imputeTS::na_kalman,
-    locf = imputeTS::na_locf,
-    ma = imputeTS::na_ma,
-    mean = imputeTS::na_mean,
-    random = imputeTS::na_random,
-    remove = imputeTS:na_remove,
-    replace = imputeTS::na_replace,
-    seadec = imputeTS::na_seadec,
-    seasplit = imputeTS::na_seasplit
+    locf = 'imputeTS::na_locf',
+    ma = 'imputeTS::na_ma',
+    mean = 'imputeTS::na_mean',
+    random = 'imputeTS::na_random',
+    remove = 'imputeTS:na_remove',
+    replace = 'imputeTS::na_replace',
+    seadec = 'imputeTS::na_seadec',
+    seasplit = 'imputeTS::na_seasplit'
   )
 
   # arguments
@@ -195,36 +200,42 @@ instantiate.impute.missing.routine = function(){
 #' @return  data.frame with missing data imputed
 #'
 #' @export
-data_standarize = function(
+data_impute = function(
   Data,                           # data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
   method = 'kalman',              # string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
-  variables = NA                  # string: vector of variables to impute missing values, default is all numeric columns
+  variables = NULL,               # string: vector of variables to impute missing values, default is all numeric columns
+  verbose = FALSE                 # boolean: show start-up status of impute.missing.routine
 ){
 
   # training parameter creation and warnings
-  if(exists("impute.missing.routine")){
-    print(warningCondition('impute.missing.routine exists and will be used to impute missing data in its present state.'))
+  if(verbose == TRUE){
+    if(exists("impute.missing.routine")){
+      print(warningCondition('impute.missing.routine exists and will be used to impute missing data in its present state.'))
+    }else{
+      impute.missing.routine = instantiate.impute.missing.routine()
+      print(warningCondition('impute.missing.routine was instantiated and default values will be used for to impute missing data.'))
+    }
   }else{
-    impute.missing.routine = instantiate.impute.missing.routine()
-    print(warningCondition('impute.missing.routine was instantiated and default values will be used for to impute missing data.'))
+    if(!exists("impute.missing.routine")){impute.missing.routine = instantiate.impute.missing.routine()}
   }
 
   # set variables to all if default
-  if(is.na(variables) == TRUE){
-    variables = names(dplyr::select(Data, -date))
+  if(is.null(variables) == TRUE){
+    variables = names(dplyr::select(Data, is.numeric))
   }
 
   # target variables must be numeric
-  if(setdiff(variables, names(dplyr::select_if(Data, is.numeric))) != 0){
-    print(errorCondition('Variables must be numeric to impute'))
+  if(length(setdiff(variables, names(dplyr::select_if(Data, is.numeric)))) != 0){
+    print(errorCondition('Variables cleaned for outliers must be numeric.'))
   }
 
   # clean outliers
-  Data = Data %>%
-    dplyr::mutate_at(vars(variables),
-                     instantiate.impute.missing.routine$method[[method]],
-                     instantiate.impute.missing.routine$arguments[[method]]) %>%
-    filter(date == cleaning.date)
+  for(v in variables){
+    impute.missing.routine$arguments[[method]]$x = Data[,c(v)]
+    Data[,c(v)] =
+      do.call(what = impute.missing.routine$method[[method]],
+              args = impute.missing.routine$arguments[[method]])
+  }
 
   # return results
   return(Data)

@@ -151,6 +151,7 @@ instantiate.multivariate.forecast.var.training = function(){
 #' @param impute.missing        boolean: if TRUE then impute missing values
 #' @param impute.method         string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
 #' @param impute.variables      string: vector of variables to impute missing values, default is all numeric columns
+#' @param impute.verbose        boolean: show start-up status of impute.missing.routine
 #'
 #' @return  data.frame with a date column and one column per forecast method selected
 #'
@@ -177,7 +178,8 @@ forecast_multivariate = function(
   # impute missing
   impute.missing = FALSE,          # boolean: if TRUE then impute missing values
   impute.method = 'kalman',        # string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
-  impute.variables = NA            # string: vector of variables to impute missing values, default is all numeric columns
+  impute.variables = NULL,         # string: vector of variables to impute missing values, default is all numeric columns
+  impute.verbose = FALSE           # boolean: show start-up status of impute.missing.routine
 
 ){
 
@@ -211,21 +213,12 @@ forecast_multivariate = function(
 
               # subset data
               information.set =
-                data_outliers(
-                  Data = information.set,
-                  cleaning.date = forecast.date,
+                data_subset(
+                  Data = Data,
+                  forecast.date = forecast.date,
                   rolling.window = rolling.window,
                   freq = freq
                 )
-
-              # impute missing values
-              if(impute.missing){
-                data_standarize(
-                  Data = information.set,
-                  variables = impute.variables,
-                  method = impute.method
-                )
-              }
 
               # clean outliers
               if(outlier.clean){
@@ -239,8 +232,27 @@ forecast_multivariate = function(
                   )
               }
 
+              # impute missing values
+              if(impute.missing){
+                information.set =
+                  data_impute(
+                    Data = information.set,
+                    variables = impute.variables,
+                    method = impute.method,
+                    verbose = impute.verbose
+                  )
+              }
+
               # set current data
               current.set = dplyr::filter(Data, forecast.date == date)
+
+              # check for missing covariates in current data
+              if(is.na(sum(dplyr::select(current.set, -date)))){
+                print(warningCondition(paste0('Missing covariate on: ', forecast.date)))
+                results = data.frame(date = current.set$date, ml = NA)
+                colnames(results)[colnames(results) == 'ml'] = engine
+                return(results)
+              }
 
               # set target variable
               names(information.set)[names(information.set) == target] = 'target'
@@ -295,3 +307,5 @@ forecast_multivariate = function(
   # return results
   return(forecasts)
 }
+
+

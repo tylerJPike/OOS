@@ -163,8 +163,7 @@ A brief example using the `Random Forest` to combine forecasts:
 			forecast.date = tail(Data$date),
 			target = 'INDPRO',
 			method = 'pc',
-			ncomp = 2
-		)
+			ncomp = 2)
 
 	# create forecasts
 	forecast.indpro = 
@@ -172,11 +171,25 @@ A brief example using the `Random Forest` to combine forecasts:
 			Data = Data,           
 			forecast.date = tail(Data$date),
 			target = 'INDPRO',
-			method = c('ols','lasso','ridge','elastic','GBM'),        
+			horizon = 1,
+			method = c('ols','lasso','ridge','elastic','GBM'),
+
+			# information set       
 			rolling.window = NA,    
-			freq = 'month',                    
-			horizon = 1            
-		)
+			freq = 'month',                   
+			
+			# outlier cleaning
+			outlier.clean = TRUE,
+			outlier.variables = NULL,
+			outlier.bounds = c(0.05, 0.95),
+			outlier.trim = FALSE,
+			outlier.cross_section = FALSE,
+			
+			# impute missing
+			impute.missing = TRUE,
+			impute.method = 'kalman',
+			impute.variables = NULL,
+			impute.verbose = FALSE) 
 
 	# add in observed values
 	forecasts.indpro = 

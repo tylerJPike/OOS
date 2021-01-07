@@ -6,7 +6,7 @@
 \usage{
 data_outliers(
   Data,
-  variables,
+  variables = NULL,
   w.bounds = c(0.05, 0.95),
   trim = FALSE,
   cross_section = FALSE

@@ -19,7 +19,8 @@ forecast_multivariate(
   outlier.cross_section = FALSE,
   impute.missing = FALSE,
   impute.method = "kalman",
-  impute.variables = NA
+  impute.variables = NULL,
+  impute.verbose = FALSE
 )
 }
 \arguments{
@@ -52,6 +53,8 @@ forecast_multivariate(
 \item{impute.method}{string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'}
 
 \item{impute.variables}{string: vector of variables to impute missing values, default is all numeric columns}
+
+\item{impute.verbose}{boolean: show start-up status of impute.missing.routine}
 }
 \value{
 data.frame with a date column and one column per forecast method selected

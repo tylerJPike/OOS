@@ -11,9 +11,22 @@ combination tools and forecast comparison metrics.
 
 ## Workflow and available Tools
 
-### 0. Dimension Reduction
+### 0. Data preparation
+Dimension Reduction
 1. Principal Components
 2. Partial Least Square Scores
+
+Clean Outliers
+1. Winsorize
+2. Trim  
+
+Impute Missing Observations 
+1. Interpolation
+2. Kalman Filter
+3. Fill-Forward
+4. Average
+5. Moving Average
+6. Seasonal Decomposition
 
 ### 1. Forecasting models 
 Univariate 
@@ -66,7 +79,7 @@ Forecast Comparison Methods
 
 ## Model estimation flexibility and accessibility
 
-Users may edit any model training routine through accessing a list of function arguments. For machine learning techniques, this entails editing [caret](https://github.com/topepo/caret) arguments including: tuning grid, control grid, method, and accuracy metric. For univariate time series forecasting, this entails passing arguments to [forecast](https://github.com/robjhyndman/forecast) package model functions. 
+Users may edit any model training routine through accessing a list of function arguments. For machine learning techniques, this entails editing [caret](https://github.com/topepo/caret) arguments including: tuning grid, control grid, method, and accuracy metric. For univariate time series forecasting, this entails passing arguments to [forecast](https://github.com/robjhyndman/forecast) package model functions. For imputing missing variables, this entails passing arguments to [imputeTS](https://github.com/SteffenMoritz/imputeTS) package functions.
 
 A brief example using an `Arima` model to forecast univariate time series:   
 
@@ -198,11 +211,10 @@ A brief example using the `Random Forest` to combine forecasts:
 	1. deep NN via Keras  
 	2. xgboost, grf, quantile trees, ect.  
 	3. univariate ts model error correction via NN 
-3. Expand multivariate functionality
-	1. Add dimension reduction routines (pca, pls, dfm)  
-	2. Multivariate automatic lag selection
-	3. Multivariate joint estimation via trees and NN
-	4. Create standard errors
+3. Expand multivariate functionality  
+	1. Multivariate automatic lag selection
+	2. Multivariate joint estimation via trees and NN
+	3. Create standard errors
 4. Add basic plotting functionality
 5. Demonstrate how to create user-define forecasting methods
 6. Convert to tidymodels framework where possible  (maybe)

@@ -22,9 +22,9 @@ standardize = function(X){return((X-mean(X, na.rm = T))/sd(X, na.rm = T))}
 #'
 #' @export
 winsorize = function(X, bounds, replacement = TRUE){
-  
+
     qq = quantile(X, probs = bounds, na.rm = TRUE)
-  
+
     if(replacement == TRUE){
       X[X <= qq[2]] = qq[1]
       X[X >= qq[2]] = qq[2]
@@ -32,15 +32,15 @@ winsorize = function(X, bounds, replacement = TRUE){
       X[X <= qq[2]] = NA
       X[X >= qq[2]] = NA
     }
-    
+
     return(X)
 }
 
 
 #' Create information set
 #'
-#' A function to subset data recurisvely or with a rolling window to create a valid information set. Is used as a data preparation 
-#' helper function and is called internally by forecast_univariate, forecast_multivariate, and forecast_combine. 
+#' A function to subset data recurisvely or with a rolling window to create a valid information set. Is used as a data preparation
+#' helper function and is called internally by forecast_univariate, forecast_multivariate, and forecast_combine.
 #'
 #' @param Data                  data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
 #' @param forecast.date         date: upper bound of information set
@@ -56,16 +56,16 @@ data_subset = function(
   rolling.window,
   freq
 ){
-  
+
   # 1. using expanding window
   if(is.na(rolling.window)){
     information.set =
-      dplyr::filter(Data, date <= forecast.date) 
-    
+      dplyr::filter(Data, date <= forecast.date)
+
     # 2. using rolling window
   }else{
     rolling.window.start = forecast.date
-    
+
     if(freq == 'day'){
       rolling.window.start = forecast.date - rolling.window
     }else if(freq == 'week'){
@@ -77,9 +77,9 @@ data_subset = function(
     }else if(freq == 'year'){
       lubridate::year(rolling.window.start) = lubridate::year(forecast.date) - rolling.window
     }
-    
+
     information.set =
-      dplyr::filter(Data, rolling.window.start <= date & date <= forecast.date ) 
+      dplyr::filter(Data, rolling.window.start <= date & date <= forecast.date )
   }
 
   return(information.set)
@@ -91,7 +91,7 @@ data_subset = function(
 #' Clean outliers
 #'
 #' A function to clean outliers. Is used as a data preparation helper function and is called internally
-#'  by forecast_univariate, forecast_multivariate, and forecast_combine. 
+#'  by forecast_univariate, forecast_multivariate, and forecast_combine.
 #'
 #' @param Data                  data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
 #' @param variables             string: vector of variables to standardize, default is all but 'date' column
@@ -107,20 +107,20 @@ data_outliers = function(
   variables,                      # string: vector of variables to standardize, default is all but 'date' column
   w.bounds = c(0.05, 0.95),       # double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
   trim = FALSE,                   # boolean: if TRUE then replace outliers with NA instead of winsorizing bound
-  cross_section = FALSE,          # boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)
+  cross_section = FALSE           # boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)
 ){
 
   # target variables must be numeric
   if(setdiff(variables, names(dplyr::select_if(Data, is.numeric))) != 0){
     print(errorCondition('Variables cleaned for outliers must be numeric.'))
   }
-  
+
   # clean outliers (column wise)
   if(cross_section == FALSE){
     Data = Data %>%
       dplyr::mutate_at(vars(variables), winsorize, bounds = w.bounds, replacement = trim) %>%
       filter(date == cleaning.date)
-    
+
   # clean outliers (row wise)
   }else{
     Data = Data %>%
@@ -128,7 +128,7 @@ data_outliers = function(
       dplyr::mutate_at(vars(variables), winsorize, bounds = w.bounds, replacement = trim) %>%
       filter(date == cleaning.date)
   }
-  
+
   # return results
   return(Data)
 }
@@ -149,8 +149,8 @@ instantiate.impute.missing.routine = function(){
   # methods
   methods = list(
     interpolation = imputeTS::na_interpolation,
-    kalman = imputeTS::na_kalman, 
-    locf = imputeTS::na_locf, 
+    kalman = imputeTS::na_kalman,
+    locf = imputeTS::na_locf,
     ma = imputeTS::na_ma,
     mean = imputeTS::na_mean,
     random = imputeTS::na_random,
@@ -159,11 +159,11 @@ instantiate.impute.missing.routine = function(){
     seadec = imputeTS::na_seadec,
     seasplit = imputeTS::na_seasplit
   )
-  
+
   # arguments
   arguments = list(
     interpolation = NULL,
-    kalman = NULL, 
+    kalman = NULL,
     locf =  NULL,
     ma =  NULL,
     mean =  NULL,
@@ -173,20 +173,20 @@ instantiate.impute.missing.routine = function(){
     seadec =  NULL,
     seasplit =  NULL
   )
-  
+
   return(
     list(
       method = methods,
       arguments = arguments
     )
   )
-  
+
 }
 
 #' Impute missing values
 #'
 #' A function to impute missing values. Is used as a data preparation helper function and is called internally
-#'  by forecast_univariate, forecast_multivariate, and forecast_combine. 
+#'  by forecast_univariate, forecast_multivariate, and forecast_combine.
 #'
 #' @param Data                  data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
 #' @param method                string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
@@ -208,24 +208,24 @@ data_standarize = function(
     impute.missing.routine = instantiate.impute.missing.routine()
     print(warningCondition('impute.missing.routine was instantiated and default values will be used for to impute missing data.'))
   }
-  
+
   # set variables to all if default
   if(is.na(variables) == TRUE){
     variables = names(dplyr::select(Data, -date))
   }
-  
+
   # target variables must be numeric
   if(setdiff(variables, names(dplyr::select_if(Data, is.numeric))) != 0){
     print(errorCondition('Variables must be numeric to impute'))
   }
-  
+
   # clean outliers
   Data = Data %>%
-    dplyr::mutate_at(vars(variables), 
+    dplyr::mutate_at(vars(variables),
                      instantiate.impute.missing.routine$method[[method]],
                      instantiate.impute.missing.routine$arguments[[method]]) %>%
     filter(date == cleaning.date)
-  
+
   # return results
   return(Data)
 }

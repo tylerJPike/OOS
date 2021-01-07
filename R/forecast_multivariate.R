@@ -143,6 +143,14 @@ instantiate.multivariate.forecast.var.training = function(){
 #' @param rolling.window   int: size of rolling window, NA if expanding window is used
 #' @param freq             string: time series frequency; day, week, month, quarter, year
 #' @param horizon          int: number of periods into the future to forecast
+#' @param  outlier.clean   boolean: if TRUE then clean outliers
+#' @param outlier.variables     string: vector of variables to standardize, default is all but 'date' column
+#' @param outlier.bounds        double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
+#' @param outlier.trim          boolean: if TRUE then replace outliers with NA instead of winsorizing bound
+#' @param outlier.cross_section boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)
+#' @param impute.missing        boolean: if TRUE then impute missing values
+#' @param impute.method         string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
+#' @param impute.variables      string: vector of variables to impute missing values, default is all numeric columns
 #'
 #' @return  data.frame with a date column and one column per forecast method selected
 #'
@@ -152,10 +160,25 @@ forecast_multivariate = function(
   Data,                 # data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
   forecast.dates,       # date: dates forecasts are created
   target,               # string: column name in `Data` of variable to forecast
+  horizon,              # int: number of periods into the future to forecast
   method,               # string or vector: methods to use; 'var', 'ols', 'ridge', 'lasso', 'elastic', 'RF', 'GBM', 'NN'
+
+  # information set
   rolling.window = NA,  # int: size of rolling window, NA if expanding window is used
   freq,                 # string: time series frequency; day, week, month, quarter, year
-  horizon               # int: number of periods into the future to forecast
+
+  # outlier cleaning
+  outlier.clean = FALSE,           # boolean: if TRUE then clean outliers
+  outlier.variables,               # string: vector of variables to standardize, default is all but 'date' column
+  outlier.bounds = c(0.05, 0.95),  # double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
+  outlier.trim = FALSE,            # boolean: if TRUE then replace outliers with NA instead of winsorizing bound
+  outlier.cross_section = FALSE,   # boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)
+
+  # impute missing
+  impute.missing = FALSE,          # boolean: if TRUE then impute missing values
+  impute.method = 'kalman',        # string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
+  impute.variables = NA            # string: vector of variables to impute missing values, default is all numeric columns
+
 ){
 
   # results list
@@ -187,31 +210,33 @@ forecast_multivariate = function(
             .f = function(forecast.date){
 
               # subset data
-              # 1. using expanding window
-              if(is.na(rolling.window)){
+              information.set =
+                data_outliers(
+                  Data = information.set,
+                  cleaning.date = forecast.date,
+                  rolling.window = rolling.window,
+                  freq = freq
+                )
+
+              # impute missing values
+              if(impute.missing){
+                data_standarize(
+                  Data = information.set,
+                  variables = impute.variables,
+                  method = impute.method
+                )
+              }
+
+              # clean outliers
+              if(outlier.clean){
                 information.set =
-                  dplyr::filter(Data, date <= forecast.date) %>%
-                  dplyr::select(-date)
-
-              # 2. using rolling window
-              }else{
-                rolling.window.start = forecast.date
-
-                if(freq == 'day'){
-                  rolling.window.start = forecast.date - rolling.window
-                }else if(freq == 'week'){
-                  lubridate::week(rolling.window.start) = lubridate::week(forecast.date) - rolling.window
-                }else if(freq == 'month'){
-                  lubridate::month(rolling.window.start) = lubridate::month(forecast.date) - rolling.window
-                }else if(freq == 'quarter'){
-                  lubridate::month(rolling.window.start) = lubridate::month(forecast.date) - rolling.window*3
-                }else if(freq == 'year'){
-                  lubridate::year(rolling.window.start) = lubridate::year(forecast.date) - rolling.window
-                }
-
-                information.set =
-                  dplyr::filter(Data, rolling.window.start <= date & date <= forecast.date ) %>%
-                  dplyr::select(-date)
+                  data_outliers(
+                    Data = information.set,
+                    variables = outlier.variables,
+                    w.bounds = outlier.bounds,
+                    trim = outlier.trim,
+                    cross_section = outlier.cross_section
+                  )
               }
 
               # set current data

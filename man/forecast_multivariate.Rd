@@ -8,10 +8,18 @@ forecast_multivariate(
   Data,
   forecast.dates,
   target,
+  horizon,
   method,
   rolling.window = NA,
   freq,
-  horizon
+  outlier.clean = FALSE,
+  outlier.variables,
+  outlier.bounds = c(0.05, 0.95),
+  outlier.trim = FALSE,
+  outlier.cross_section = FALSE,
+  impute.missing = FALSE,
+  impute.method = "kalman",
+  impute.variables = NA
 )
 }
 \arguments{
@@ -21,13 +29,29 @@ forecast_multivariate(
 
 \item{target}{string: column name in Data of variable to forecast}
 
+\item{horizon}{int: number of periods into the future to forecast}
+
 \item{method}{string or vector: methods to use; 'var', 'ols', 'ridge', 'lasso', 'elastic', 'RF', 'GBM', 'NN'}
 
 \item{rolling.window}{int: size of rolling window, NA if expanding window is used}
 
 \item{freq}{string: time series frequency; day, week, month, quarter, year}
 
-\item{horizon}{int: number of periods into the future to forecast}
+\item{outlier.clean}{boolean: if TRUE then clean outliers}
+
+\item{outlier.variables}{string: vector of variables to standardize, default is all but 'date' column}
+
+\item{outlier.bounds}{double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)}
+
+\item{outlier.trim}{boolean: if TRUE then replace outliers with NA instead of winsorizing bound}
+
+\item{outlier.cross_section}{boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)}
+
+\item{impute.missing}{boolean: if TRUE then impute missing values}
+
+\item{impute.method}{string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'}
+
+\item{impute.variables}{string: vector of variables to impute missing values, default is all numeric columns}
 }
 \value{
 data.frame with a date column and one column per forecast method selected

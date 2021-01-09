@@ -176,20 +176,25 @@ forecast_combine = function(
   burn.in = 1          # int: the number of periods to use in the first model estimation
 ){
 
+  # cast from long to wide
+  forecasts = forecasts %>%
+    dplyr::select(-se, -forecast.date) %>%
+    tidyr::pivot_wider(names_from = model, values_from = forecast)
+
   results.list = list()
 
   # uniform weights
   if('uniform' %in% method){
     forecasts.raw = dplyr::select(forecasts, -dplyr::contains('date'), -dplyr::contains('observed'))
     combination = apply(forecasts.raw, MARGIN = 1, FUN = mean, na.rm = T)
-    results.list[['unform']] = data.frame(date = forecasts$date, uniform = combination)
+    results.list[['unform']] = data.frame(date = forecasts$date, forecast = combination, model = 'uniform')
   }
 
   # median forecast
   if('median' %in% method){
     forecasts.raw = dplyr::select(forecasts, -dplyr::contains('date'), -dplyr::contains('observed'))
     combination = apply(forecasts.raw, MARGIN = 1, FUN = median, na.rm = T)
-    results.list[['median']] = data.frame(date = forecasts$date, median = combination)
+    results.list[['median']] = data.frame(date = forecasts$date, forecast = combination, model = 'median')
   }
 
   # trimmed (winsorized) mean
@@ -197,7 +202,7 @@ forecast_combine = function(
     forecasts.raw = dplyr::select(forecasts, -dplyr::contains('date'), -dplyr::contains('observed'))
     combination = apply(forecasts.raw, MARGIN = 1, FUN = winsorize, bounds = trim)
     combination = apply(forecasts.raw, MARGIN = 1, FUN = mean, na.rm = T)
-    results.list[['trimmed']] =  data.frame(date = forecasts$date, combination)
+    results.list[['trimmed']] =  data.frame(date = forecasts$date, forecast = combination, model = 'trimmed.mean')
   }
 
   # N-best method
@@ -214,8 +219,13 @@ forecast_combine = function(
     # create n-best forecast combinations
     combination.nbest = NBest(dplyr::select(forecasts, -dplyr::contains('date')), n.max, window)
     combination.mean = apply(combination.nbest, MARGIN = 1, FUN = mean, na.rm = T)
+    combination = data.frame(date = forecasts$date, combination.mean, combination.nbest)
+    combination = tidyr::pivot_longer(combination,
+                                      cols = names(dplyr::select(combination, -date)),
+                                      names_to = 'model',
+                                      values_to = 'forecast')
 
-    results.list[['nbest']] = data.frame(date = forecasts$date, combination.mean, combination.nbest)
+    results.list[['nbest']] = combination
   }
 
   # peLASSO
@@ -246,9 +256,10 @@ forecast_combine = function(
           }
 
           # calculate forecast
-          peLasso = predict(model, newx = as.matrix(current.forecasts[,covariates]), s = 'lambda.min') + rowMeans(dplyr::select(current.forecasts , -observed, -date))
-          results = data.frame(date = current.forecasts$date, peLasso)
-          colnames(results)[colnames(results) == 'X1'] = 'peLasso'
+          peLasso = predict(model, newx = as.matrix(current.forecasts[,covariates]), s = 'lambda.min') +
+            rowMeans(dplyr::select(current.forecasts , -observed, -date))
+          results = data.frame(date = current.forecasts$date, peLasso, model = 'peLasso')
+          colnames(results)[colnames(results) == 'X1'] = 'forecast'
           return(results)
 
         }
@@ -284,7 +295,7 @@ forecast_combine = function(
                 # estimate model
                 model =
                   caret::train(observed~.,
-                                data = information.set,
+                                data = dplyr::select(information.set, -date),
                                 method    = forecast.combinations.ml.training$caret.engine[[engine]],
                                 trControl = forecast.combinations.ml.training$control,
                                 tuneGrid  = forecast.combinations.ml.training$tuning.grids[[engine]],
@@ -292,24 +303,38 @@ forecast_combine = function(
                                 na.action = na.omit)
 
                 # calculate forecast
-                ml = predict(model, newdata = current.forecasts)
-                results = data.frame(date = current.forecasts$date, ml)
-                colnames(results)[colnames(results) == 'ml'] = engine
-                return(results)
+                point = predict(model, newdata = current.forecasts)
 
+                # calculate standard error
+                error =
+                  try(
+                    predict(model$finalModel, current.forecasts, interval = "confidence", level = 0.95) %>%
+                      data.frame(),
+                    silent = TRUE
+                  )
+
+                if('upr' %in% names(error) == TRUE){
+                  error = (error$upr - error$fit) / qnorm(0.95)
+                  error = as.numeric(error)
+                }else{
+                  error = NA
+                }
+
+                # set dates
+                results = data.frame(date = current.forecasts$date,
+                                     model = engine, forecast = point, se = error)
               }
             ) %>%
             purrr::reduce(dplyr::bind_rows)
         }
       ) %>%
-      purrr::reduce(dplyr::full_join, by = 'date')
+      purrr::reduce(dplyr::bind_rows)
 
     results.list[['ML']] = combination
   }
 
   # return results
-  results = purrr::reduce(results.list, dplyr::full_join, by = 'date')
+  results = purrr::reduce(results.list, dplyr::bind_rows)
+  rownames(results) = c(1:nrow(results))
   return(results)
 }
-
-

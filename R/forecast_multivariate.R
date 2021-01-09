@@ -275,7 +275,7 @@ forecast_multivariate = function(
                                na.action = na.omit)
 
                 # calculate forecast
-                ml = predict(model, newdata = current.set)
+                point = predict(model, newdata = current.set)
 
                 # calculate standard error
                 error =

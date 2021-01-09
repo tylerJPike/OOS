@@ -138,9 +138,6 @@ A brief example using the `Random Forest` to combine forecasts:
 			impute.variables = NULL,
 			impute.verbose = FALSE) 
 
-	# flatten point estimates into a matrix
-	forecast.unemployment = forecast_flatten(forecast.unemployment)
-
 	# add in observed values
 	forecast.unemployment = 
 		dplyr::left_join(forecast.unemployment, Data, by = 'date') %>%

@@ -85,6 +85,41 @@ data_subset = function(
   return(information.set)
 }
 
+#' Set forecasted date
+#'
+#' A function to subset data recurisvely or with a rolling window to create a valid information set. Is used as a data preparation
+#' helper function and is called internally by forecast_univariate, forecast_multivariate, and forecast_combine.
+#'
+#' @param forecast.date         date: date forecast was made
+#' @param horizon               int: priods ahead of forecast
+#' @param freq                  string: time series frequency; day, week, month, quarter, year; only needed for rolling window factors
+#'
+#' @return  date
+#'
+#' @export
+forecast_date = function(
+  forecast.date,
+  horizon,
+  freq
+){
+
+  date = forecast.date
+
+  if(freq == 'day'){
+    date = forecast.date + horizon
+  }else if(freq == 'week'){
+    lubridate::week(date) = lubridate::week(date) + horizon
+  }else if(freq == 'month'){
+    lubridate::month(date) = lubridate::month(date) + horizon
+  }else if(freq == 'quarter'){
+    lubridate::month(date) = lubridate::month(date) + horizon*3
+  }else if(freq == 'year'){
+    lubridate::year(date) = lubridate::year(date) + horizon
+  }
+
+  return(date)
+}
+
 #---------------------------------------------
 # Clean outliers
 #---------------------------------------------

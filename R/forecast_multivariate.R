@@ -292,25 +292,6 @@ forecast_multivariate = function(
                   error = NA
                 }
 
-                # set date
-                date = forecast.date
-                if(freq == 'day'){
-                  date = forecast.date + horizon
-                }else if(freq == 'week'){
-                  lubridate::week(date) = lubridate::week(date) + horizon
-                }else if(freq == 'month'){
-                  lubridate::month(date) = lubridate::month(date) + horizon
-                }else if(freq == 'quarter'){
-                  lubridate::month(date) = lubridate::month(date) + horizon*3
-                }else if(freq == 'year'){
-                  lubridate::year(date) = lubridate::year(date) + horizon
-                }
-
-
-                results = data.frame(date = date,
-                                     forecast.date = forecast.date,
-                                     model = engine, forecast = ml, se = error)
-
               # estimate VAR
               }else{
 
@@ -324,33 +305,24 @@ forecast_multivariate = function(
                     type    =  multivariate.forecast.var.training$type
                   )
 
-                # calculate forecast
+                # calculate forecast and standard error
                 ml = predict(model, n.ahead = horizon)
                 ml = ml$fcst[target] %>% data.frame()
-
                 point = ml[horizon, 1]
-
                 error = (ml[horizon, 3] - ml[horizon, 1]) / qnorm(0.95)
 
-                # set date
-                date = forecast.date
-                if(freq == 'day'){
-                  date = forecast.date + horizon
-                }else if(freq == 'week'){
-                  lubridate::week(date) = lubridate::week(date) + horizon
-                }else if(freq == 'month'){
-                  lubridate::month(date) = lubridate::month(date) + horizon
-                }else if(freq == 'quarter'){
-                  lubridate::month(date) = lubridate::month(date) + horizon*3
-                }else if(freq == 'year'){
-                  lubridate::year(date) = lubridate::year(date) + horizon
-                }
-
-                results = data.frame(date = date,
-                                     forecast.date = forecast.date,
-                                     model = engine, forecast = point, se = error)
               }
 
+              # set date
+              date = forecast_date(
+                forecast.date,
+                horizon,
+                freq)
+
+              # set dates
+              results = data.frame(date = date,
+                                   forecast.date = forecast.date,
+                                   model = engine, forecast = point, se = error)
               # return results
               return(results)
 
@@ -370,21 +342,3 @@ forecast_multivariate = function(
   # return results
   return(forecasts)
 }
-
-# set data
-#  quantmod::getSymbols.FRED(c('UNRATE','INDPRO','GS10'), env = globalenv())
-Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
-Data = data.frame(Data, date = zoo::index(Data)) %>%
-  dplyr::filter(lubridate::year(date) >= 1990)
-
-# create forecasts
-forecast.indpro =
-  forecast_multivariate(
-    Data = Data,
-    forecast.date = tail(Data$date),
-    target = 'INDPRO',
-    horizon = 1,
-    method = c('ols', 'var'),
-    freq = 'month')
-
-print(forecast.indpro)

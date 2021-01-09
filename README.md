@@ -229,6 +229,15 @@ A brief example using the `Random Forest` to combine forecasts:
 			test = 'DM',
 			horizon = 1)
 
+	# chart forecasts
+	chart = 
+		forecast_chart(
+			Data = forecasts,
+			Title = 'Industrial Production',
+			Ylab = 'Index',
+			Freq = 'Monthly',
+			zeroline = FALSE)
+
 
 
 ---

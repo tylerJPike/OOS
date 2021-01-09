@@ -114,8 +114,8 @@ instantiate.multivariate.forecast.var.training = function(){
 
   return(
     list(
-      p = NULL,
-      lag.max = 12,
+      p = 1,
+      lag.max = NULL,
       ic = 'AIC',
       type = 'none',
       season = NULL,
@@ -203,7 +203,7 @@ forecast_multivariate = function(
   }
 
   # Create forecasts
-  forecasts = intersect(method, c('ols','ridge','lasso','elastic','GBM','RF','NN')) %>%
+  forecasts = intersect(method, c('ols','ridge','lasso','elastic','GBM','RF','NN','var')) %>%
     purrr::map(
       .f = function(engine){
 
@@ -246,25 +246,28 @@ forecast_multivariate = function(
               # set current data
               current.set = dplyr::filter(Data, forecast.date == date)
 
-              # check for missing covariates in current data
-              if(is.na(sum(dplyr::select(current.set, -date)))){
-                print(warningCondition(paste0('Missing covariate on: ', forecast.date)))
-                results = data.frame(date = current.set$date, ml = NA)
-                colnames(results)[colnames(results) == 'ml'] = engine
-                return(results)
-              }
-
-              # set target variable
-              names(information.set)[names(information.set) == target] = 'target'
-
-              # set horizon
-              information.set = dplyr::mutate(information.set, target = dplyr::lead(target, horizon))
-
               # estimate ML model
               if(engine != 'var'){
+
+                # check for missing covariates in current data
+                if(is.na(sum(dplyr::select(current.set, -date)))){
+                  print(warningCondition(paste0('Missing covariate on: ', forecast.date)))
+                  results = data.frame(date = current.set$date, ml = NA)
+                  colnames(results)[colnames(results) == 'ml'] = engine
+                  return(results)
+                }
+
+                # set target variable
+                names(information.set)[names(information.set) == target] = 'target'
+
+                # set horizon
+                information.set = dplyr::mutate(information.set, target = dplyr::lead(target, horizon)) %>%
+                  na.omit()
+
+                # estimate model
                 model =
                   caret::train(target~.,
-                               data = information.set,
+                               data = dplyr::select(information.set, -date),
                                method    = multivariate.forecast.ml.training$caret.engine[[engine]],
                                trControl = multivariate.forecast.ml.training$control,
                                tuneGrid  = multivariate.forecast.ml.training$tuning.grids[[engine]],
@@ -273,25 +276,79 @@ forecast_multivariate = function(
 
                 # calculate forecast
                 ml = predict(model, newdata = current.set)
-                results = data.frame(date = current.set$date, ml)
-                colnames(results)[colnames(results) == 'ml'] = engine
+
+                # calculate standard error
+                error =
+                  try(
+                    predict(model$finalModel, current.set, interval = "confidence", level = 0.95) %>%
+                      data.frame(),
+                    silent = TRUE
+                    )
+
+                if(is.data.frame(error) == TRUE){
+                  error = (error$upr - error$fit) / qnorm(0.95)
+                  error = as.numeric(error)
+                }else{
+                  error = NA
+                }
+
+                # set date
+                date = forecast.date
+                if(freq == 'day'){
+                  date = forecast.date + horizon
+                }else if(freq == 'week'){
+                  lubridate::week(date) = lubridate::week(date) + horizon
+                }else if(freq == 'month'){
+                  lubridate::month(date) = lubridate::month(date) + horizon
+                }else if(freq == 'quarter'){
+                  lubridate::month(date) = lubridate::month(date) + horizon*3
+                }else if(freq == 'year'){
+                  lubridate::year(date) = lubridate::year(date) + horizon
+                }
+
+
+                results = data.frame(date = date,
+                                     forecast.date = forecast.date,
+                                     model = engine, forecast = ml, se = error)
 
               # estimate VAR
               }else{
+
                 model =
                   vars::VAR(
-                    y       =  Data,
+                    y       = na.omit(dplyr::select(information.set, -date)),
                     p       =  multivariate.forecast.var.training$p,
-                    max.lag =  multivariate.forecast.var.training$max.lag,
+                    lag.max =  multivariate.forecast.var.training$max.lag,
                     ic      =  multivariate.forecast.var.training$ic,
                     season  =  multivariate.forecast.var.training$season,
-                    exogen  =  multivariate.forecast.var.training$exogen
+                    type    =  multivariate.forecast.var.training$type
                   )
 
                 # calculate forecast
-                ml = predict(model, newdata = current.set)
-                results = data.frame(date = current.set$date, ml)
-                colnames(results)[colnames(results) == 'ml'] = engine
+                ml = predict(model, n.ahead = horizon)
+                ml = ml$fcst[target] %>% data.frame()
+
+                point = ml[horizon, 1]
+
+                error = (ml[horizon, 3] - ml[horizon, 1]) / qnorm(0.95)
+
+                # set date
+                date = forecast.date
+                if(freq == 'day'){
+                  date = forecast.date + horizon
+                }else if(freq == 'week'){
+                  lubridate::week(date) = lubridate::week(date) + horizon
+                }else if(freq == 'month'){
+                  lubridate::month(date) = lubridate::month(date) + horizon
+                }else if(freq == 'quarter'){
+                  lubridate::month(date) = lubridate::month(date) + horizon*3
+                }else if(freq == 'year'){
+                  lubridate::year(date) = lubridate::year(date) + horizon
+                }
+
+                results = data.frame(date = date,
+                                     forecast.date = forecast.date,
+                                     model = engine, forecast = point, se = error)
               }
 
               # return results
@@ -302,10 +359,32 @@ forecast_multivariate = function(
           purrr::reduce(dplyr::bind_rows)
       }
     ) %>%
-    purrr::reduce(dplyr::full_join, by = 'date')
+    purrr::reduce(dplyr::bind_rows)
+
+  # prepare results
+  rownames(forecasts) = c(1:nrow(forecasts))
+  forecasts = forecasts %>%
+    dplyr::filter(!is.na(model)) %>%
+    dplyr::select(date, forecast.date, model, forecast, se)
 
   # return results
   return(forecasts)
 }
 
+# set data
+#  quantmod::getSymbols.FRED(c('UNRATE','INDPRO','GS10'), env = globalenv())
+Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
+Data = data.frame(Data, date = zoo::index(Data)) %>%
+  dplyr::filter(lubridate::year(date) >= 1990)
 
+# create forecasts
+forecast.indpro =
+  forecast_multivariate(
+    Data = Data,
+    forecast.date = tail(Data$date),
+    target = 'INDPRO',
+    horizon = 1,
+    method = c('ols', 'var'),
+    freq = 'month')
+
+print(forecast.indpro)

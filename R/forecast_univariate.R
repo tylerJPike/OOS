@@ -206,10 +206,18 @@ forecast_univariate = function(
                   # create forecasts
                   predictions = forecast::forecast(model, h = periods)
 
-                  # set results
-                  if(is.null(predictions$lower)){predictions$lower = predictions$upper = t(c(NA,NA))} # nnetar does not create se by default
-                  predictions = data.frame(predictions$mean, predictions$lower, predictions$upper)
-                  names(predictions) = c( 'forecast','lower.80','lower.95', 'upper.80', 'upper.95')
+                  # create standard errors
+                  calc.error = try(predictions$lower[1])
+
+                  if(is.numeric(calc.error) == TRUE){
+                    error = (predictions$upper[,1] - predictions$lower[,1]) /
+                      (2 * qnorm(.5 + predictions$level[1] / 200))
+                    error = as.numeric(error)
+                  }else{
+                    se = NA
+                  }
+
+                  predictions = data.frame(model = engine, forecast = predictions$mean, se = error)
 
                 # 2. using recursive forecasts
                 }else{
@@ -225,8 +233,19 @@ forecast_univariate = function(
 
                     # create forecast
                     prediction = forecast::forecast(model, h = 1)
-                    if(is.null(prediction$lower)){prediction$lower = prediction$upper = t(c(NA,NA))} # nnetar does not create se by default
-                    predictions[[i]] = data.frame(forecast = prediction$mean, prediction$lower, prediction$upper)
+
+                    # create standard errors
+                    calc.error = try(prediction$lower[1])
+
+                    if(is.numeric(calc.error) == TRUE){
+                      error = (prediction$upper[,1] - prediction$lower[,1]) /
+                        (2 * qnorm(.5 + prediction$level[1] / 200))
+                      error = as.numeric(error)
+                    }else{
+                      error = NA
+                    }
+
+                    predictions[[i]] = data.frame(model = engine, forecast = prediction$mean, se = error)
 
                     # update information set
                     information.set = rbind(information.set, prediction$mean[1]) %>% as.ts()
@@ -236,7 +255,6 @@ forecast_univariate = function(
 
                   # collapse results
                   predictions = purrr::reduce(predictions, dplyr::bind_rows) %>% data.frame()
-                  names(predictions) = c( 'forecast','lower.80','lower.95', 'upper.80', 'upper.95')
 
                 }
 
@@ -247,20 +265,12 @@ forecast_univariate = function(
                 # return results
                 return(predictions)
               }
-          )
+          ) %>% purrr::reduce(dplyr::bind_rows)
 
-        names(results) = methods
-
-        #---------------------------
-        # Estimate forecasting model
-        #---------------------------
         return(results)
 
       }
-    )
-
-  # set list item names
-  names(forecasts) = forecast.dates
+    ) %>% purrr::reduce(dplyr::bind_rows)
 
   return(forecasts)
 }

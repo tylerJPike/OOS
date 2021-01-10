@@ -240,6 +240,12 @@ A brief example using the `Random Forest` to combine forecasts:
 ---
 
 ## Future Extensions
+High priority
+1. Add option to return models
+2. Add option to return information.set
+3. Prepare and choose lags
+
+Low priority
 1. Add a basic genetic algorithm for forecast combinations  
 2. Upgrade ML functionality   
 	1. deep NN via Keras  
@@ -249,6 +255,4 @@ A brief example using the `Random Forest` to combine forecasts:
 	1. Multivariate automatic lag selection
 	2. Multivariate joint estimation via trees and NN
 	3. Create standard errors
-4. Add basic plotting functionality
-5. Demonstrate how to create user-define forecasting methods
-6. Convert to tidymodels framework where possible  (maybe)
+4. Demonstrate how to create user-define forecasting methods

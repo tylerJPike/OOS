@@ -21,11 +21,11 @@ standardize = function(X){return((X-mean(X, na.rm = T))/sd(X, na.rm = T))}
 #' @return  numeric vector of winsorized or trimmed values
 #'
 #' @export
-winsorize = function(X, bounds, replacement = TRUE){
+winsorize = function(X, bounds, trim = TRUE){
 
     qq = quantile(X, probs = bounds, na.rm = TRUE)
 
-    if(replacement == TRUE){
+    if(trim == TRUE){
       X[X <= qq[1]] = qq[1]
       X[X >= qq[2]] = qq[2]
     }else{
@@ -158,14 +158,14 @@ data_outliers = function(
 
   # clean outliers (column wise)
   if(cross_section == FALSE){
-    Data = Data %>%
-      dplyr::mutate_at(dplyr::vars(variables), winsorize, bounds = w.bounds, replacement = trim)
+    test = Data %>%
+      dplyr::mutate_at(dplyr::vars(variables), winsorize, bounds = w.bounds, trim = trim)
 
   # clean outliers (row wise)
   }else{
     Data = Data %>%
       dplyr::rowwise() %>%
-      dplyr::mutate_at(dplyr::vars(variables), winsorize, bounds = w.bounds, replacement = trim)
+      dplyr::mutate_at(dplyr::vars(variables), winsorize, bounds = w.bounds, trim = trim)
   }
 
   # return results

@@ -77,6 +77,8 @@ Forecast Comparison Methods
 2. Diebold-Mariano Test (for unnested models)
 3. Clark and West Test (for nested models)
 
+### 4. Chart forecasts
+
 ## Model estimation flexibility and accessibility
 
 Users may edit any model training routine through accessing a list of function arguments. For machine learning techniques, this entails editing [caret](https://github.com/topepo/caret) arguments including: tuning grid, control grid, method, and accuracy metric. For univariate time series forecasting, this entails passing arguments to [forecast](https://github.com/robjhyndman/forecast) package model functions. For imputing missing variables, this entails passing arguments to [imputeTS](https://github.com/SteffenMoritz/imputeTS) package functions.
@@ -106,16 +108,29 @@ A brief example using the `Random Forest` to combine forecasts:
 ## Basic usage example
 
 	#----------------------------------------
-	### Univariate example
+	### Forecasting Example
 	#----------------------------------------
 	# set data
-	quantmod::getSymbols.FRED('UNRATE', env = globalenv())
-	Data = data.frame(UNRATE, date = zoo::index(UNRATE))
+	quantmod::getSymbols.FRED(c('UNRATE','INDPRO','GS10'), 
+							  env = globalenv())
+	Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
+	Data = data.frame(Data, date = zoo::index(Data)) %>%
+		dplyr::filter(lubridate::year(date) >= 1990)
+	
+	# create OOS principal components
+	# (will not be used)
+	Data.factors =
+		dimension_reduction(
+			Data = Data,
+			forecast.date = tail(Data$date),
+			target = 'INDPRO',
+			method = 'pc',
+			ncomp = 2)
 
 	# run univariate forecasts 
-	forecast.unemployment = 
+	forecast.uni = 
 		forecast_univariate(
-			Data = Data,
+			Data = dplyr::select(Data, date, INDPRO),
 			forecast.dates = tail(Data$date,15), 
 			method = c('naive','auto.arima', 'ets'),      
 			periods = 1,                         
@@ -126,62 +141,23 @@ A brief example using the `Random Forest` to combine forecasts:
 			freq = 'month',                   
 			
 			# outlier cleaning
-			outlier.clean = TRUE,
+			outlier.clean = FALSE,
 			outlier.variables = NULL,
 			outlier.bounds = c(0.05, 0.95),
 			outlier.trim = FALSE,
 			outlier.cross_section = FALSE,
 			
 			# impute missing
-			impute.missing = TRUE,
+			impute.missing = FALSE,
 			impute.method = 'kalman',
 			impute.variables = NULL,
 			impute.verbose = FALSE) 
 
-	# add in observed values
-	forecast.unemployment = 
-		dplyr::left_join(forecast.unemployment, Data, by = 'date') %>%
-		dplyr::rename(observed = UNRATE)
-
-	# forecast combinations 
-	combinations.urate = 
-		forecast_combine(
-			forecast.unemployment, 
-			method = c('uniform','median','trimmed.mean',
-					'n.best','lasso','peLasso','RF'), 
-			burn.in = 10, 
-			n.max = 3)
-
-	# forecast comparison measured with MSE ratio
-	mse_ratio = 
-		forecast_comparison(
-			baseline.forecast = forecasts$naive,
-			alternative.forecast = combinations.urate$uniform,
-			observed = forecast.unemployment$observed)
-
-	#----------------------------------------
-	### Multivariate example
-	#----------------------------------------
-	# set data
-	quantmod::getSymbols.FRED(c('UNRATE','INDPRO','GS10'), env = globalenv())
-	Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
-	Data = data.frame(Data, date = zoo::index(Data)) %>%
-		dplyr::filter(lubridate::year(date) >= 1990)
-	
-	# create OOS principal components
-	Data.factors =
-		dimension_reduction(
-			Data = Data,
-			forecast.date = tail(Data$date),
-			target = 'INDPRO',
-			method = 'pc',
-			ncomp = 2)
-
-	# create forecasts
-	forecast.indpro = 
+	# create multivariate forecasts
+	forecast.multi = 
 		forecast_multivariate(
 			Data = Data,           
-			forecast.date = tail(Data$date),
+			forecast.date = tail(Data$date,15),
 			target = 'INDPRO',
 			horizon = 1,
 			method = c('ols','lasso','ridge','elastic','GBM'),
@@ -203,37 +179,54 @@ A brief example using the `Random Forest` to combine forecasts:
 			impute.variables = NULL,
 			impute.verbose = FALSE) 
 
-	# add in observed values
-	forecasts.indpro = 
-		dplyr::left_join(forecast.indpro, Data[,c('date','INDPRO')], by = 'date') %>%
-		dplyr::rename(observed = INDPRO)
+	# combine forecasts and add in observed values
+	forecasts = 
+		dplyr::bind_rows(
+			forecast.uni,
+			forecast.mulit) %>%
+		dplyr::left_join( 
+			dplyr::select(Data, date, observed = INDPRO))
 
 	# forecast combinations 
 	combinations.indpro = 
 		forecast_combine(
 			forecasts, 
 			method = c('uniform','median','trimmed.mean',
-					'n.best','lasso','peLasso','RF'), 
-			burn.in = 4, 
+					   'n.best','lasso','peLasso','RF'), 
+			burn.in = 5, 
 			n.max = 2)
 
-	# forecast comparison with Diebold-Mariano test
-	DM_test = 
-		forecast_comparison(
-			baseline.forecast = forecasts.indpro$ols,
-			alternative.forecast = combinations.indpro$uniform,
-			observed = forecasts.indpro$observed,
-			test = 'DM',
-			horizon = 1)
+	# merge forecast combinations back into forecasts
+	forecasts = 
+		forecasts %>%
+		dplyr::bind_rows(forecast.combo)
+
+	# calculate forecast errors
+	forecast.error = forecast_accuracy(forecasts)
+
+	# view forecast errors from least to greatest 
+	#   (best forecast to worst forecast method)
+	forecast.error %>% 
+		dplyr::mutate_at(vars(-model), round, 3) %>%
+		dplyr::arrange(MSE)
+
+	# compare forecasts to the baseline (a random walk)
+	forecast_comparison(
+		forecasts,
+		baseline.forecast = 'naive',  
+		test = 'ER',
+		loss = 'MSE') %>% 
+		arrange(error.ratio)
 
 	# chart forecasts
 	chart = 
 		forecast_chart(
-			Data = forecasts,
-			Title = 'Industrial Production',
+			forecasts,              
+			Title = 'Shiller/Case House Price Index',
 			Ylab = 'Index',
-			Freq = 'Monthly',
-			zeroline = FALSE)
+			Freq = 'Monthly')
+
+	chart
 
 
 
@@ -243,7 +236,6 @@ A brief example using the `Random Forest` to combine forecasts:
 High priority
 1. Add option to return models
 2. Add option to return information.set
-3. Prepare and choose lags
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  

@@ -5,9 +5,9 @@
 # forecast
 
 #-------------------------------------------
-# forecast accuracy
+# loss functions
 #-------------------------------------------
-#' Forecast accuracy
+#' Calculate error via loss functions
 #'
 #' A function to calculate various error loss functions. Options include:
 #' MSE, RMSE, MAE, and  MAPE. The default is MSE loss.
@@ -20,8 +20,7 @@
 #'
 #' @export
 
-
-forecast_accuracy = function(
+loss_function = function(
   forecast,          # numeric: vector of forecasted values
   observed,          # numeric: vector of observed values
   metric = 'MSE'     # string: loss function
@@ -41,16 +40,72 @@ forecast_accuracy = function(
 }
 
 #-------------------------------------------
+# forecast accuracy
+#-------------------------------------------
+#' Forecast accuracy
+#'
+#' A function to calculate various error loss functions. Options include:
+#' MSE, RMSE, MAE, and  MAPE. The default is MSE loss.
+#'
+#' @param Data  data.frame: data frame of forecasts, model names, and dates
+#'
+#' @return data.frame of numeric error results
+#'
+#' @export
+
+forecast_accuracy = function(
+  Data
+){
+
+  if(!'observed' %in% names(Data)){
+    print(errorCondition('There must be a column named "obsererved" in Data.'))
+
+  }
+  if(!'date' %in% names(Data)){
+    print(errorCondition('There must be a column named "date" in Data.'))
+  }
+
+  # set data
+  information.set =
+    dplyr::full_join(
+      dplyr::select(Data, -observed),
+      dplyr::select(Data, date, observed),
+      by  = 'date')
+
+  # calculate loss functions
+  information.set = information.set %>%
+    dplyr::group_split(model) %>%
+    purrr::map_df(
+      .f = function(X){
+
+        Y = X %>%
+          dplyr::select(observed, forecast, model) %>%
+          na.omit() %>%
+          dplyr::summarize(
+            model = unique(model),
+            MSE = mean((observed - forecast)^2, na.rm = T),
+            RMSE = sqrt(mean((observed - forecast)^2, na.rm = T)),
+            MAE = mean(abs(observed - forecast), na.rm = T),
+            MAPE = mean(abs((forecast - observed)/observed), na.rm = T))
+
+        return(Y)
+     }
+   )
+
+  return(information.set)
+}
+
+
+#-------------------------------------------
 # forecast comparison
 #-------------------------------------------
 #' Compare forecasts
 #'
-#' A function to compare two forecasts. Options include: simple forecast error ratios,
+#' A function to compare forecasts. Options include: simple forecast error ratios,
 #' Diebold-Mariano test, and Clark and West test for nested models
 #'
-#' @param baseline.forecast      numeric: vector of baseline (null hypothesis) forecasts
-#' @param alternative.forecast   numeric: vector of alternative forecasts
-#' @param observed               numeric: vector of observed values
+#' @param Data                   data.frame: data frame of forecasts, model names, and dates
+#' @param baseline.forecast      string: column name of baseline (null hypothesis) forecasts
 #' @param test                   string: which test to use; ER = error ratio, DM = Diebold-Mariano, CM = Clark and West
 #' @param loss                   string: error loss function to use if creating forecast error ratio
 #' @param horizon                int: horizon of forecasts being compared in DM and CW tests
@@ -60,53 +115,101 @@ forecast_accuracy = function(
 #' @export
 
 forecast_comparison = function(
-  baseline.forecast,      # numeric: vector of baseline (null hypothesis) forecasts
-  alternative.forecast,   # numeric: vector of alternative forecasts
-  observed,               # numeric: vector of observed values
+  Data,                   # data.frame: data frame of forecasts, model names, and dates
+  baseline.forecast,      # string: column name of baseline (null hypothesis) forecasts
   test = 'ER',            # string: which test to use; ER = error ratio, DM = Diebold-Mariano, CM = Clark and West
   loss = 'MSE',           # string: error loss function to use if creating forecast error ratio
   horizon = NULL          # int: horizon of forecasts being compared in DM and CW tests
 ){
 
-  # Diebold-Mariano forecast comparison
-  if(test == 'DM'){
+  if(!'observed' %in% names(Data)){
+    print(errorCondition('There must be a column named "observed" in Data.'))
 
-    DM.statistic =
-      forecast::dm.test(
-        e1 = na.omit(baseline.forecast - observed),
-        e2 = na.omit(alternative.forecast - observed),
-        alternative = 'less')$statistic[1]
-
-    return(DM.statistic)
-
-  # Clark and West (2006) forecast comparison test for nested models
-  }else if(test == 'CW'){
-
-    fCW12 =
-      (observed - baseline.forecast)^2 -
-      (observed-alternative.forecast)^2 -
-      (baseline.forecast - alternative.forecast)^2
-
-    lmCW = lm(as.numeric(fCW12)~1)
-
-    lmCW.summ = summary(lmCW)
-
-    lmCW.NW.summ = lmCW.summ
-
-    lmCW.NW.summ$coefficients = unclass(lmtest::coeftest(lmCW, vcov. = sandwich::NeweyWest(lmCW,lag=(h-1))))
-
-    CM.statistic = lmCW.NW.summ$coefficients[3]
-
-    return(CM.statistic)
-
-  # Forecast error ratios
-  }else if(test == 'ER'){
-    error =
-      forecast_accuracy(alternative.forecast, observed, loss) /
-      forecast_accuracy(baseline.forecast, observed, loss)
-
-    return(error)
   }
+  if(!'date' %in% names(Data)){
+    print(errorCondition('There must be a column named "date" in Data.'))
+  }
+
+  # set data
+  information.set =
+    dplyr::full_join(
+      dplyr::select(Data, -observed),
+      Data %>%
+        dplyr::filter(model == baseline.forecast) %>%
+        dplyr::select(date, observed, baseline.forecast = forecast),
+      by  = 'date')
+
+
+  # calculate loss functions
+  if(test == 'ER'){
+    information.set = information.set %>%
+      dplyr::group_split(model) %>%
+      purrr::map_df(
+        .f = function(X){
+
+          error =
+            loss_function(X$forecast, X$observed, loss) /
+            loss_function(X$baseline.forecast, X$observed, loss)
+
+          return(
+            data.frame(
+              model = unique(X$model),
+              error.ratio = error)
+          )
+        }
+      )
+
+  }else if(test == 'DM'){
+    information.set = information.set %>%
+      dplyr::group_split(model) %>%
+      purrr::map_df(
+        .f = function(X){
+
+          DM.statistic =
+            forecast::dm.test(
+              e1 = na.omit(X$baseline.forecast - X$observed),
+              e2 = na.omit(X$forecast - X$observed),
+              alternative = 'less')$statistic[1]
+
+          return(
+            data.frame(
+              model = unique(X$model),
+              DM.statistic = DM.statistic)
+          )
+        }
+      )
+
+  }else if(test == 'CW'){
+    information.set = information.set %>%
+      dplyr::group_split(model) %>%
+      purrr::map_df(
+        .f = function(X){
+
+          fCW12 =
+              (X$observed - X$baseline.forecast)^2 -
+              (X$observed - X$forecast)^2 -
+              (X$baseline.forecast - X$forecast)^2
+
+          lmCW = lm(as.numeric(fCW12)~1)
+
+          lmCW.summ = summary(lmCW)
+
+          lmCW.NW.summ = lmCW.summ
+
+          lmCW.NW.summ$coefficients = unclass(lmtest::coeftest(lmCW, vcov. = sandwich::NeweyWest(lmCW,lag=(h-1))))
+
+          CM.statistic = lmCW.NW.summ$coefficients[3]
+
+          return(
+              data.frame(
+                model = unique(X$model),
+                CM.statistic = CM.statistic)
+          )
+        }
+      )
+  }
+
+  return(information.set)
 
 }
 

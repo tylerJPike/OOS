@@ -4,17 +4,13 @@
 \alias{forecast_accuracy}
 \title{Forecast accuracy}
 \usage{
-forecast_accuracy(forecast, observed, metric = "MSE")
+forecast_accuracy(Data)
 }
 \arguments{
-\item{forecast}{numeric: vector of forecasted values}
-
-\item{observed}{numeric: vector of observed values}
-
-\item{metric}{string: loss function}
+\item{Data}{data.frame: data frame of forecasts, model names, and dates}
 }
 \value{
-numeric test result
+data.frame of numeric error results
 }
 \description{
 A function to calculate various error loss functions. Options include:

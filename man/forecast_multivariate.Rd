@@ -12,6 +12,8 @@ forecast_multivariate(
   method,
   rolling.window = NA,
   freq,
+  lag.variables = NULL,
+  lag.n = NULL,
   outlier.clean = FALSE,
   outlier.variables,
   outlier.bounds = c(0.05, 0.95),

@@ -191,14 +191,14 @@ A brief example using the `Random Forest` to combine forecasts:
 			freq = 'month',                   
 			
 			# outlier cleaning
-			outlier.clean = TRUE,
+			outlier.clean = FALSE,
 			outlier.variables = NULL,
 			outlier.bounds = c(0.05, 0.95),
 			outlier.trim = FALSE,
 			outlier.cross_section = FALSE,
 			
 			# impute missing
-			impute.missing = TRUE,
+			impute.missing = FALSE,
 			impute.method = 'kalman',
 			impute.variables = NULL,
 			impute.verbose = FALSE) 

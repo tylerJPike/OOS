@@ -5,20 +5,17 @@
 \title{Compare forecasts}
 \usage{
 forecast_comparison(
+  Data,
   baseline.forecast,
-  alternative.forecast,
-  observed,
   test = "ER",
   loss = "MSE",
   horizon = NULL
 )
 }
 \arguments{
-\item{baseline.forecast}{numeric: vector of baseline (null hypothesis) forecasts}
+\item{Data}{data.frame: data frame of forecasts, model names, and dates}
 
-\item{alternative.forecast}{numeric: vector of alternative forecasts}
-
-\item{observed}{numeric: vector of observed values}
+\item{baseline.forecast}{string: column name of baseline (null hypothesis) forecasts}
 
 \item{test}{string: which test to use; ER = error ratio, DM = Diebold-Mariano, CM = Clark and West}
 
@@ -30,6 +27,6 @@ forecast_comparison(
 numeric test result
 }
 \description{
-A function to compare two forecasts. Options include: simple forecast error ratios,
+A function to compare forecasts. Options include: simple forecast error ratios,
 Diebold-Mariano test, and Clark and West test for nested models
 }

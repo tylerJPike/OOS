@@ -219,7 +219,8 @@ forecast_combine = function(
     # create n-best forecast combinations
     combination.nbest = NBest(dplyr::select(forecasts, -dplyr::contains('date')), n.max, window)
     combination.mean = apply(combination.nbest, MARGIN = 1, FUN = mean, na.rm = T)
-    combination = data.frame(date = forecasts$date, combination.mean, combination.nbest)
+    combination = data.frame(date = forecasts$date, combination.mean, combination.nbest) %>%
+      dplyr::rename(N.best = combination.mean)
     combination = tidyr::pivot_longer(combination,
                                       cols = names(dplyr::select(combination, -date)),
                                       names_to = 'model',
@@ -270,7 +271,7 @@ forecast_combine = function(
   }
 
   # ML algorithms via caret
-  if(length(intersect(c('GBM','RF','NN','ols','lasso','ridge','elastic'), method)) != 1){
+  if(length(intersect(c('GBM','RF','NN','ols','lasso','ridge','elastic'), method)) > 0){
 
     # training parameter creation and warnings
     if(exists("forecast.combinations.ml.training")){

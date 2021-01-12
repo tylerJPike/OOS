@@ -120,6 +120,47 @@ forecast_date = function(
   return(date)
 }
 
+#' Create n lags
+#'
+#' A function to create 1 through n lags of a set of variables. Is used as a data preparation
+#' helper function and is called internally by forecast_univariate, forecast_multivariate, and forecast_combine.
+#'
+#' @param Data        data.frame: data frame of variables to lag and a 'date' column
+#' @param lags        int: number of lags to create
+#' @param variables   string: vector of variable names to lag, default is all non-date variables
+#'
+#' @return  data.frame
+#'
+#' @export
+n.lag = function(
+  Data,                       # data.frame: data frame of variables to lag and a 'date' column
+  lags,                       # int: number of lags to create
+  variables = NULL            # string: vector of variable names to lag, default is all non-date variables
+){
+
+  if(is.null(variables)){
+    variables = names(dplyr::select(Data, -date))
+  }
+
+  Data = c(0:lags) %>%
+    purrr::map(
+      .f = function(n){
+
+        if(n == 0){return(Data)}
+
+        X = Data %>%
+          dplyr::mutate_at(variables, dplyr::lag, n)
+
+        names(X)[names(X) != 'date'] = paste0(names(X)[names(X) != 'date'], '.l', n)
+
+        return(X)
+      }
+    ) %>%
+    purrr::reduce(full_join, by = 'date')
+
+
+  return(Data)
+}
 #---------------------------------------------
 # Clean outliers
 #---------------------------------------------

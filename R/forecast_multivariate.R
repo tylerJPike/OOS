@@ -167,6 +167,8 @@ forecast_multivariate = function(
   # information set
   rolling.window = NA,  # int: size of rolling window, NA if expanding window is used
   freq,                 # string: time series frequency; day, week, month, quarter, year
+  lag.variables = NULL, # string: vector of variables to lag each time step, if lag.n is not null then the default is all non-date variables
+  lag.n = NULL,         # int: number of lags to create
 
   # outlier cleaning
   outlier.clean = FALSE,           # boolean: if TRUE then clean outliers
@@ -243,8 +245,17 @@ forecast_multivariate = function(
                   )
               }
 
+              # create variable lags
+              if(!is.null(lag.n)){
+                information.set =
+                  n.lag(
+                    Data,
+                    lags = lag.n,
+                    variables = lag.variables)
+              }
+
               # set current data
-              current.set = dplyr::filter(Data, forecast.date == date)
+              current.set = dplyr::filter(information.set, forecast.date == date)
 
               # estimate ML model
               if(engine != 'var'){
@@ -275,7 +286,11 @@ forecast_multivariate = function(
                                na.action = na.omit)
 
                 # calculate forecast
-                point = predict(model, newdata = current.set)
+                point = try(predict(model, newdata = current.set))
+
+                if(!is.numeric(point)){
+                  point = NA
+                }
 
                 # calculate standard error
                 error =
@@ -285,12 +300,10 @@ forecast_multivariate = function(
                     silent = TRUE
                     )
 
-                if(is.data.frame(error) == TRUE){
-                  error = (error$upr - error$fit) / qnorm(0.95)
-                  error = as.numeric(error)
-                }else{
-                  error = NA
-                }
+                error = try((error$upr - error$fit) / qnorm(0.95),
+                            silent = TRUE)
+
+                if(is.numeric(error) != TRUE | length(error) != 1){error = NA}
 
               # estimate VAR
               }else{

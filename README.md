@@ -234,8 +234,6 @@ A brief example using the `Random Forest` to combine forecasts:
 
 ## Future Extensions
 High priority
-1. Add option to return models
-2. Add option to return information.set
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  

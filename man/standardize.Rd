@@ -7,11 +7,7 @@
 standardize(X)
 }
 \arguments{
-\item{X}{numeric: vector to be winsorized or trimmed}
-
-\item{bounds}{double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)}
-
-\item{replacement}{boolean: if TRUE then replace outliers with NA instead of winsorizing bound}
+\item{X}{numeric: vector to be standardized}
 }
 \value{
 numeric vector of winsorized or trimmed values

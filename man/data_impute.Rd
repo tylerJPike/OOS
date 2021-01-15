@@ -12,6 +12,8 @@ data_impute(Data, method = "kalman", variables = NULL, verbose = FALSE)
 \item{method}{string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'}
 
 \item{variables}{string: vector of variables to standardize, default is all but 'date' column}
+
+\item{verbose}{boolean: show start-up status of impute.missing.routine}
 }
 \value{
 data.frame with missing data imputed

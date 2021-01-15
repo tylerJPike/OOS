@@ -13,7 +13,7 @@ winsorize(X, bounds)
 
 \item{bounds}{numeric: upper and lower winsorizing bounds}
 
-\item{replacement}{boolean: if TRUE then replace outliers with NA instead of winsorizing bound}
+\item{trim}{boolean: if TRUE then replace outliers with NA instead of winsorizing bound}
 }
 \value{
 numeric vector of winsorized or trimmed values

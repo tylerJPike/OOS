@@ -3,9 +3,7 @@
 #---------------------------------------------
 #' Standardize variables (mean 0, variance 1)
 #'
-#' @param X                   numeric: vector to be winsorized or trimmed
-#' @param bounds              double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
-#' @param replacement         boolean: if TRUE then replace outliers with NA instead of winsorizing bound
+#' @param X                   numeric: vector to be standardized
 #'
 #' @return  numeric vector of winsorized or trimmed values
 #'
@@ -16,7 +14,7 @@ standardize = function(X){return((X-mean(X, na.rm = T))/sd(X, na.rm = T))}
 #'
 #' @param X                   numeric: vector to be winsorized or trimmed
 #' @param bounds              double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
-#' @param replacement         boolean: if TRUE then replace outliers with NA instead of winsorizing bound
+#' @param trim                boolean: if TRUE then replace outliers with NA instead of winsorizing bound
 #'
 #' @return  numeric vector of winsorized or trimmed values
 #'
@@ -272,6 +270,7 @@ instantiate.impute.missing.routine = function(){
 #' @param Data                  data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
 #' @param method                string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
 #' @param variables             string: vector of variables to standardize, default is all but 'date' column
+#' @param verbose               boolean: show start-up status of impute.missing.routine
 #'
 #' @return  data.frame with missing data imputed
 #'

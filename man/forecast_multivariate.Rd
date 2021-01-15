@@ -42,6 +42,10 @@ forecast_multivariate(
 
 \item{freq}{string: time series frequency; day, week, month, quarter, year}
 
+\item{lag.variables}{string: vector of variables to lag each time step, if lag.n is not null then the default is all non-date variables}
+
+\item{lag.n}{int: number of lags to create}
+
 \item{outlier.clean}{boolean: if TRUE then clean outliers}
 
 \item{outlier.variables}{string: vector of variables to standardize, default is all but 'date' column}

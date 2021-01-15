@@ -87,7 +87,7 @@ instantiate.univariate.forecast.training = function(){
 #' @param Data            data.frame: data frame of variable to forecast and a date column
 #' @param forecast.dates  date: dates forecasts are created
 #' @param methods         string or vector: models to estimate forecasts
-#' @param periods         int: number of periods to forecast
+#' @param horizon         int: number of periods to forecast
 #' @param rolling.window  int: size of rolling window, NA if expanding window is used
 #' @param freq            string: time series frequency; day, week, month, quarter, year
 #' @param recursive       boolean: use sequential one-step-ahead forecast if TRUE, use direct projections if FALSE
@@ -100,6 +100,8 @@ instantiate.univariate.forecast.training = function(){
 #' @param impute.method         string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
 #' @param impute.variables      string: vector of variables to impute missing values, default is all numeric columns
 #' @param impute.verbose        boolean: show start-up status of impute.missing.routine
+#' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
+#' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
 #' @return  data.frame with a date column and one column per forecast method selected
 #'
@@ -109,7 +111,7 @@ forecast_univariate = function(
   Data,                   # data.frame: data frame of variable to forecast and a date column
   forecast.dates,         # date: dates forecasts are created
   methods,                # string or vector: models to estimate forecasts with; currently supports all and only functions from the `forecast` package
-  periods,                # int: number of periods to forecast
+  horizon,                # int: number of periods to forecast
   recursive = TRUE,       # boolean: use sequential one-step-ahead forecast if TRUE, use direct projections if FALSE
 
   # information set
@@ -127,7 +129,11 @@ forecast_univariate = function(
   impute.missing = FALSE,          # boolean: if TRUE then impute missing values
   impute.method = 'kalman',        # string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
   impute.variables = NULL,         # string: vector of variables to impute missing values, default is all numeric columns
-  impute.verbose = FALSE           # boolean: show start-up status of impute.missing.routine
+  impute.verbose = FALSE,          # boolean: show start-up status of impute.missing.routine
+
+  # additional objects
+  return.models = FALSE,           # boolean: if TRUE then return list of models estimated each forecast.date
+  return.data = FALSE              # boolean: if True then return list of information.set for each forecast.date
 
 ){
 
@@ -138,6 +144,10 @@ forecast_univariate = function(
     univariate.forecast.training = instantiate.univariate.forecast.training()
     print(warningCondition('univariate.forecast.training was instantiated and default values will be used for model estimation.'))
   }
+
+  # create lists to store information
+  list.models = list(); i = 1
+  list.data = list(); j = 1
 
   # forecast routine
   forecasts = forecast.dates %>%
@@ -188,6 +198,7 @@ forecast_univariate = function(
         #---------------------------
         # Create forecasts
         #---------------------------
+
         results =
             methods %>% purrr::map(
               .f = function(engine){
@@ -204,7 +215,7 @@ forecast_univariate = function(
                                    args = univariate.forecast.training$arguments[[engine]])
 
                   # create forecasts
-                  predictions = forecast::forecast(model, h = periods)
+                  predictions = forecast::forecast(model, h = horizon)
 
                   # create standard errors
                   calc.error = try(predictions$lower[1])
@@ -225,7 +236,7 @@ forecast_univariate = function(
                   predictions = list()
                   univariate.forecast.training$arguments[[engine]]$y = information.set
 
-                  for(i in 1:periods){
+                  for(i in 1:horizon){
 
                     # estimate model
                     model =  do.call(what = univariate.forecast.training$method[[engine]],
@@ -260,17 +271,65 @@ forecast_univariate = function(
 
                 # add forecast dates
                 predictions$forecast.date = forecast.date
-                predictions$date = seq.Date(from = forecast.date, by = freq, length.out = periods+1)[2:(periods+1)]
+                predictions$date = seq.Date(from = forecast.date, by = freq, length.out = horizon+1)[2:(horizon+1)]
 
                 # return results
-                return(predictions)
+                return(
+                  list(
+                    predictions = predictions,
+                    model = model
+                  )
+                )
               }
-          ) %>% purrr::reduce(dplyr::bind_rows)
+          )
 
+        predictions =
+          map(results, .f = function(X){return(X$predictions)}) %>%
+          purrr::reduce(dplyr::bind_rows)
+
+        models =
+          map(results, .f = function(X){return(X$model)})
+
+        # store objects for return
+        results =
+          list(
+            predictions = predictions,
+            information.set = information.set,
+            models = models
+          )
+
+        # return results
         return(results)
 
       }
-    ) %>% purrr::reduce(dplyr::bind_rows)
+    )
 
-  return(forecasts)
+  # prepare forecasts
+  predictions =
+    map(forecasts, .f = function(X){return(X$predictions)}) %>%
+    purrr::reduce(dplyr::bind_rows)
+
+  # add model and information set lists to return object
+  if(return.data == TRUE | return.models == TRUE){
+    information = list(forecasts = predictions)
+  }else{
+    information = predictions
+  }
+
+  # prepare models
+  if(return.models == TRUE){
+    models = map(forecasts, .f = function(X){return(X$models)})
+    names(models) = forecast.dates
+    information[['models']] = models
+  }
+
+  # prepare information set
+  if(return.data == TRUE){
+    information.set = map(forecasts, .f = function(X){return(X$information.set)})
+    names(information.set) = forecast.dates
+    information[['information.set']] = information.set
+  }
+
+  # return results
+  return(information)
 }

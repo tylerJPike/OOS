@@ -8,7 +8,7 @@ forecast_univariate(
   Data,
   forecast.dates,
   methods,
-  periods,
+  horizon,
   recursive = TRUE,
   rolling.window = NA,
   freq,
@@ -20,7 +20,9 @@ forecast_univariate(
   impute.missing = FALSE,
   impute.method = "kalman",
   impute.variables = NULL,
-  impute.verbose = FALSE
+  impute.verbose = FALSE,
+  return.models = FALSE,
+  return.data = FALSE
 )
 }
 \arguments{
@@ -30,7 +32,7 @@ forecast_univariate(
 
 \item{methods}{string or vector: models to estimate forecasts}
 
-\item{periods}{int: number of periods to forecast}
+\item{horizon}{int: number of periods to forecast}
 
 \item{recursive}{boolean: use sequential one-step-ahead forecast if TRUE, use direct projections if FALSE}
 
@@ -55,6 +57,10 @@ forecast_univariate(
 \item{impute.variables}{string: vector of variables to impute missing values, default is all numeric columns}
 
 \item{impute.verbose}{boolean: show start-up status of impute.missing.routine}
+
+\item{return.models}{boolean: if TRUE then return list of models estimated each forecast.date}
+
+\item{return.data}{boolean: if True then return list of information.set for each forecast.date}
 }
 \value{
 data.frame with a date column and one column per forecast method selected

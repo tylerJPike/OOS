@@ -152,6 +152,8 @@ instantiate.multivariate.forecast.var.training = function(){
 #' @param impute.method         string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
 #' @param impute.variables      string: vector of variables to impute missing values, default is all numeric columns
 #' @param impute.verbose        boolean: show start-up status of impute.missing.routine
+#' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
+#' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
 #' @return  data.frame with a date column and one column per forecast method selected
 #'
@@ -181,7 +183,11 @@ forecast_multivariate = function(
   impute.missing = FALSE,          # boolean: if TRUE then impute missing values
   impute.method = 'kalman',        # string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
   impute.variables = NULL,         # string: vector of variables to impute missing values, default is all numeric columns
-  impute.verbose = FALSE           # boolean: show start-up status of impute.missing.routine
+  impute.verbose = FALSE,          # boolean: show start-up status of impute.missing.routine
+
+  # additional objects
+  return.models = FALSE,           # boolean: if TRUE then return list of models estimated each forecast.date
+  return.data = FALSE              # boolean: if True then return list of information.set for each forecast.date
 
 ){
 
@@ -204,55 +210,56 @@ forecast_multivariate = function(
     print(warningCondition('multivariate.forecast.var.training was instantiated and default values will be used for VAR model estimation.'))
   }
 
+
   # Create forecasts
-  forecasts = intersect(method, c('ols','ridge','lasso','elastic','GBM','RF','NN','var')) %>%
+  forecasts = forecast.dates %>%
     purrr::map(
-      .f = function(engine){
+      .f = function(forecast.date){
 
-        forecast.dates%>%
-          purrr::map(
-            .f = function(forecast.date){
+          # subset data
+          information.set =
+            data_subset(
+              Data = Data,
+              forecast.date = forecast.date,
+              rolling.window = rolling.window,
+              freq = freq
+            )
 
-              # subset data
-              information.set =
-                data_subset(
-                  Data = Data,
-                  forecast.date = forecast.date,
-                  rolling.window = rolling.window,
-                  freq = freq
-                )
+          # clean outliers
+          if(outlier.clean){
+            information.set =
+              data_outliers(
+                Data = information.set,
+                variables = outlier.variables,
+                w.bounds = outlier.bounds,
+                trim = outlier.trim,
+                cross_section = outlier.cross_section
+              )
+          }
 
-              # clean outliers
-              if(outlier.clean){
-                information.set =
-                  data_outliers(
-                    Data = information.set,
-                    variables = outlier.variables,
-                    w.bounds = outlier.bounds,
-                    trim = outlier.trim,
-                    cross_section = outlier.cross_section
-                  )
-              }
+          # impute missing values
+          if(impute.missing){
+            information.set =
+              data_impute(
+                Data = information.set,
+                variables = impute.variables,
+                method = impute.method,
+                verbose = impute.verbose
+              )
+          }
 
-              # impute missing values
-              if(impute.missing){
-                information.set =
-                  data_impute(
-                    Data = information.set,
-                    variables = impute.variables,
-                    method = impute.method,
-                    verbose = impute.verbose
-                  )
-              }
+          # create variable lags
+          if(!is.null(lag.n)){
+            information.set =
+              n.lag(
+                Data,
+                lags = lag.n,
+                variables = lag.variables)
+          }
 
-              # create variable lags
-              if(!is.null(lag.n)){
-                information.set =
-                  n.lag(
-                    Data,
-                    lags = lag.n,
-                    variables = lag.variables)
-              }
+          results = method %>%
+            purrr::map(
+              .f = function(engine){
 
               # set current data
               current.set = dplyr::filter(information.set, forecast.date == date)
@@ -272,7 +279,8 @@ forecast_multivariate = function(
                 names(information.set)[names(information.set) == target] = 'target'
 
                 # set horizon
-                information.set = dplyr::mutate(information.set, target = dplyr::lead(target, horizon)) %>%
+                information.set =
+                  dplyr::mutate(information.set, target = dplyr::lead(target, horizon)) %>%
                   na.omit()
 
                 # estimate model
@@ -333,25 +341,72 @@ forecast_multivariate = function(
                 freq)
 
               # set dates
-              results = data.frame(date = date,
-                                   forecast.date = forecast.date,
-                                   model = engine, forecast = point, se = error)
+              predictions = data.frame(
+                date = date,
+                forecast.date = forecast.date,
+                model = engine, forecast = point, se = error)
+
+
               # return results
-              return(results)
+              return(
+                list(
+                  predictions = predictions,
+                  model = model
+                )
+              )
 
             }
-          ) %>%
+          )
+
+        predictions =
+          map(results, .f = function(X){return(X$predictions)}) %>%
           purrr::reduce(dplyr::bind_rows)
+
+        rownames(predictions) = c(1:nrow(predictions))
+
+        models =
+          map(results, .f = function(X){return(X$model)})
+
+        # store objects for return
+        results =
+          list(
+            predictions = predictions,
+            information.set = information.set,
+            models = models
+          )
+
+        # return results
+        return(results)
+
       }
-    ) %>%
+    )
+
+  # prepare forecasts
+  predictions =
+    map(forecasts, .f = function(X){return(X$predictions)}) %>%
     purrr::reduce(dplyr::bind_rows)
 
-  # prepare results
-  rownames(forecasts) = c(1:nrow(forecasts))
-  forecasts = forecasts %>%
-    dplyr::filter(!is.na(model)) %>%
-    dplyr::select(date, forecast.date, model, forecast, se)
+  # add model and information set lists to return object
+  if(return.data == TRUE | return.models == TRUE){
+    information = list(forecasts = predictions)
+  }else{
+    information = predictions
+  }
+
+  # prepare models
+  if(return.models == TRUE){
+    models = map(forecasts, .f = function(X){return(X$models)})
+    names(models) = forecast.dates
+    information[['models']] = models
+  }
+
+  # prepare information set
+  if(return.data == TRUE){
+    information.set = map(forecasts, .f = function(X){return(X$information.set)})
+    names(information.set) = forecast.dates
+    information[['information.set']] = information.set
+  }
 
   # return results
-  return(forecasts)
+  return(information)
 }

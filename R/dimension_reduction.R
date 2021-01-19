@@ -83,7 +83,7 @@ dimension_reduction = function(
           if(method == 'pc'){
 
             # estimate factors
-            model.pc = princomp(dplyr::select(information.set, -target))
+            model.pc = stats::princomp(dplyr::select(information.set, -target))
 
             # select factors
             factors = as.matrix(dplyr::select(information.set, -target)) %*% model.pc$loadings[,1:ncomp]

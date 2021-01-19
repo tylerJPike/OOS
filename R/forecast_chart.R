@@ -32,11 +32,11 @@ forecast_chart = function(
 
   # set chart
   chart =
-    ggplot2::ggplot(Data, aes(x=date, y = forecast, color = model)) +
+    ggplot2::ggplot(Data, ggplot2::aes(x=date, y = forecast, color = model)) +
     # plot line
     ggplot2::geom_line(lwd = 1.25) +
     ggplot2::theme_classic() +
-    ggplot2::theme(panel.grid.major = element_line(size = 0.5, linetype = 'solid', colour = "grey")) +
+    ggplot2::theme(panel.grid.major = ggplot2::element_line(size = 0.5, linetype = 'solid', colour = "grey")) +
     # chart details
     ggplot2::labs(title = Title, subtitle = Freq) +
     ggplot2::xlab("") +

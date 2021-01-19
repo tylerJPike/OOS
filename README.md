@@ -6,15 +6,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
-This package creates a paradigm to provide a structured and automatd approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent exant time series forecasting routines on CRAN -- including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast 
-combination tools and forecast comparison metrics. 
+This package creates a paradigm to provide a structured and automatd approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics. 
 
 ## Workflow and available Tools
 
 ### 0. Data preparation
-Dimension Reduction
-1. Principal Components
-2. Partial Least Square Scores
 
 Clean Outliers
 1. Winsorize
@@ -27,6 +23,10 @@ Impute Missing Observations
 4. Average
 5. Moving Average
 6. Seasonal Decomposition
+
+Dimension Reduction
+1. Principal Components
+2. Partial Least Square Scores
 
 ### 1. Forecasting models 
 Univariate 
@@ -133,7 +133,7 @@ A brief example using the `Random Forest` to combine forecasts:
 			Data = dplyr::select(Data, date, INDPRO),
 			forecast.dates = tail(Data$date,15), 
 			method = c('naive','auto.arima', 'ets'),      
-			periods = 1,                         
+			horizon = 1,                         
 			recursive = FALSE,
 
 			# information set       
@@ -234,15 +234,17 @@ A brief example using the `Random Forest` to combine forecasts:
 
 ## Future Extensions
 High priority
+1. Forecast_combine fails when using only one method
+2. Test updated forecast_combine winsorize
+2. Add parallel processing ability
+3. Add house pricing vingette
+4. Add unit tests
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  
 2. Upgrade ML functionality   
-	1. deep NN via Keras  
-	2. xgboost, grf, quantile trees, ect.  
-	3. univariate ts model error correction via NN 
-3. Expand multivariate functionality  
-	1. Multivariate automatic lag selection
-	2. Multivariate joint estimation via trees and NN
-	3. Create standard errors
+	1. Deep NN via Keras  
+	2. Xgboost, grf, quantile trees, ect.  
+	3. Univariate ts model error correction via NN 
+	4. Multivariate joint estimation via trees and NN
 4. Demonstrate how to create user-define forecasting methods

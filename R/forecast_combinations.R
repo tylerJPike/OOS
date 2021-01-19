@@ -47,24 +47,6 @@ NBest = function(
   return(nBest)
 }
 
-#' Winsorize
-#'
-#' A function to winsorize the cross-section of forecasts
-#'
-#' @param X        numeric: numeric data to be winsorized
-#' @param bounds   numeric: upper and lower winsorizing bounds
-#'
-#' @return  vector of winsorized  X
-#'
-#' @export
-
-winsorize = function(X, bounds){
-  quantiles = quantile(X, probs = bounds, na.rm = T)
-  X[X <= quantiles[1]] = quantiles[1]
-  X[X <= quantiles[2]] = quantiles[2]
-  return(X)
-}
-
 #---------------------------------------------
 # Forecast combination method arguments
 #----------------------------------------------
@@ -200,7 +182,7 @@ forecast_combine = function(
   # trimmed (winsorized) mean
   if('trimmed.mean' %in% method){
     forecasts.raw = dplyr::select(forecasts, -dplyr::contains('date'), -dplyr::contains('observed'))
-    combination = apply(forecasts.raw, MARGIN = 1, FUN = winsorize, bounds = trim)
+    combination = apply(forecasts.raw, MARGIN = 1, FUN = winsorize, bounds = trim, trim = FALSE)
     combination = apply(forecasts.raw, MARGIN = 1, FUN = mean, na.rm = T)
     results.list[['trimmed']] =  data.frame(date = forecasts$date, forecast = combination, model = 'trimmed.mean')
   }

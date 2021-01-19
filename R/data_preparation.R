@@ -3,7 +3,7 @@
 #---------------------------------------------
 #' Standardize variables (mean 0, variance 1)
 #'
-#' @param X                   numeric: vector to be standardized
+#' @param X    numeric: vector to be standardized
 #'
 #' @return  numeric vector of winsorized or trimmed values
 #'
@@ -12,9 +12,9 @@ standardize = function(X){return((X-mean(X, na.rm = T))/sd(X, na.rm = T))}
 
 #' Winsorize or trim variables
 #'
-#' @param X                   numeric: vector to be winsorized or trimmed
-#' @param bounds              double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
-#' @param trim                boolean: if TRUE then replace outliers with NA instead of winsorizing bound
+#' @param X           numeric: vector to be winsorized or trimmed
+#' @param trim        boolean: if TRUE then replace outliers with NA instead of winsorizing bound
+#' @param bounds      double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
 #'
 #' @return  numeric vector of winsorized or trimmed values
 #'
@@ -33,7 +33,6 @@ winsorize = function(X, bounds, trim = TRUE){
 
     return(X)
 }
-
 
 #' Create information set
 #'
@@ -94,7 +93,7 @@ data_subset = function(
 #'
 #' @return  date
 #'
-#' @export
+#' 
 forecast_date = function(
   forecast.date,
   horizon,
@@ -154,11 +153,12 @@ n.lag = function(
         return(X)
       }
     ) %>%
-    purrr::reduce(full_join, by = 'date')
+    purrr::reduce(dplyr::full_join, by = 'date')
 
 
   return(Data)
 }
+
 #---------------------------------------------
 # Clean outliers
 #---------------------------------------------
@@ -267,10 +267,10 @@ instantiate.impute.missing.routine = function(){
 #' A function to impute missing values. Is used as a data preparation helper function and is called internally
 #'  by forecast_univariate, forecast_multivariate, and forecast_combine.
 #'
-#' @param Data                  data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
-#' @param method                string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
-#' @param variables             string: vector of variables to standardize, default is all but 'date' column
-#' @param verbose               boolean: show start-up status of impute.missing.routine
+#' @param Data          data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
+#' @param method        string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
+#' @param variables     string: vector of variables to standardize, default is all but 'date' column
+#' @param verbose       boolean: show start-up status of impute.missing.routine
 #'
 #' @return  data.frame with missing data imputed
 #'

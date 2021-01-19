@@ -284,11 +284,11 @@ forecast_univariate = function(
           )
 
         predictions =
-          map(results, .f = function(X){return(X$predictions)}) %>%
+          purrr::map(results, .f = function(X){return(X$predictions)}) %>%
           purrr::reduce(dplyr::bind_rows)
 
         models =
-          map(results, .f = function(X){return(X$model)})
+          purrr::map(results, .f = function(X){return(X$model)})
 
         # store objects for return
         results =
@@ -306,7 +306,7 @@ forecast_univariate = function(
 
   # prepare forecasts
   predictions =
-    map(forecasts, .f = function(X){return(X$predictions)}) %>%
+    purrr::map(forecasts, .f = function(X){return(X$predictions)}) %>%
     purrr::reduce(dplyr::bind_rows)
 
   # add model and information set lists to return object
@@ -318,14 +318,14 @@ forecast_univariate = function(
 
   # prepare models
   if(return.models == TRUE){
-    models = map(forecasts, .f = function(X){return(X$models)})
+    models = purrr::map(forecasts, .f = function(X){return(X$models)})
     names(models) = forecast.dates
     information[['models']] = models
   }
 
   # prepare information set
   if(return.data == TRUE){
-    information.set = map(forecasts, .f = function(X){return(X$information.set)})
+    information.set = purrr::map(forecasts, .f = function(X){return(X$information.set)})
     names(information.set) = forecast.dates
     information[['information.set']] = information.set
   }

@@ -165,6 +165,14 @@ forecast_comparison = function(
       purrr::map_df(
         .f = function(X){
 
+          if(sum(na.omit(X$baseline.forecast - X$forecast)) == 0){
+            return(
+              data.frame(
+                model = baseline.forecast,
+                DM.statistic = NA)
+            )
+          }
+
           DM.statistic =
             forecast::dm.test(
               e1 = na.omit(X$baseline.forecast - X$observed),
@@ -185,6 +193,14 @@ forecast_comparison = function(
       purrr::map_df(
         .f = function(X){
 
+          if(sum(na.omit(X$baseline.forecast - X$forecast)) == 0){
+            return(
+              data.frame(
+                model = baseline.forecast,
+                CM.statistic = NA)
+            )
+          }
+
           fCW12 =
               (X$observed - X$baseline.forecast)^2 -
               (X$observed - X$forecast)^2 -
@@ -196,19 +212,21 @@ forecast_comparison = function(
 
           lmCW.NW.summ = lmCW.summ
 
-          lmCW.NW.summ$coefficients = unclass(lmtest::coeftest(lmCW, vcov. = sandwich::NeweyWest(lmCW,lag=(h-1))))
+          lmCW.NW.summ$coefficients =
+            unclass(lmtest::coeftest(lmCW, vcov. = sandwich::NeweyWest(lmCW, dplyr::lag(horizon-1))))
 
-          CM.statistic = lmCW.NW.summ$coefficients[3]
+          CW.statistic = lmCW.NW.summ$coefficients[3]
 
           return(
               data.frame(
                 model = unique(X$model),
-                CM.statistic = CM.statistic)
+                Cw.statistic = CM.statistic)
           )
         }
       )
   }
 
+  rownames(information.set) = c(1:nrow(information.set))
   return(information.set)
 
 }

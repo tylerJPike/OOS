@@ -241,6 +241,7 @@ High priority
 3. Add house pricing vingette
 4. Add unit tests
 5. Add dimension reduction in data cleaning step of forecast_multivariate
+7. Fix CW forecast comparison test
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  

@@ -93,7 +93,7 @@ data_subset = function(
 #'
 #' @return  date
 #'
-#' 
+#'
 forecast_date = function(
   forecast.date,
   horizon,
@@ -187,7 +187,7 @@ data_outliers = function(
 
   # set variables to all if default
   if(is.null(variables) == TRUE){
-    variables = names(dplyr::select(Data, is.numeric))
+    variables = names(dplyr::select_if(Data, is.numeric))
   }
 
   # target variables must be numeric
@@ -296,7 +296,7 @@ data_impute = function(
 
   # set variables to all if default
   if(is.null(variables) == TRUE){
-    variables = names(dplyr::select(Data, is.numeric))
+    variables = names(dplyr::select_if(Data, is.numeric))
   }
 
   # target variables must be numeric

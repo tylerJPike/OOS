@@ -15,7 +15,7 @@ forecast_multivariate(
   lag.variables = NULL,
   lag.n = NULL,
   outlier.clean = FALSE,
-  outlier.variables,
+  outlier.variables = NULL,
   outlier.bounds = c(0.05, 0.95),
   outlier.trim = FALSE,
   outlier.cross_section = FALSE,

@@ -176,7 +176,7 @@ forecast_multivariate = function(
 
   # outlier cleaning
   outlier.clean = FALSE,           # boolean: if TRUE then clean outliers
-  outlier.variables,               # string: vector of variables to standardize, default is all but 'date' column
+  outlier.variables = NULL,        # string: vector of variables to standardize, default is all but 'date' column
   outlier.bounds = c(0.05, 0.95),  # double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
   outlier.trim = FALSE,            # boolean: if TRUE then replace outliers with NA instead of winsorizing bound
   outlier.cross_section = FALSE,   # boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)

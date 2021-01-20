@@ -36,3 +36,6 @@ Imports:
   imputeTS, 
   vars,
   stats
+Suggests: 
+    testthat,
+    covr

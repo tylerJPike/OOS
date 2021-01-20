@@ -13,7 +13,7 @@ forecast_univariate(
   rolling.window = NA,
   freq,
   outlier.clean = FALSE,
-  outlier.variables,
+  outlier.variables = NULL,
   outlier.bounds = c(0.05, 0.95),
   outlier.trim = FALSE,
   outlier.cross_section = FALSE,

@@ -1,9 +1,0 @@
-comment: false
-
-language: r
-
-r_packages:
-  - covr
-
-after_success:
-- Rscript -e 'covr::codecov()'

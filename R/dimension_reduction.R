@@ -100,7 +100,7 @@ dimension_reduction = function(
             # estimate factors
             model.pls =
               plsr::pls(X = dplyr::select(information.set, -target) %>% as.matrix(),
-                        Y = dplyr::select(information.set, target)  %>% as.matrix())
+                        Y = dplyr::select(information.set, target) %>% as.matrix())
 
             # select factors
             factors = model.pls$score[,1:ncomp]

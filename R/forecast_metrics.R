@@ -197,7 +197,7 @@ forecast_comparison = function(
             return(
               data.frame(
                 model = baseline.forecast,
-                CM.statistic = NA)
+                CW.statistic = NA)
             )
           }
 
@@ -220,7 +220,7 @@ forecast_comparison = function(
           return(
               data.frame(
                 model = unique(X$model),
-                Cw.statistic = CM.statistic)
+                Cw.statistic = CW.statistic)
           )
         }
       )

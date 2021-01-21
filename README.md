@@ -235,12 +235,12 @@ A brief example using the `Random Forest` to combine forecasts:
 
 ## Future Extensions
 High priority
-1. Forecast_combine fails when using only one method
-2. Test updated forecast_combine winsorize
-2. Add parallel processing ability
-3. Add house pricing vingette
-4. Add dimension reduction in data cleaning step of forecast_multivariate
-5. Fix CW forecast comparison test
+1. Fix forecast_combine fails when using only one method
+2. Fix forecast_combine winsorize
+3. Fix CW forecast comparison test
+4. Add parallel processing ability
+5. Add house pricing vingette
+6. Add dimension reduction in data cleaning step of forecast_multivariate
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  

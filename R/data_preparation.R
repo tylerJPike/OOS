@@ -19,11 +19,11 @@ standardize = function(X){return((X-mean(X, na.rm = T))/sd(X, na.rm = T))}
 #' @return  numeric vector of winsorized or trimmed values
 #'
 #' @export
-winsorize = function(X, bounds, trim = TRUE){
+winsorize = function(X, bounds, trim = FALSE){
 
     qq = quantile(X, probs = bounds, na.rm = TRUE)
 
-    if(trim == TRUE){
+    if(trim == FALSE){
       X[X <= qq[1]] = qq[1]
       X[X >= qq[2]] = qq[2]
     }else{

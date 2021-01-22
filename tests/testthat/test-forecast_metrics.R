@@ -81,6 +81,18 @@ test_that("forecast_comparison", {
   expect_true(!is.na(mean(dm.test$error.ratio)) |
                 !is.nan(mean(dm.test$error.ratio)),'DM test is NA or NAN')
 
+  # run DM test
+  cw.test =
+    forecast_comparison(
+      forecasts,
+      baseline.forecast = 'naive',
+      test = 'CW',
+      horizon = 1)
+
+  expect_true(is.data.frame(cw.test),'DM test is not a data.frame')
+  expect_true(!is.na(mean(cw.test$error.ratio)) |
+                !is.nan(mean(cw.test$error.ratio)),'DM test is NA or NAN')
+
 })
 
 test_that("forecast_accuracy", {

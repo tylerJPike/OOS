@@ -213,7 +213,7 @@ forecast_comparison = function(
           lmCW.NW.summ = lmCW.summ
 
           lmCW.NW.summ$coefficients =
-            unclass(lmtest::coeftest(lmCW, vcov. = sandwich::NeweyWest(lmCW, dplyr::lag(horizon-1))))
+              unclass(lmtest::coeftest(lmCW, vcov. = sandwich::NeweyWest(lmCW, lag = horizon)))
 
           CW.statistic = lmCW.NW.summ$coefficients[3]
 
@@ -230,12 +230,3 @@ forecast_comparison = function(
   return(information.set)
 
 }
-
-
-
-
-
-
-
-
-

@@ -29,7 +29,7 @@ test_that("forecast_combine produces standard output", {
     forecast_combine(
       forecasts,
       method = c('uniform','median','trimmed.mean',
-                 'n.best','lasso'),
+                 'n.best','lasso','peLasso'),
       burn.in = 5,
       n.max = 2)
 

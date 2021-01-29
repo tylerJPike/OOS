@@ -1,7 +1,7 @@
 #----------------------------------------
 ### Basic chart
 #----------------------------------------
-#' Basic forecast chart
+#' Chart forecasts
 #'
 #' @param Data        data.frame: oos.forecast object
 #' @param Title       string: chart title

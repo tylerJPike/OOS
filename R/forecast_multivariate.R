@@ -154,6 +154,10 @@ instantiate.multivariate.forecast.var.training = function(){
 #' @param impute.method         string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
 #' @param impute.variables      string: vector of variables to impute missing values, default is all numeric columns
 #' @param impute.verbose        boolean: show start-up status of impute.missing.routine
+#' @param reduce.data           boolean: if TRUE then reduce dimension
+#' @param reduce.variables      string: vector of variables to impute missing values, default is all numeric columns
+#' @param reduce.ncomp          int: number of factors to create
+#' @param reduce.standardize    boolean: normalize variables (mean zero, variance one) before estimating factors
 #' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
 #' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
@@ -186,6 +190,12 @@ forecast_multivariate = function(
   impute.method = 'kalman',        # string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
   impute.variables = NULL,         # string: vector of variables to impute missing values, default is all numeric columns
   impute.verbose = FALSE,          # boolean: show start-up status of impute.missing.routine
+
+  # dimension reduction
+  reduce.data = FALSE,             # boolean: if TRUE then reduce dimension
+  reduce.variables = NULL,         # string: vector of variables to impute missing values, default is all numeric columns
+  reduce.ncomp = NULL,             # int: number of factors to create
+  reduce.standardize = TRUE,       # boolean: normalize variables (mean zero, variance one) before estimating factors
 
   # additional objects
   return.models = FALSE,           # boolean: if TRUE then return list of models estimated each forecast.date
@@ -250,11 +260,28 @@ forecast_multivariate = function(
               )
           }
 
+          # dimension reduction
+          if(reduce.data){
+            information.set.reduce =
+              data_reduction(
+                Data = information.set,
+                variables = reduce.variables,
+                ncomp = reduce.ncomp,
+                standardize = reduce.standardize
+              )
+
+            information.set =
+              dplyr::full_join(
+                dplyr::select(information.set, target, date),
+                information.set.reduce,
+                by = 'date')
+          }
+
           # create variable lags
           if(!is.null(lag.n)){
             information.set =
               n.lag(
-                Data,
+                Data = information.set,
                 lags = lag.n,
                 variables = lag.variables)
           }

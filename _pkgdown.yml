@@ -1,0 +1,38 @@
+
+template:
+  params:
+    bootswatch: flatly
+
+
+reference:
+  - title: Forecasting Workflow
+    desc: Functions used to create and compare forecasts
+    contents:
+      - '`forecast_univariate`'
+      - '`forecast_multivariate`'
+      - '`forecast_combine`'
+      - '`forecast_accuracy`'
+      - '`forecast_comparison`'
+      - '`forecast_chart`'
+  - title: Data Cleaning
+    desc: Functions used for data cleaning in `forecast_univariate` and `forecast_multivariate`
+    contents:
+      - '`data_outliers`'
+      - '`data_impute`'
+  - title: Model Accessibility
+    desc: Functions to instantiate lists that users may edit to control model estimate routines
+    contents:
+      - '`instantiate.impute.missing.routine`'
+      - '`instantiate.univariate.forecast.training`'
+      - '`instantiate.multivariate.forecast.ml.training`'
+      - '`instantiate.multivariate.forecast.var.training`'
+      - '`instantiate.forecast.combinations.ml.training`'
+
+
+navbar:
+  right:
+    - icon: fa-file-code-o
+      text: "functions"
+      href: reference/index.html
+    - icon: fa-github fa-2x
+      href: https://github.com/tylerJPike/OOS

@@ -27,7 +27,6 @@ Impute Missing Observations
 
 Dimension Reduction
 1. Principal Components
-2. Partial Least Square Scores
 
 ### 1. Forecasting models 
 Univariate 
@@ -66,7 +65,9 @@ Multivariate
 11. Tree-Based Gradient Boosting Machine 
 12. Single Layered Neural Network  
 
-### 3. Accuracy metrics and comparisons
+### 3. Chart forecasts
+
+### 4. Accuracy metrics and comparisons
 Loss Functions
 1. Mean Square Error (MSE)
 2. Root Mean Square Error (RMSE)
@@ -77,8 +78,6 @@ Forecast Comparison Methods
 1. Forecast Error Ratios
 2. Diebold-Mariano Test (for unnested models)
 3. Clark and West Test (for nested models)
-
-### 4. Chart forecasts
 
 ## Model estimation flexibility and accessibility
 
@@ -97,36 +96,27 @@ A brief example using an `Arima` model to forecast univariate time series:
 
 A brief example using the `Random Forest` to combine forecasts:   
 
-	# 1. create the central list of ML training arguments, forecast.combinations.ml.training  
+	# 1. create the central list of ML training arguments 
 	forecast.combinations.ml.training = instantiate.forecast.combinations.ml.training()  
 
 	# 2. select an item to edit, for example the random forest tuning grid   
 		# view default tuning grid  
 		forecast.combinations.ml.training$tune.grid[['RF']]  
 		# edit tuning grid   
-		forecast.combinations.ml.training$tune.grid[['RF']] <- expand.grid(mtry = c(1:6))  
-
+		forecast.combinations.ml.training$tune.grid[['RF']] = expand.grid(mtry = c(1:6))  
+---
 ## Basic usage example
 
 	#----------------------------------------
 	### Forecasting Example
 	#----------------------------------------
-	# set data
-	quantmod::getSymbols.FRED(c('UNRATE','INDPRO','GS10'), 
-							  env = globalenv())
+	# pull and prepare data from FRED
+	quantmod::getSymbols.FRED(
+		c('UNRATE','INDPRO','GS10'), 
+		env = globalenv())
 	Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
 	Data = data.frame(Data, date = zoo::index(Data)) %>%
 		dplyr::filter(lubridate::year(date) >= 1990)
-	
-	# create OOS principal components
-	# (will not be used)
-	Data.factors =
-		dimension_reduction(
-			Data = Data,
-			forecast.date = tail(Data$date),
-			target = 'INDPRO',
-			method = 'pc',
-			ncomp = 2)
 
 	# run univariate forecasts 
 	forecast.uni = 
@@ -178,7 +168,13 @@ A brief example using the `Random Forest` to combine forecasts:
 			impute.missing = FALSE,
 			impute.method = 'kalman',
 			impute.variables = NULL,
-			impute.verbose = FALSE) 
+			impute.verbose = FALSE,
+			
+			# dimension reduction
+			reduce.data = FALSE,
+			reduce.variables = NULL,
+			reduce.ncomp = NULL,
+			reduce.standardize = TRUE) 
 
 	# combine forecasts and add in observed values
 	forecasts = 
@@ -229,18 +225,16 @@ A brief example using the `Random Forest` to combine forecasts:
 
 	chart
 
-
-
 ---
 
 ## Future Extensions
 High priority
-1. Fix forecast_combine fails when using only one method
-2. Fix forecast_combine winsorize
-3. Fix CW forecast comparison test
-4. Add parallel processing ability
-5. Add house pricing vingette
-6. Add dimension reduction in data cleaning step of forecast_multivariate
+1. Add parallel processing ability
+2. Create vingettes
+	1. Basic example
+	2. User defined functions
+	3. Forecasting binary outputs - prob of recession example
+3. Create website
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  
@@ -249,4 +243,3 @@ Low priority
 	2. Xgboost, grf, quantile trees, ect.  
 	3. Univariate ts model error correction via NN 
 	4. Multivariate joint estimation via trees and NN
-4. Demonstrate how to create user-define forecasting methods

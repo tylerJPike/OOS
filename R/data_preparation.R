@@ -315,3 +315,61 @@ data_impute = function(
   # return results
   return(Data)
 }
+
+
+#---------------------------------------------
+# Dimension reduction
+#---------------------------------------------
+#' Dimension reduction via principal components
+#'
+#' A function to estimate principal components.
+#'
+#' @param Data            data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
+#' @param variables       string: vector of variables to standardize, default is all but 'date' column
+#' @param ncomp           int: number of factors to create
+#' @param standardize     boolean: normalize variables (mean zero, variance one) before estimating factors
+#'
+#' @return  data.frame with a date column and one column per forecast method selected
+#'
+#' @export
+
+data_reduction = function(
+  Data,                 # data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
+  variables = NULL,     # string: vector of variables to impute missing values, default is all numeric columns
+  ncomp,                # int: number of factors to create
+  standardize = TRUE    # boolean: normalize variables (mean zero, variance one) before estimating factors
+){
+
+  # set variables to all if default
+  if(is.null(variables) == TRUE){
+    variables = names(dplyr::select_if(Data, is.numeric))
+  }
+
+  # target variables must be numeric
+  if(length(setdiff(variables, names(dplyr::select_if(Data, is.numeric)))) != 0){
+    print(errorCondition('Variables cleaned for outliers must be numeric.'))
+  }
+
+  # remove missing
+  information.set = na.omit(Data)
+
+  # standardize variables
+  information.set = information.set %>%
+    dplyr::mutate_at(dplyr::vars(variables), OOS::standardize)
+
+  # estimate factors
+  model.pc = stats::princomp(dplyr::select(information.set, -date))
+
+  # select factors
+  factors = as.matrix(dplyr::select(information.set, -date)) %*% model.pc$loadings[,1:ncomp]
+
+  # take most recent factors
+  colnames(factors) = paste0('pc.',c(1:ncomp))
+
+  factors =
+    data.frame(factors,
+               date = information.set$date)
+
+  # return results
+  return(factors)
+}

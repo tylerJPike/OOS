@@ -12,4 +12,4 @@ r_github_packages:
   - tylerJPike/OOS
 
 after_success:
-  - Rscript -e 'covr::codecov()'
+  - Rscript -e 'covr::codecov(token = eabccb13-c362-4955-9ee2-34cfb28f0c29)'

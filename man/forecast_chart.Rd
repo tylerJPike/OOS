@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_chart.R
 \name{forecast_chart}
 \alias{forecast_chart}
-\title{Basic forecast chart}
+\title{Chart forecasts}
 \usage{
 forecast_chart(Data, Title, Ylab, Freq, zeroline = FALSE)
 }
@@ -21,5 +21,5 @@ forecast_chart(Data, Title, Ylab, Freq, zeroline = FALSE)
 ggplot2 chart
 }
 \description{
-Basic forecast chart
+Chart forecasts
 }

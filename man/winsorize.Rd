@@ -4,7 +4,7 @@
 \alias{winsorize}
 \title{Winsorize or trim variables}
 \usage{
-winsorize(X, bounds, trim = TRUE)
+winsorize(X, bounds, trim = FALSE)
 }
 \arguments{
 \item{X}{numeric: vector to be winsorized or trimmed}

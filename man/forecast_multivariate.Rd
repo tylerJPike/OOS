@@ -23,6 +23,11 @@ forecast_multivariate(
   impute.method = "kalman",
   impute.variables = NULL,
   impute.verbose = FALSE,
+  reduce.data = FALSE,
+  reduce.variables = NULL,
+  reduce.ncomp = NULL,
+  reduce.standardize = TRUE,
+  parallel.dates = NULL,
   return.models = FALSE,
   return.data = FALSE
 )
@@ -63,6 +68,16 @@ forecast_multivariate(
 \item{impute.variables}{string: vector of variables to impute missing values, default is all numeric columns}
 
 \item{impute.verbose}{boolean: show start-up status of impute.missing.routine}
+
+\item{reduce.data}{boolean: if TRUE then reduce dimension}
+
+\item{reduce.variables}{string: vector of variables to impute missing values, default is all numeric columns}
+
+\item{reduce.ncomp}{int: number of factors to create}
+
+\item{reduce.standardize}{boolean: normalize variables (mean zero, variance one) before estimating factors}
+
+\item{parallel.dates}{int: the number of cores available for parallel estimation}
 
 \item{return.models}{boolean: if TRUE then return list of models estimated each forecast.date}
 

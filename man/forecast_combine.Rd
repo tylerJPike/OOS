@@ -10,7 +10,8 @@ forecast_combine(
   n.max = NULL,
   window = NA,
   trim = c(0.5, 0.95),
-  burn.in = 1
+  burn.in = 1,
+  parallel.dates = NULL
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ forecast_combine(
 \item{trim}{numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)}
 
 \item{burn.in}{int: the number of periods to use in the first model estimation}
+
+\item{parallel.dates}{int: the number of cores available for parallel estimation}
 }
 \value{
 data.frame with a date column and one column per forecast method selected

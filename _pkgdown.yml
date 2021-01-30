@@ -19,6 +19,7 @@ reference:
     contents:
       - '`data_outliers`'
       - '`data_impute`'
+      - '`data_reduce`'
   - title: Model Accessibility
     desc: Functions to instantiate lists that users may edit to control model estimate routines
     contents:

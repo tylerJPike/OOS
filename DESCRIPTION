@@ -24,6 +24,8 @@ Imports:
   lubridate,
   dplyr,
   purrr,
+  furrr,
+  future,
   ggplot2,
   tidyr,
   plsr,
@@ -33,9 +35,9 @@ Imports:
   caret,
   lmtest,
   sandwich, 
-  imputeTS, 
-  vars,
-  stats
+  imputeTS,
+  stats,
+  vars
 Suggests: 
     testthat,
     covr

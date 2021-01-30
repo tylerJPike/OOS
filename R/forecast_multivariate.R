@@ -158,6 +158,7 @@ instantiate.multivariate.forecast.var.training = function(){
 #' @param reduce.variables      string: vector of variables to impute missing values, default is all numeric columns
 #' @param reduce.ncomp          int: number of factors to create
 #' @param reduce.standardize    boolean: normalize variables (mean zero, variance one) before estimating factors
+#' @param parallel.dates        int: the number of cores available for parallel estimation
 #' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
 #' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
@@ -197,6 +198,9 @@ forecast_multivariate = function(
   reduce.ncomp = NULL,             # int: number of factors to create
   reduce.standardize = TRUE,       # boolean: normalize variables (mean zero, variance one) before estimating factors
 
+  # parallel processing
+  parallel.dates = NULL,           # int: the number of cores available for parallel estimation
+
   # additional objects
   return.models = FALSE,           # boolean: if TRUE then return list of models estimated each forecast.date
   return.data = FALSE              # boolean: if True then return list of information.set for each forecast.date
@@ -222,10 +226,17 @@ forecast_multivariate = function(
     print(warningCondition('multivariate.forecast.var.training was instantiated and default values will be used for VAR model estimation.'))
   }
 
+  # create parallel back end
+  if(!is.null(parallel.dates)){
+    future::plan(strategy = 'multisession', workers = parallel.dates)
+  }else{
+    future::plan(strategy = 'sequential')
+  }
+
 
   # Create forecasts
   forecasts = forecast.dates %>%
-    purrr::map(
+    furrr::future_map(
       .f = function(forecast.date){
 
           # subset data

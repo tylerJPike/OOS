@@ -100,6 +100,7 @@ instantiate.univariate.forecast.training = function(){
 #' @param impute.method         string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
 #' @param impute.variables      string: vector of variables to impute missing values, default is all numeric columns
 #' @param impute.verbose        boolean: show start-up status of impute.missing.routine
+#' @param parallel.dates        int: the number of cores available for parallel estimation
 #' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
 #' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
@@ -131,6 +132,9 @@ forecast_univariate = function(
   impute.variables = NULL,         # string: vector of variables to impute missing values, default is all numeric columns
   impute.verbose = FALSE,          # boolean: show start-up status of impute.missing.routine
 
+  # parallel processing
+  parallel.dates = NULL,           # int: the number of cores available for parallel estimation
+
   # additional objects
   return.models = FALSE,           # boolean: if TRUE then return list of models estimated each forecast.date
   return.data = FALSE              # boolean: if True then return list of information.set for each forecast.date
@@ -145,13 +149,20 @@ forecast_univariate = function(
     print(warningCondition('univariate.forecast.training was instantiated and default values will be used for model estimation.'))
   }
 
+  # create parallel back end
+  if(!is.null(parallel.dates)){
+    future::plan(strategy = 'multisession', workers = parallel.dates)
+  }else{
+    future::plan(strategy = 'sequential')
+  }
+
   # create lists to store information
   list.models = list(); i = 1
   list.data = list(); j = 1
 
   # forecast routine
   forecasts = forecast.dates %>%
-    purrr::map(
+    furrr::future_map(
       .f = function(forecast.date){
 
         #---------------------------

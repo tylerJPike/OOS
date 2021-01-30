@@ -21,6 +21,7 @@ forecast_univariate(
   impute.method = "kalman",
   impute.variables = NULL,
   impute.verbose = FALSE,
+  parallel.dates = NULL,
   return.models = FALSE,
   return.data = FALSE
 )
@@ -57,6 +58,8 @@ forecast_univariate(
 \item{impute.variables}{string: vector of variables to impute missing values, default is all numeric columns}
 
 \item{impute.verbose}{boolean: show start-up status of impute.missing.routine}
+
+\item{parallel.dates}{int: the number of cores available for parallel estimation}
 
 \item{return.models}{boolean: if TRUE then return list of models estimated each forecast.date}
 

@@ -65,6 +65,9 @@ forecast_accuracy = function(
     print(errorCondition('There must be a column named "date" in Data.'))
   }
 
+  # function variables
+  model = observed = forecast = forecast.date = se = NA
+
   # set data
   information.set =
     dplyr::full_join(
@@ -129,6 +132,9 @@ forecast_comparison = function(
   if(!'date' %in% names(Data)){
     print(errorCondition('There must be a column named "date" in Data.'))
   }
+
+  # function variables
+  model = observed = forecast = forecast.date = se = NA
 
   # set data
   information.set =

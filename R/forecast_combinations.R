@@ -27,6 +27,8 @@ NBest = function(
   window = NA   # int: size of rolling window to evaluate forecast error over, use entire period if NA
 ){
 
+  observed = NA
+
   # calculate rolling forecast errors
   errors = abs(dplyr::select(forecasts, -observed) - forecasts$observed)
   rollRMSE = function(X){return(sqrt(mean((X)^2, na.rm = T)))}
@@ -50,16 +52,16 @@ NBest = function(
 #---------------------------------------------
 # Forecast combination method arguments
 #----------------------------------------------
-#' Instantiate forecast.combinations.ml.training
+#' Instantiate forecast_combinations.control_panel
 #'
 #' A function to create the forecast combination technique arguments list
 #' for user manipulation.
 #'
-#' @return forecast.combinations.ml.training
+#' @return forecast_combinations.control_panel
 #'
 #' @export
 
-instantiate.forecast.combinations.ml.training = function(){
+instantiate.forecast_combinations.control_panel = function(){
 
   # caret names
   caret.engine = list(
@@ -171,6 +173,8 @@ forecast_combine = function(
     dplyr::select(-se, -forecast.date) %>%
     tidyr::pivot_wider(names_from = model, values_from = forecast)
 
+  # function variables
+  model = observed = forecast = forecast.date = se = NA
   results.list = list()
 
   # uniform weights
@@ -264,11 +268,11 @@ forecast_combine = function(
   if(length(intersect(c('GBM','RF','NN','ols','lasso','ridge','elastic'), method)) > 0){
 
     # training parameter creation and warnings
-    if(exists("forecast.combinations.ml.training")){
-      print(warningCondition('forecast.combinations.ml.training exists and will be used for ML forecast combination techniques in its present state.'))
+    if(exists("forecast_combinations.control_panel")){
+      print(warningCondition('forecast_combinations.control_panel exists and will be used for ML forecast combination techniques in its present state.'))
     }else{
-      forecast.combinations.ml.training = instantiate.forecast.combinations.ml.training()
-      print(warningCondition('forecast.combinations.ml.training was instantiated and default values will be used to train ML forecast combination techniques.'))
+      forecast_combinations.control_panel = instantiate.forecast_combinations.control_panel()
+      print(warningCondition('forecast_combinations.control_panel was instantiated and default values will be used to train ML forecast combination techniques.'))
     }
 
     combination = intersect(c('GBM','RF','NN','ols','lasso','ridge','elastic'), method) %>%
@@ -287,10 +291,10 @@ forecast_combine = function(
                 model =
                   caret::train(observed~.,
                                 data = dplyr::select(information.set, -date),
-                                method    = forecast.combinations.ml.training$caret.engine[[engine]],
-                                trControl = forecast.combinations.ml.training$control,
-                                tuneGrid  = forecast.combinations.ml.training$tuning.grids[[engine]],
-                                metric    = forecast.combinations.ml.training$accuracy,
+                                method    = forecast_combinations.control_panel$caret.engine[[engine]],
+                                trControl = forecast_combinations.control_panel$control,
+                                tuneGrid  = forecast_combinations.control_panel$tuning.grids[[engine]],
+                                metric    = forecast_combinations.control_panel$accuracy,
                                 na.action = na.omit)
 
                 # calculate forecast

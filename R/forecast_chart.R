@@ -21,6 +21,10 @@ forecast_chart = function(
   zeroline = FALSE   # boolean: if TRUE then add a horizontal line at zero
 ){
 
+
+  # function variables
+  model = observed = forecast = forecast.date = se = NA
+
   # reformat observed
   Data =
     dplyr::bind_rows(

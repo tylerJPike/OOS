@@ -14,5 +14,3 @@ NULL
 #' @import stats
 NULL
 
-# define global variables
-model = observed = forecast = forecast.date = h = se = NA

@@ -9,16 +9,16 @@
 #----------------------------------------------
 # multivariate forecasting arguments - ML
 #----------------------------------------------
-#' Instantiate multivariate.forecast.ml.training
+#' Instantiate forecast_multivariate.ml.control_panel
 #'
 #' A function to create the multivariate forecast methods
 #' arguments list for user manipulation.
 #'
-#' @return multivariate.forecast.ml.training
+#' @return forecast_multivariate.ml.control_panel
 #'
 #' @export
 
-instantiate.multivariate.forecast.ml.training = function(){
+instantiate.forecast_multivariate.ml.control_panel = function(){
 
   # caret names
   caret.engine = list(
@@ -101,16 +101,16 @@ instantiate.multivariate.forecast.ml.training = function(){
 #----------------------------------------------
 # multivariate forecasting arguments - VAR
 #----------------------------------------------
-#' Instantiate multivariate.forecast.var.training
+#' Instantiate forecast_multivariate.var.control_panel
 #'
 #' A function to create the multivariate forecast methods
 #' arguments list for user manipulation.
 #'
-#' @return multivariate.forecast.var.training
+#' @return forecast_multivariate.var.control_panel
 #'
 #' @export
 
-instantiate.multivariate.forecast.var.training = function(){
+instantiate.forecast_multivariate.var.control_panel = function(){
 
   return(
     list(
@@ -211,19 +211,19 @@ forecast_multivariate = function(
   results.list = list()
 
   # training parameter creation and warnings
-  if(exists("multivariate.forecast.ml.training")){
-    print(warningCondition('forecast.combinations.ml.training exists and will be used for ML model estimation in its present state.'))
+  if(exists("forecast_multivariate.ml.control_panel")){
+    print(warningCondition('forecast_multivariate.ml.control_panel exists and will be used for ML model estimation in its present state.'))
   }else{
-    multivariate.forecast.ml.training = instantiate.multivariate.forecast.ml.training()
-    print(warningCondition('multivariate.forecast.ml.training was instantiated and default values will be used for ML model estimation.'))
+    forecast_multivariate.ml.control_panel = instantiate.forecast_multivariate.ml.control_panel()
+    print(warningCondition('forecast_multivariate.ml.control_panel was instantiated and default values will be used for ML model estimation.'))
   }
 
   # VAR parameters and warnings
-  if(exists("multivariate.forecast.var.training")){
+  if(exists("forecast_multivariate.var.control_panel")){
     print(warningCondition('forecast.combinations.var.training exists and will be used for VAR model estimation in its present state.'))
   }else{
-    multivariate.forecast.var.training = instantiate.multivariate.forecast.var.training()
-    print(warningCondition('multivariate.forecast.var.training was instantiated and default values will be used for VAR model estimation.'))
+    forecast_multivariate.var.control_panel = instantiate.forecast_multivariate.var.control_panel()
+    print(warningCondition('forecast_multivariate.var.control_panel was instantiated and default values will be used for VAR model estimation.'))
   }
 
   # create parallel back end
@@ -327,10 +327,10 @@ forecast_multivariate = function(
                 model =
                   caret::train(target~.,
                                data = dplyr::select(information.set, -date),
-                               method    = multivariate.forecast.ml.training$caret.engine[[engine]],
-                               trControl = multivariate.forecast.ml.training$control,
-                               tuneGrid  = multivariate.forecast.ml.training$tuning.grids[[engine]],
-                               metric    = multivariate.forecast.ml.training$accuracy,
+                               method    = forecast_multivariate.ml.control_panel$caret.engine[[engine]],
+                               trControl = forecast_multivariate.ml.control_panel$control,
+                               tuneGrid  = forecast_multivariate.ml.control_panel$tuning.grids[[engine]],
+                               metric    = forecast_multivariate.ml.control_panel$accuracy,
                                na.action = na.omit)
 
                 # calculate forecast
@@ -359,11 +359,11 @@ forecast_multivariate = function(
                 model =
                   vars::VAR(
                     y       = na.omit(dplyr::select(information.set, -date)),
-                    p       =  multivariate.forecast.var.training$p,
-                    lag.max =  multivariate.forecast.var.training$max.lag,
-                    ic      =  multivariate.forecast.var.training$ic,
-                    season  =  multivariate.forecast.var.training$season,
-                    type    =  multivariate.forecast.var.training$type
+                    p       =  forecast_multivariate.var.control_panel$p,
+                    lag.max =  forecast_multivariate.var.control_panel$max.lag,
+                    ic      =  forecast_multivariate.var.control_panel$ic,
+                    season  =  forecast_multivariate.var.control_panel$season,
+                    type    =  forecast_multivariate.var.control_panel$type
                   )
 
                 # calculate forecast and standard error

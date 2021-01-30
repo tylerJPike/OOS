@@ -10,16 +10,16 @@
 #----------------------------------------------
 # univariate forecasting arguments
 #----------------------------------------------
-#' Instantiate univariate.forecast.training
+#' Instantiate forecast_univariate.control_panel
 #'
 #' A function to create the univariate forecast method arguments list
 #' for user manipulation.
 #'
-#' @return univariate.forecast.training
+#' @return forecast_univariate.control_panel
 #'
 #' @export
 
-instantiate.univariate.forecast.training = function(){
+instantiate.forecast_univariate.control_panel = function(){
 
   # methods
   methods = list(
@@ -142,11 +142,11 @@ forecast_univariate = function(
 ){
 
   # training parameter creation and warnings
-  if(exists("univariate.forecast.training")){
-    print(warningCondition('univariate.forecast.training exists and will be used for model estimation in its present state.'))
+  if(exists("forecast_univariate.control_panel")){
+    print(warningCondition('forecast_univariate.control_panel exists and will be used for model estimation in its present state.'))
   }else{
-    univariate.forecast.training = instantiate.univariate.forecast.training()
-    print(warningCondition('univariate.forecast.training was instantiated and default values will be used for model estimation.'))
+    forecast_univariate.control_panel = instantiate.forecast_univariate.control_panel()
+    print(warningCondition('forecast_univariate.control_panel was instantiated and default values will be used for model estimation.'))
   }
 
   # create parallel back end
@@ -219,11 +219,11 @@ forecast_univariate = function(
                 if(recursive == FALSE){
 
                   # set data
-                  univariate.forecast.training$arguments[[engine]]$y = information.set
+                  forecast_univariate.control_panel$arguments[[engine]]$y = information.set
 
                   # estimate model
-                  model =  do.call(what = univariate.forecast.training$method[[engine]],
-                                   args = univariate.forecast.training$arguments[[engine]])
+                  model =  do.call(what = forecast_univariate.control_panel$method[[engine]],
+                                   args = forecast_univariate.control_panel$arguments[[engine]])
 
                   # create forecasts
                   predictions = forecast::forecast(model, h = horizon)
@@ -245,13 +245,13 @@ forecast_univariate = function(
                 }else{
 
                   predictions = list()
-                  univariate.forecast.training$arguments[[engine]]$y = information.set
+                  forecast_univariate.control_panel$arguments[[engine]]$y = information.set
 
                   for(i in 1:horizon){
 
                     # estimate model
-                    model =  do.call(what = univariate.forecast.training$method[[engine]],
-                                     args = univariate.forecast.training$arguments[[engine]])
+                    model =  do.call(what = forecast_univariate.control_panel$method[[engine]],
+                                     args = forecast_univariate.control_panel$arguments[[engine]])
 
                     # create forecast
                     prediction = forecast::forecast(model, h = 1)
@@ -271,7 +271,7 @@ forecast_univariate = function(
 
                     # update information set
                     information.set = rbind(information.set, prediction$mean[1]) %>% as.ts()
-                    univariate.forecast.training$arguments[[engine]]$y = information.set
+                    forecast_univariate.control_panel$arguments[[engine]]$y = information.set
 
                   }
 

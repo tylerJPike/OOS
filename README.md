@@ -229,7 +229,6 @@ A brief example using the `Random Forest` to combine forecasts:
 
 ## Future Extensions
 High priority
-1. Add parallel processing ability
 2. Create vingettes
 	1. Basic example
 	2. User defined functions

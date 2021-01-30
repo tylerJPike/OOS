@@ -22,12 +22,10 @@ reference:
   - title: Model Accessibility
     desc: Functions to instantiate lists that users may edit to control model estimate routines
     contents:
-      - '`instantiate.impute.missing.routine`'
-      - '`instantiate.univariate.forecast.training`'
-      - '`instantiate.multivariate.forecast.ml.training`'
-      - '`instantiate.multivariate.forecast.var.training`'
-      - '`instantiate.forecast.combinations.ml.training`'
-
+      - '`instantiate.forecast_univariate.control_panel`'
+      - '`instantiate.forecast_mulitvariate.ml.control_panel`'
+      - '`instantiate.forecast_mulitvariate.var.control_panel`'
+      - '`instantiate.forecast_combine.control_panel`'
 
 navbar:
   right:

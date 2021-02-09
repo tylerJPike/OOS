@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Forecast with forecast combinations — forecast_combine • OOS</title>
+<title>Create interface to control forecast_univariate model estimation — instantiate.forecast_univariate.control_panel • OOS</title>
 
 
 <!-- jquery -->
@@ -39,14 +39,9 @@
 
 
 
-<meta property="og:title" content="Forecast with forecast combinations — forecast_combine" />
-<meta property="og:description" content="A function to combine forecasts out-of-sample. Methods available include:
-uniform weights, median forecast, trimmed (winsorized) mean, n-best,
-ridge regression, lasso regression, elastic net, peLASSO,
-random forest, tree-based gradient boosting machine, and single-layer neural network.
-The function will take in a data frame of forecasts, observed values (named 'observed', when the method requires it),
-and the observation date (i.e. the foretasted date, named 'date'), while outputting a data frame
-with a date column and one column per combination method selected." />
+<meta property="og:title" content="Create interface to control forecast_univariate model estimation — instantiate.forecast_univariate.control_panel" />
+<meta property="og:description" content="A function to create the univariate forecast method arguments list
+for user manipulation." />
 
 
 
@@ -96,6 +91,13 @@ with a date column and one column per combination method selected." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
+  <a href="../reference/index.html">
+    <span class="fa fa-file-code-o"></span>
+     
+    functions
+  </a>
+</li>
+<li>
   <a href="https://github.com/tylerJPike/OOS">
     <span class="fa fa-github fa-2x"></span>
      
@@ -114,67 +116,22 @@ with a date column and one column per combination method selected." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Forecast with forecast combinations</h1>
+    <h1>Create interface to control <code>forecast_univariate</code> model estimation</h1>
     
-    <div class="hidden name"><code>forecast_combine.Rd</code></div>
+    <div class="hidden name"><code>instantiate.forecast_univariate.control_panel.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A function to combine forecasts out-of-sample. Methods available include:
-uniform weights, median forecast, trimmed (winsorized) mean, n-best,
-ridge regression, lasso regression, elastic net, peLASSO,
-random forest, tree-based gradient boosting machine, and single-layer neural network.
-The function will take in a data frame of forecasts, observed values (named 'observed', when the method requires it),
-and the observation date (i.e. the foretasted date, named 'date'), while outputting a data frame
-with a date column and one column per combination method selected.</p>
+    <p>A function to create the univariate forecast method arguments list
+for user manipulation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>forecast_combine</span><span class='op'>(</span>
-  <span class='va'>forecasts</span>,
-  method <span class='op'>=</span> <span class='st'>"unform"</span>,
-  n.max <span class='op'>=</span> <span class='cn'>NULL</span>,
-  window <span class='op'>=</span> <span class='cn'>NA</span>,
-  trim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
-  burn.in <span class='op'>=</span> <span class='fl'>1</span>,
-  parallel.dates <span class='op'>=</span> <span class='cn'>NULL</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>instantiate.forecast_univariate.control_panel</span><span class='op'>(</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>forecasts</th>
-      <td><p>data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'</p></td>
-    </tr>
-    <tr>
-      <th>n.max</th>
-      <td><p>int: maximum number of forecasts to select</p></td>
-    </tr>
-    <tr>
-      <th>window</th>
-      <td><p>int: size of rolling window to evaluate forecast error over, use entire period if NA</p></td>
-    </tr>
-    <tr>
-      <th>trim</th>
-      <td><p>numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)</p></td>
-    </tr>
-    <tr>
-      <th>burn.in</th>
-      <td><p>int: the number of periods to use in the first model estimation</p></td>
-    </tr>
-    <tr>
-      <th>parallel.dates</th>
-      <td><p>int: the number of cores available for parallel estimation</p></td>
-    </tr>
-    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data.frame with a date column and one column per forecast method selected</p>
+    <p>forecast_univariate.control_panel</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

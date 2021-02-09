@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_multivariate.R
 \name{instantiate.forecast_multivariate.ml.control_panel}
 \alias{instantiate.forecast_multivariate.ml.control_panel}
-\title{Instantiate forecast_multivariate.ml.control_panel}
+\title{Create interface to control \code{forecast_multivariate} ML estimation}
 \usage{
 instantiate.forecast_multivariate.ml.control_panel()
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_metrics.R
 \name{forecast_comparison}
 \alias{forecast_comparison}
-\title{Compare forecasts}
+\title{Compare forecast accuracy}
 \usage{
 forecast_comparison(
   Data,

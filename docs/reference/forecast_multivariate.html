@@ -93,7 +93,19 @@ while outputting a data frame with a date column and one column per forecast met
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="../reference/index.html">
+    <span class="fa fa-file-code-o"></span>
+     
+    functions
+  </a>
+</li>
+<li>
+  <a href="https://github.com/tylerJPike/OOS">
+    <span class="fa fa-github fa-2x"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -139,6 +151,11 @@ while outputting a data frame with a date column and one column per forecast met
   impute.method <span class='op'>=</span> <span class='st'>"kalman"</span>,
   impute.variables <span class='op'>=</span> <span class='cn'>NULL</span>,
   impute.verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  reduce.data <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  reduce.variables <span class='op'>=</span> <span class='cn'>NULL</span>,
+  reduce.ncomp <span class='op'>=</span> <span class='cn'>NULL</span>,
+  reduce.standardize <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  parallel.dates <span class='op'>=</span> <span class='cn'>NULL</span>,
   return.models <span class='op'>=</span> <span class='cn'>FALSE</span>,
   return.data <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
@@ -217,6 +234,26 @@ while outputting a data frame with a date column and one column per forecast met
     <tr>
       <th>impute.verbose</th>
       <td><p>boolean: show start-up status of impute.missing.routine</p></td>
+    </tr>
+    <tr>
+      <th>reduce.data</th>
+      <td><p>boolean: if TRUE then reduce dimension</p></td>
+    </tr>
+    <tr>
+      <th>reduce.variables</th>
+      <td><p>string: vector of variables to impute missing values, default is all numeric columns</p></td>
+    </tr>
+    <tr>
+      <th>reduce.ncomp</th>
+      <td><p>int: number of factors to create</p></td>
+    </tr>
+    <tr>
+      <th>reduce.standardize</th>
+      <td><p>boolean: normalize variables (mean zero, variance one) before estimating factors</p></td>
+    </tr>
+    <tr>
+      <th>parallel.dates</th>
+      <td><p>int: the number of cores available for parallel estimation</p></td>
     </tr>
     <tr>
       <th>return.models</th>

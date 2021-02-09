@@ -42,7 +42,7 @@ loss_function = function(
 #-------------------------------------------
 # forecast accuracy
 #-------------------------------------------
-#' Forecast accuracy
+#' Calculate forecast accuracy
 #'
 #' A function to calculate various error loss functions. Options include:
 #' MSE, RMSE, MAE, and  MAPE. The default is MSE loss.
@@ -102,7 +102,7 @@ forecast_accuracy = function(
 #-------------------------------------------
 # forecast comparison
 #-------------------------------------------
-#' Compare forecasts
+#' Compare forecast accuracy
 #'
 #' A function to compare forecasts. Options include: simple forecast error ratios,
 #' Diebold-Mariano test, and Clark and West test for nested models

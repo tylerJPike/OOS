@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_combinations.R
 \name{forecast_combine}
 \alias{forecast_combine}
-\title{Combine forecasts}
+\title{Forecast with forecast combinations}
 \usage{
 forecast_combine(
   forecasts,

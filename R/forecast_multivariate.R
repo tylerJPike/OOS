@@ -9,7 +9,7 @@
 #----------------------------------------------
 # multivariate forecasting arguments - ML
 #----------------------------------------------
-#' Instantiate forecast_multivariate.ml.control_panel
+#' Create interface to control `forecast_multivariate` ML estimation
 #'
 #' A function to create the multivariate forecast methods
 #' arguments list for user manipulation.
@@ -101,7 +101,7 @@ instantiate.forecast_multivariate.ml.control_panel = function(){
 #----------------------------------------------
 # multivariate forecasting arguments - VAR
 #----------------------------------------------
-#' Instantiate forecast_multivariate.var.control_panel
+#' Create interface to control `forecast_multivariate` VAR estimation
 #'
 #' A function to create the multivariate forecast methods
 #' arguments list for user manipulation.

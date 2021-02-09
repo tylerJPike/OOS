@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_metrics.R
 \name{forecast_accuracy}
 \alias{forecast_accuracy}
-\title{Forecast accuracy}
+\title{Calculate forecast accuracy}
 \usage{
 forecast_accuracy(Data)
 }

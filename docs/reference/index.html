@@ -71,33 +71,61 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">OOS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
+  <a href=".././reference/index.html">Reference</a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Vignettes
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">1. Getting Started</li>
+    <li class="dropdown-header">2. User-defined Models</li>
+    <li class="dropdown-header">3. Binary Outcomes</li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="../reference/index.html">
-    <span class="fa fa-file-code-o"></span>
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cogs"></span>
      
-    functions
+    Workflow
+     
+    <span class="caret"></span>
   </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">1. Data Cleaning</li>
+    <li class="dropdown-header">2. Forecasting</li>
+    <li class="dropdown-header">3. Error Analysis</li>
+    <li class="dropdown-header">4. Charting</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cog"></span>
+     
+    Tools
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Data Cleaning Techniques</li>
+    <li class="dropdown-header">Forecasting Techniques</li>
+    <li class="dropdown-header">Error Analysis Techniques</li>
+  </ul>
 </li>
 <li>
   <a href="https://github.com/tylerJPike/OOS">
-    <span class="fa fa-github fa-2x"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -154,30 +182,73 @@
         <td>
           <p><code><a href="forecast_combine.html">forecast_combine()</a></code> </p>
         </td>
-        <td><p>Combine forecasts</p></td>
+        <td><p>Forecast with forecast combinations</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="forecast_accuracy.html">forecast_accuracy()</a></code> </p>
         </td>
-        <td><p>Forecast accuracy</p></td>
+        <td><p>Calculate forecast accuracy</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="forecast_comparison.html">forecast_comparison()</a></code> </p>
         </td>
-        <td><p>Compare forecasts</p></td>
+        <td><p>Compare forecast accuracy</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="forecast_chart.html">forecast_chart()</a></code> </p>
         </td>
-        <td><p>Basic forecast chart</p></td>
+        <td><p>Chart forecasts</p></td>
       </tr>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-data-cleaning" class="hasAnchor"><a href="#section-data-cleaning" class="anchor"></a>Data Cleaning</h2>
+          <h2 id="section-model-accessibility" class="hasAnchor"><a href="#section-model-accessibility" class="anchor"></a>Model Accessibility</h2>
+          <p class="section-desc"><p>Functions to instantiate lists that users may edit to control model estimation routines</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="instantiate.data_impute.control_panel.html">instantiate.data_impute.control_panel()</a></code> </p>
+        </td>
+        <td><p>Create interface to control <code>data_impute</code> model estimation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="instantiate.forecast_univariate.control_panel.html">instantiate.forecast_univariate.control_panel()</a></code> </p>
+        </td>
+        <td><p>Create interface to control <code>forecast_univariate</code> model estimation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="instantiate.forecast_multivariate.ml.control_panel.html">instantiate.forecast_multivariate.ml.control_panel()</a></code> </p>
+        </td>
+        <td><p>Create interface to control <code>forecast_multivariate</code> ML estimation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="instantiate.forecast_multivariate.var.control_panel.html">instantiate.forecast_multivariate.var.control_panel()</a></code> </p>
+        </td>
+        <td><p>Create interface to control <code>forecast_multivariate</code> VAR estimation</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="instantiate.forecast_combinations.control_panel.html">instantiate.forecast_combinations.control_panel()</a></code> </p>
+        </td>
+        <td><p>Create interface to control <code>forecast_combine</code> model estimation</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-data-cleaning-internal-" class="hasAnchor"><a href="#section-data-cleaning-internal-" class="anchor"></a>Data Cleaning (Internal)</h2>
           <p class="section-desc"><p>Functions used for data cleaning in <code>forecast_univariate</code> and <code>forecast_multivariate</code></p></p>
         </th>
       </tr>
@@ -198,49 +269,12 @@
           <p><code><a href="data_impute.html">data_impute()</a></code> </p>
         </td>
         <td><p>Impute missing values</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-model-accessibility" class="hasAnchor"><a href="#section-model-accessibility" class="anchor"></a>Model Accessibility</h2>
-          <p class="section-desc"><p>Functions to instantiate lists that users may edit to control model estimate routines</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="instantiate.impute.missing.routine.html">instantiate.impute.missing.routine()</a></code> </p>
-        </td>
-        <td><p>Instantiate impute.missing.routine</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="instantiate.univariate.forecast.training.html">instantiate.univariate.forecast.training()</a></code> </p>
+          <p><code><a href="data_reduction.html">data_reduction()</a></code> </p>
         </td>
-        <td><p>Instantiate univariate.forecast.training</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="instantiate.multivariate.forecast.ml.training.html">instantiate.multivariate.forecast.ml.training()</a></code> </p>
-        </td>
-        <td><p>Instantiate multivariate.forecast.ml.training</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="instantiate.multivariate.forecast.var.training.html">instantiate.multivariate.forecast.var.training()</a></code> </p>
-        </td>
-        <td><p>Instantiate multivariate.forecast.var.training</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="instantiate.forecast.combinations.ml.training.html">instantiate.forecast.combinations.ml.training()</a></code> </p>
-        </td>
-        <td><p>Instantiate forecast.combinations.ml.training</p></td>
+        <td><p>Dimension reduction via principal components</p></td>
       </tr>
     </tbody>
     </table>

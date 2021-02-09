@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_univariate.R
 \name{instantiate.forecast_univariate.control_panel}
 \alias{instantiate.forecast_univariate.control_panel}
-\title{Instantiate forecast_univariate.control_panel}
+\title{Create interface to control \code{forecast_univariate} model estimation}
 \usage{
 instantiate.forecast_univariate.control_panel()
 }

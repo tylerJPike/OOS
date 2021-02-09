@@ -215,15 +215,15 @@ data_outliers = function(
 #---------------------------------------------
 # Impute missing
 #---------------------------------------------
-#' Instantiate impute.missing.routine
+#' Create interface to control `data_impute` model estimation
 #'
 #' A function to create the data imputation method
 #' arguments list for user manipulation.
 #'
-#' @return instantiate.impute.missing.routine
+#' @return data_impute.control_panel
 #'
 #' @export
-instantiate.impute.missing.routine = function(){
+instantiate.data_impute.control_panel = function(){
 
   # methods
   methods = list(
@@ -279,19 +279,19 @@ data_impute = function(
   Data,                           # data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
   method = 'kalman',              # string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'
   variables = NULL,               # string: vector of variables to impute missing values, default is all numeric columns
-  verbose = FALSE                 # boolean: show start-up status of impute.missing.routine
+  verbose = FALSE                 # boolean: show start-up status of data_impute.control_panel
 ){
 
   # training parameter creation and warnings
   if(verbose == TRUE){
-    if(exists("impute.missing.routine")){
-      print(warningCondition('impute.missing.routine exists and will be used to impute missing data in its present state.'))
+    if(exists("data_impute.control_panel")){
+      print(warningCondition('data_impute.control_panel exists and will be used to impute missing data in its present state.'))
     }else{
-      impute.missing.routine = instantiate.impute.missing.routine()
-      print(warningCondition('impute.missing.routine was instantiated and default values will be used for to impute missing data.'))
+      data_impute.control_panel = instantiate.data_impute.control_panel()
+      print(warningCondition('data_impute.control_panel was instantiated and default values will be used for to impute missing data.'))
     }
   }else{
-    if(!exists("impute.missing.routine")){impute.missing.routine = instantiate.impute.missing.routine()}
+    if(!exists("data_impute.control_panel")){data_impute.control_panel = instantiate.data_impute.control_panel()}
   }
 
   # set variables to all if default
@@ -306,10 +306,10 @@ data_impute = function(
 
   # clean outliers
   for(v in variables){
-    impute.missing.routine$arguments[[method]]$x = Data[,c(v)]
+    data_impute.control_panel$arguments[[method]]$x = Data[,c(v)]
     Data[,c(v)] =
-      do.call(what = impute.missing.routine$method[[method]],
-              args = impute.missing.routine$arguments[[method]])
+      do.call(what = data_impute.control_panel$method[[method]],
+              args = data_impute.control_panel$arguments[[method]])
   }
 
   # return results

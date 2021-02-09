@@ -10,7 +10,7 @@
 #----------------------------------------------
 # univariate forecasting arguments
 #----------------------------------------------
-#' Instantiate forecast_univariate.control_panel
+#' Create interface to control `forecast_univariate` model estimation
 #'
 #' A function to create the univariate forecast method arguments list
 #' for user manipulation.

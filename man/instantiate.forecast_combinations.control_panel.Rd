@@ -2,7 +2,7 @@
 % Please edit documentation in R/forecast_combinations.R
 \name{instantiate.forecast_combinations.control_panel}
 \alias{instantiate.forecast_combinations.control_panel}
-\title{Instantiate forecast_combinations.control_panel}
+\title{Create interface to control \code{forecast_combine} model estimation}
 \usage{
 instantiate.forecast_combinations.control_panel()
 }

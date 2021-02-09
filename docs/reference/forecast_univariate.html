@@ -92,7 +92,19 @@ one column per forecast method selected." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="../reference/index.html">
+    <span class="fa fa-file-code-o"></span>
+     
+    functions
+  </a>
+</li>
+<li>
+  <a href="https://github.com/tylerJPike/OOS">
+    <span class="fa fa-github fa-2x"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -135,6 +147,7 @@ one column per forecast method selected.</p>
   impute.method <span class='op'>=</span> <span class='st'>"kalman"</span>,
   impute.variables <span class='op'>=</span> <span class='cn'>NULL</span>,
   impute.verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  parallel.dates <span class='op'>=</span> <span class='cn'>NULL</span>,
   return.models <span class='op'>=</span> <span class='cn'>FALSE</span>,
   return.data <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
@@ -205,6 +218,10 @@ one column per forecast method selected.</p>
     <tr>
       <th>impute.verbose</th>
       <td><p>boolean: show start-up status of impute.missing.routine</p></td>
+    </tr>
+    <tr>
+      <th>parallel.dates</th>
+      <td><p>int: the number of cores available for parallel estimation</p></td>
     </tr>
     <tr>
       <th>return.models</th>

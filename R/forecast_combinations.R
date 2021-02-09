@@ -52,7 +52,7 @@ NBest = function(
 #---------------------------------------------
 # Forecast combination method arguments
 #----------------------------------------------
-#' Instantiate forecast_combinations.control_panel
+#' Create interface to control `forecast_combine` model estimation
 #'
 #' A function to create the forecast combination technique arguments list
 #' for user manipulation.
@@ -129,7 +129,7 @@ instantiate.forecast_combinations.control_panel = function(){
 #---------------------------------------------
 # Forecast combination methods
 #---------------------------------------------
-#' Combine forecasts
+#' Forecast with forecast combinations
 #'
 #' A function to combine forecasts out-of-sample. Methods available include:
 #' uniform weights, median forecast, trimmed (winsorized) mean, n-best,

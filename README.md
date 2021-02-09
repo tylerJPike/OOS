@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/tylerJPike/OOS/branch/main/graph/badge.svg?token=AQ4PFWU3KS)](https://codecov.io/gh/tylerJPike/OOS)
 <!-- badges: end -->
 
-This package creates a paradigm to provide a structured and automatd approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics. 
+This package creates a paradigm to provide a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics. 
 
 ## Workflow and available Tools
 
@@ -86,24 +86,24 @@ Users may edit any model training routine through accessing a list of function a
 A brief example using an `Arima` model to forecast univariate time series:   
 
 	# 1. create the central list of univariate model training arguments, univariate.forecast.training  
-	univariate.forecast.training = instantiate.univariate.forecast.training()  
+	forecast_univariate.control_panel = instantiate.forecast_univariate.control_panel()  
 
 	# 2. select an item to edit, for example the Arima order to create an ARMA(1,1)   
 		# view default model arguments (there are none)  
-		univariate.forecast.training$arguments[['Arima']] 
+		forecast_univariate.control_panel$arguments[['Arima']] 
 		# add our own function arguments  
-		univariate.forecast.training$arguments[['Arima']]$order = c(1,0,1) 
+		forecast_univariate.control_panel$arguments[['Arima']]$order = c(1,0,1) 
 
 A brief example using the `Random Forest` to combine forecasts:   
 
 	# 1. create the central list of ML training arguments 
-	forecast.combinations.ml.training = instantiate.forecast.combinations.ml.training()  
+	forecast_combinations.control_panel = instantiate.forecast_combinations.control_panel()  
 
 	# 2. select an item to edit, for example the random forest tuning grid   
 		# view default tuning grid  
-		forecast.combinations.ml.training$tune.grid[['RF']]  
+		forecast_combinations.control_panel$tune.grid[['RF']]  
 		# edit tuning grid   
-		forecast.combinations.ml.training$tune.grid[['RF']] = expand.grid(mtry = c(1:6))  
+		forecast_combinations.control_panel$tune.grid[['RF']] = expand.grid(mtry = c(1:6))  
 ---
 ## Basic usage example
 
@@ -219,7 +219,7 @@ A brief example using the `Random Forest` to combine forecasts:
 	chart = 
 		forecast_chart(
 			forecasts,              
-			Title = 'Shiller/Case House Price Index',
+			Title = 'Industrial Production',
 			Ylab = 'Index',
 			Freq = 'Monthly')
 
@@ -229,11 +229,25 @@ A brief example using the `Random Forest` to combine forecasts:
 
 ## Future Extensions
 High priority
+1. Code
+   1. accept `ts` and `xts` objects
+   2. update ML default training parameters
+   3. smooth out user-defined functions
 2. Create vingettes
 	1. Basic example
 	2. User defined functions
 	3. Forecasting binary outputs - prob of recession example
 3. Create website
+    1. add navbar to workflow pages (copy and paste from index.html)
+	2. write workflow
+	3. change home page from README
+	4. create sigil
+
+Medium Priority
+1. Charting
+	1. error plot
+	2. term-by-term decomposition time series (see Determinants as example)
+	3. SHAP decomposition time series
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  

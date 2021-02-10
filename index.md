@@ -3,7 +3,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/r-lib/usethis/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/usethis/actions)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/tylerJPike/OOS/branch/main/graph/badge.svg?token=AQ4PFWU3KS)](https://codecov.io/gh/tylerJPike/OOS)
 <!-- badges: end -->
@@ -11,6 +11,20 @@
 This package creates a paradigm to provide a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics. 
 
 Available tools and techniques may be reviewed under the **Tools** tab. While vignettes and other extended documentation of the OOS package's capabilities may be found under the **Workflow** tab.
+
+---
+## Why use OOS
+
+It is a simple fact that in-sample time series forecasting overstates model accuracy. Moreover, standard data cleaning routines and cross-validation techniques do not respect and avoid look-ahead bias, infecting the information set of study. In sum, practioners need to be careful when evaluating time series forecasts. 
+
+As it stands (as of Feb. 2021), most would agree that the clostest package or collection of packages to a comprehensive and cohesive time series forecasting workflow in R is the maturing TidyModels. While TidyModels provides a flexible framework for data cleaning, model estimation, and prediction, it has not been built with out-of-sample time series forecasting in mind. That is, one still needs to write for-loop, apply function, or map routine to re-estimate thier desired forecasting workflow each time step, and then collect, clean, and deliver the mess of output that comes out of such a practice. 
+
+In an answer to R's lack of out-of-sample time series forecasting frameworks, OOS provides a clean, comprehensive, and robust workflow for out-of-sample forecasting. 
+
+In addition to systematizing and democratizing out-of-sample time series forecasting with traditional econometric tools and modern machine learning methods, OOS also:
+1. plays nicely with the tidyverse - facilitating integration with existing codebases   
+2. provides sensible off-the-shelf defaults for new forecasters, while giving advanced users full control over all model and trianing function parameters for maximum flexibility
+3. gives users control over what pieces of information to return in easy to handle data.frames or lists  
 
 ---
 ## Installation
@@ -143,3 +157,6 @@ or
 			Freq = 'Monthly')
 
 	chart
+
+## Contact
+If you should have questions, concerns, or wish to collaborate, please contact [Tyler J. Pike](https://tylerjpike.github.io/)

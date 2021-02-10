@@ -27,7 +27,7 @@
 </head>
 <body data-spy="scroll" data-target="#toc">
     <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <header><div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -78,13 +78,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="./pages/data_cleaning.html">Data Cleaning Techniques</a>
+      <a href="./articles/data_cleaning.html">Data Cleaning Techniques</a>
     </li>
     <li>
-      <a href="./pages/forecast_techniques.html">Forecasting Techniques</a>
+      <a href="./articles/forecast_techniques.html">Forecasting Techniques</a>
     </li>
     <li>
-      <a href="./pages/error_analysis.html">Error Analysis Techniques</a>
+      <a href="./articles/error_analysis.html">Error Analysis Techniques</a>
     </li>
     <li class="divider">
     <li>
@@ -118,6 +118,21 @@
 <p>This package creates a paradigm to provide a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics.</p>
 <p>Available tools and techniques may be reviewed under the <strong>Tools</strong> tab. While vignettes and other extended documentation of the OOS package’s capabilities may be found under the <strong>Workflow</strong> tab.</p>
 <hr>
+<div id="why-use-oos" class="section level2">
+<h2 class="hasAnchor">
+<a href="#why-use-oos" class="anchor"></a>Why use OOS</h2>
+<p>It is a simple fact that in-sample time series forecasting overstates model accuracy. Moreover, standard data cleaning routines and cross-validation techniques do not respect and avoid look-ahead bias, infecting the information set of study. In sum, practioners need to be careful when evaluating time series forecasts.</p>
+<p>As it stands (as of Feb. 2021), most would agree that the clostest package or collection of packages to a comprehensive and cohesive time series forecasting workflow in R is the maturing TidyModels. While TidyModels provides a flexible framework for data cleaning, model estimation, and prediction, it has not been built with out-of-sample time series forecasting in mind. That is, one still needs to write for-loop, apply function, or map routine to re-estimate thier desired forecasting workflow each time step, and then collect, clean, and deliver the mess of output that comes out of such a practice.</p>
+<p>In an answer to R’s lack of out-of-sample time series forecasting frameworks, OOS provides a clean, comprehensive, and robust workflow for out-of-sample forecasting.</p>
+<p>In addition to systematizing and democratizing out-of-sample time series forecasting with traditional econometric tools and modern machine learning methods, OOS also:</p>
+<ol>
+<li>plays nicely with the tidyverse - facilitating integration with existing codebases<br>
+</li>
+<li>provides sensible off-the-shelf defaults for new forecasters, while giving advanced users full control over all model and trianing function parameters for maximum flexibility</li>
+<li>gives users control over what pieces of information to return in easy to handle data.frames or lists</li>
+</ol>
+<hr>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -248,6 +263,11 @@
 <span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>chart</span></code></pre></div>
 </div>
+<div id="contact" class="section level2">
+<h2 class="hasAnchor">
+<a href="#contact" class="anchor"></a>Contact</h2>
+<p>If you should have questions, concerns, or wish to collaborate, please contact <a href="https://tylerjpike.github.io/">Tyler J. Pike</a></p>
+</div>
 </div>
   </div>
 
@@ -271,7 +291,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/r-lib/usethis/actions"><img src="https://github.com/r-lib/usethis/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
+<li><a href="https://www.tidyverse.org/lifecycle/#stable"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a></li>
 <li><a href="https://codecov.io/gh/tylerJPike/OOS"><img src="https://codecov.io/gh/tylerJPike/OOS/branch/main/graph/badge.svg?token=AQ4PFWU3KS" alt="codecov"></a></li>
 </ul>

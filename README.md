@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/r-lib/usethis/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/usethis/actions)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/tylerJPike/OOS/branch/main/graph/badge.svg?token=AQ4PFWU3KS)](https://codecov.io/gh/tylerJPike/OOS)
 <!-- badges: end -->
@@ -238,10 +238,12 @@ High priority
 	2. User defined functions
 	3. Forecasting binary outputs - prob of recession example
 3. Create website
-    1. add navbar to workflow pages (copy and paste from index.html)
+    1. ~~add navbar to workflow pages~~
 	2. write workflow
-	3. change home page from README
+	3. ~~change home page from README~~
 	4. create sigil
+	5. add google analytics
+	6. add search bar (maybe)
 
 Medium Priority
 1. Charting
@@ -256,3 +258,4 @@ Low priority
 	2. Xgboost, grf, quantile trees, ect.  
 	3. Univariate ts model error correction via NN 
 	4. Multivariate joint estimation via trees and NN
+3. Add density forecasting

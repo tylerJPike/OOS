@@ -34,6 +34,7 @@ reference:
 
 navbar:
   title: "OOS"
+  type: inverse
   left:
     - text: ''
   right:
@@ -54,11 +55,11 @@ navbar:
       text: Tools
       menu:
       - text: Data Cleaning Techniques
-        href: ./pages/data_cleaning.html
+        href: ./articles/data_cleaning.html
       - text: Forecasting Techniques
-        href: ./pages/forecast_techniques.html
+        href: ./articles/forecast_techniques.html
       - text: Error Analysis Techniques
-        href: ./pages/error_analysis.html
+        href: ./articles/error_analysis.html
       - text: ----------
       - text: Function Documentation
         href: ./reference/index.html

@@ -61,9 +61,11 @@ Multivariate
 7. Lasso Regression
 8. Elastic Net
 9. peLASSO
-10. Random Forest
-11. Tree-Based Gradient Boosting Machine 
-12. Single Layered Neural Network  
+10. Principal Component Regression  
+11. Partial Least Squares Regression
+12. Random Forest
+13. Tree-Based Gradient Boosting Machine 
+14. Single Layered Neural Network  
 
 ### 3. Chart forecasts
 

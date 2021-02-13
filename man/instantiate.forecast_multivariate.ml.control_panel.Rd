@@ -4,7 +4,18 @@
 \alias{instantiate.forecast_multivariate.ml.control_panel}
 \title{Create interface to control \code{forecast_multivariate} ML estimation}
 \usage{
-instantiate.forecast_multivariate.ml.control_panel()
+instantiate.forecast_multivariate.ml.control_panel(
+  covariates = NULL,
+  rolling.window = NULL,
+  horizon = NULL
+)
+}
+\arguments{
+\item{covariates}{int: the number of features that will go into the model}
+
+\item{rolling.window}{int: size of rolling window, NA if expanding window is used}
+
+\item{horizon}{int: number of periods into the future to forecast}
 }
 \value{
 forecast_multivariate.ml.control_panel

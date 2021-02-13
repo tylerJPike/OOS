@@ -14,11 +14,15 @@
 #' A function to create the multivariate forecast methods
 #' arguments list for user manipulation.
 #'
+#' @param covariates       int: the number of features that will go into the model
+#' @param rolling.window   int: size of rolling window, NA if expanding window is used
+#' @param horizon          int: number of periods into the future to forecast
+#'
 #' @return forecast_multivariate.ml.control_panel
 #'
 #' @export
 
-instantiate.forecast_multivariate.ml.control_panel = function(){
+instantiate.forecast_multivariate.ml.control_panel = function(covariates = NULL, rolling.window = NULL, horizon = NULL){
 
   # caret names
   caret.engine = list(
@@ -52,8 +56,8 @@ instantiate.forecast_multivariate.ml.control_panel = function(){
       expand.grid(
         n.minobsinnode = c(1),
         shrinkage = c(.1,.01),
-        n.trees = c(200,400,600),
-        interaction.depth = c(1,2)),
+        n.trees = c(100, 250, 500),
+        interaction.depth = c(1,2,5)),
 
     RF =
       expand.grid(
@@ -61,7 +65,7 @@ instantiate.forecast_multivariate.ml.control_panel = function(){
 
     NN =
       expand.grid(
-        size = seq(2,10,1),
+        size = seq(2,10,5),
         decay = c(.01,.001),
         bag = c(100, 250, 500)),
 
@@ -75,13 +79,43 @@ instantiate.forecast_multivariate.ml.control_panel = function(){
 
   )
 
-  # hyperparameter selection routine
-  control =
-    caret::trainControl(
-      method = "cv",
-      number = 5,
-      allowParallel = TRUE,
-      savePredictions = TRUE)
+  # tuning grids if # of features is available
+  if(!is.null(covariates)){
+    tuning.grids[['RF']] =
+      expand.grid(
+        mtry = covariates/3)
+
+    tuning.grids[['NN']] =
+      expand.grid(
+        size = c(covariates, 2*covariates, 3*covariates),
+        decay = c(.01,.001),
+        bag = c(20, 100))
+
+  }
+
+  # hyper-parameter selection routine
+  if(is.numeric(rolling.window)){
+    control =
+      caret::trainControl(
+        method = "timeslice",
+        horizon = horizon,
+        initialWindow = rolling.window,
+        allowParallel = TRUE)
+  }else if(!is.null(rolling.window)){
+    control =
+      caret::trainControl(
+        method = "timeslice",
+        horizon = horizon,
+        initialWindow = 5,
+        allowParallel = TRUE)
+  }else{
+    control =
+      caret::trainControl(
+        method = "cv",
+        number = 5,
+        allowParallel = TRUE)
+
+  }
 
   # accuracy metric used in training
   accuracy = 'RMSE'
@@ -212,18 +246,25 @@ forecast_multivariate = function(
 
   # training parameter creation and warnings
   if(exists("forecast_multivariate.ml.control_panel")){
-    print(warningCondition('forecast_multivariate.ml.control_panel exists and will be used for ML model estimation in its present state.'))
+
+    message('forecast_multivariate.ml.control_panel exists and will be used for ML model estimation in its present state.')
+
   }else{
-    forecast_multivariate.ml.control_panel = instantiate.forecast_multivariate.ml.control_panel()
-    print(warningCondition('forecast_multivariate.ml.control_panel was instantiated and default values will be used for ML model estimation.'))
+
+    covariates = nrow(dplyr::select(Data, -target, -date))
+    if(!is.null(lag.n)){covariates = covariates + covariates*lag.n}
+
+    forecast_multivariate.ml.control_panel = instantiate.forecast_multivariate.ml.control_panel(covariates = covariates, rolling.window = rolling.window, horizon = horizon)
+    message('forecast_multivariate.ml.control_panel was instantiated and default values will be used for ML model estimation.')
+
   }
 
   # VAR parameters and warnings
   if(exists("forecast_multivariate.var.control_panel")){
-    print(warningCondition('forecast.combinations.var.training exists and will be used for VAR model estimation in its present state.'))
+    message('forecast.combinations.var.training exists and will be used for VAR model estimation in its present state.')
   }else{
     forecast_multivariate.var.control_panel = instantiate.forecast_multivariate.var.control_panel()
-    print(warningCondition('forecast_multivariate.var.control_panel was instantiated and default values will be used for VAR model estimation.'))
+   message('forecast_multivariate.var.control_panel was instantiated and default values will be used for VAR model estimation.')
   }
 
   # create parallel back end
@@ -330,8 +371,7 @@ forecast_multivariate = function(
                                method    = forecast_multivariate.ml.control_panel$caret.engine[[engine]],
                                trControl = forecast_multivariate.ml.control_panel$control,
                                tuneGrid  = forecast_multivariate.ml.control_panel$tuning.grids[[engine]],
-                               metric    = forecast_multivariate.ml.control_panel$accuracy,
-                               na.action = na.omit)
+                               metric    = forecast_multivariate.ml.control_panel$accuracy)
 
                 # calculate forecast
                 point = try(predict(model, newdata = current.set))

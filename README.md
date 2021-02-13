@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/r-lib/usethis/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/usethis/actions)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![codecov](https://codecov.io/gh/tylerJPike/OOS/branch/main/graph/badge.svg?token=AQ4PFWU3KS)](https://codecov.io/gh/tylerJPike/OOS)
 <!-- badges: end -->
@@ -180,7 +180,7 @@ A brief example using the `Random Forest` to combine forecasts:
 	forecasts = 
 		dplyr::bind_rows(
 			forecast.uni,
-			forecast.mulit) %>%
+			forecast.multi) %>%
 		dplyr::left_join( 
 			dplyr::select(Data, date, observed = INDPRO))
 
@@ -231,12 +231,14 @@ A brief example using the `Random Forest` to combine forecasts:
 High priority
 1. Code
    1. accept `ts` and `xts` objects
-   2. update ML default training parameters
+   2. ~~update ML default training parameters~~
    3. smooth out user-defined functions
+   4. when combo model has same name as forecast model, add .combo to its name
 2. Create vingettes
 	1. Basic example
 	2. User defined functions
 	3. Forecasting binary outputs - prob of recession example
+	4. High dimensional forecasting
 3. Create website
     1. ~~add navbar to workflow pages~~
 	2. write workflow
@@ -244,6 +246,8 @@ High priority
 	4. create sigil
 	5. add google analytics
 	6. add search bar (maybe)
+	7. fix 'wall of text' feel
+	8. make sure ml function names passed to forecast_multivariate are clear to user
 
 Medium Priority
 1. Charting
@@ -259,3 +263,6 @@ Low priority
 	3. Univariate ts model error correction via NN 
 	4. Multivariate joint estimation via trees and NN
 3. Add density forecasting
+4. Add real time regime detection
+5. Automatically handle non-stationary series if desired
+6. Add moving average of lags options for trees

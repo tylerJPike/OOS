@@ -57,38 +57,31 @@ NBest = function(
 #' A function to create the forecast combination technique arguments list
 #' for user manipulation.
 #'
+#' @param covariates       int: the number of features that will go into the model
+#' @param rolling.window   int: size of rolling window, NA if expanding window is used
+#' @param horizon          int: number of periods into the future to forecast
+#'
 #' @return forecast_combinations.control_panel
 #'
 #' @export
 
-instantiate.forecast_combinations.control_panel = function(){
+instantiate.forecast_combinations.control_panel = function(covariates = NULL, rolling.window = NULL, horizon = NULL){
 
   # caret names
   caret.engine = list(
-    RF  = 'rf',
-    GBM = 'gbm',
-    NN  = 'avNNet',
     ols = 'lm',
-    lasso   = 'glmnet',
-    ridge   = 'glmnet',
-    elastic = 'glmnet'
+    ridge = 'glmnet',
+    lasso = 'glmnet',
+    elastic = 'glmnet',
+    RF = 'rf',
+    GBM = 'gbm',
+    NN = 'avNNet',
+    pls = 'pls',
+    pcr = 'pcr'
   )
 
   # tuning grids
   tuning.grids = list(
-    GBM =
-      expand.grid(n.minobsinnode = c(1),
-                  shrinkage = c(.1,.01),
-                  n.trees = c(200,400,600),
-                  interaction.depth = c(1,2)),
-
-    RF =
-      expand.grid(mtry = c(1:4)),
-
-    NN =
-      expand.grid(size = seq(2,10,1),
-                  decay = c(.01,.001),
-                  bag = c(100, 250, 500)),
 
     ols = NULL,
 
@@ -100,16 +93,72 @@ instantiate.forecast_combinations.control_panel = function(){
       alpha = 1,
       lambda = 10^seq(-3, 3, length = 100)),
 
-    elastic = NULL
+    elastic = NULL,
+
+    GBM =
+      expand.grid(
+        n.minobsinnode = c(1),
+        shrinkage = c(.1,.01),
+        n.trees = c(100, 250, 500),
+        interaction.depth = c(1,2,5)),
+
+    RF =
+      expand.grid(
+        mtry = c(1:4)),
+
+    NN =
+      expand.grid(
+        size = seq(2,10,5),
+        decay = c(.01,.001),
+        bag = c(100, 250, 500)),
+
+    pls =
+      expand.grid(
+        ncomp = c(1:5)),
+
+    pcr =
+      expand.grid(
+        ncomp = c(1:5))
+
   )
 
-  # hyperparameter selection routine
-  control =
-    caret::trainControl(
-      method = "cv",
-      number = 5,
-      allowParallel = TRUE,
-      savePredictions = TRUE)
+  # tuning grids if # of features is available
+  if(!is.null(covariates)){
+    tuning.grids[['RF']] =
+      expand.grid(
+        mtry = covariates/3)
+
+    tuning.grids[['NN']] =
+      expand.grid(
+        size = c(covariates, 2*covariates, 3*covariates),
+        decay = c(.01,.001),
+        bag = c(20, 100))
+
+  }
+
+  # hyper-parameter selection routine
+  if(is.numeric(rolling.window)){
+    control =
+      caret::trainControl(
+        method = "timeslice",
+        horizon = horizon,
+        initialWindow = rolling.window,
+        allowParallel = TRUE)
+  }else if(!is.null(rolling.window)){
+    control =
+      caret::trainControl(
+        method = "timeslice",
+        horizon = horizon,
+        initialWindow = 5,
+        allowParallel = TRUE)
+  }else{
+    control =
+      caret::trainControl(
+        method = "cv",
+        number = 5,
+        allowParallel = TRUE)
+
+  }
 
   # accuracy metric used in training
   accuracy = 'RMSE'
@@ -123,7 +172,6 @@ instantiate.forecast_combinations.control_panel = function(){
       accuracy = accuracy
     )
   )
-
 }
 
 #---------------------------------------------
@@ -265,14 +313,17 @@ forecast_combine = function(
   }
 
   # ML algorithms via caret
-  if(length(intersect(c('GBM','RF','NN','ols','lasso','ridge','elastic'), method)) > 0){
+  if(length(intersect(c('GBM','RF','NN','ols','lasso','ridge','elastic','pcr','pls'), method)) > 0){
 
     # training parameter creation and warnings
     if(exists("forecast_combinations.control_panel")){
-      print(warningCondition('forecast_combinations.control_panel exists and will be used for ML forecast combination techniques in its present state.'))
+      message('forecast_combinations.control_panel exists and will be used for ML forecast combination techniques in its present state.')
     }else{
-      forecast_combinations.control_panel = instantiate.forecast_combinations.control_panel()
-      print(warningCondition('forecast_combinations.control_panel was instantiated and default values will be used to train ML forecast combination techniques.'))
+
+      covariates = length(unique(forecasts$model))
+
+      forecast_combinations.control_panel = instantiate.forecast_combinations.control_panel(covariates = covariates, rolling.window = rolling.window, horizon = horizon)
+      message('forecast_combinations.control_panel was instantiated and default values will be used to train ML forecast combination techniques.')
     }
 
     combination = intersect(c('GBM','RF','NN','ols','lasso','ridge','elastic'), method) %>%

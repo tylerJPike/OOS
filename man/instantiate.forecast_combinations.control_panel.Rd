@@ -4,16 +4,12 @@
 \alias{instantiate.forecast_combinations.control_panel}
 \title{Create interface to control \code{forecast_combine} model estimation}
 \usage{
-instantiate.forecast_combinations.control_panel(
-  covariates = NULL,
-  rolling.window = NULL,
-  horizon = NULL
-)
+instantiate.forecast_combinations.control_panel(covariates = NULL)
 }
 \arguments{
 \item{covariates}{int: the number of features that will go into the model}
 
-\item{rolling.window}{int: size of rolling window, NA if expanding window is used}
+\item{burn.in}{int: the number of periods to use in the first model estimation}
 
 \item{horizon}{int: number of periods into the future to forecast}
 }

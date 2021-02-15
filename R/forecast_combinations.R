@@ -58,14 +58,14 @@ NBest = function(
 #' for user manipulation.
 #'
 #' @param covariates       int: the number of features that will go into the model
-#' @param rolling.window   int: size of rolling window, NA if expanding window is used
+#' @param burn.in         int: the number of periods to use in the first model estimation
 #' @param horizon          int: number of periods into the future to forecast
 #'
 #' @return forecast_combinations.control_panel
 #'
 #' @export
 
-instantiate.forecast_combinations.control_panel = function(covariates = NULL, rolling.window = NULL, horizon = NULL){
+instantiate.forecast_combinations.control_panel = function(covariates = NULL){
 
   # caret names
   caret.engine = list(
@@ -137,28 +137,11 @@ instantiate.forecast_combinations.control_panel = function(covariates = NULL, ro
   }
 
   # hyper-parameter selection routine
-  if(is.numeric(rolling.window)){
-    control =
-      caret::trainControl(
-        method = "timeslice",
-        horizon = horizon,
-        initialWindow = rolling.window,
-        allowParallel = TRUE)
-  }else if(!is.null(rolling.window)){
-    control =
-      caret::trainControl(
-        method = "timeslice",
-        horizon = horizon,
-        initialWindow = 5,
-        allowParallel = TRUE)
-  }else{
-    control =
-      caret::trainControl(
-        method = "cv",
-        number = 5,
-        allowParallel = TRUE)
-
-  }
+  control =
+    caret::trainControl(
+      method = "cv",
+      number = 5,
+      allowParallel = TRUE)
 
   # accuracy metric used in training
   accuracy = 'RMSE'
@@ -203,7 +186,7 @@ forecast_combine = function(
   forecasts,              # data.frame: data frame of forecasted values to combine, assumes `date` and `observed` columns, but `observed' is not necessary for all methods
   method = 'unform',      # string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'
   n.max = NULL,           # int: maximum number of forecasts to select
-  window = NA,            # int: size of rolling window to evaluate forecast error over, use entire period if NA
+  rolling.window = NA,            # int: size of rolling window to evaluate forecast error over, use entire period if NA
   trim = c(0.5, 0.95),    # numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)
   burn.in = 1,            # int: the number of periods to use in the first model estimation
   parallel.dates = NULL   # int: the number of cores available for parallel estimation
@@ -322,7 +305,7 @@ forecast_combine = function(
 
       covariates = length(unique(forecasts$model))
 
-      forecast_combinations.control_panel = instantiate.forecast_combinations.control_panel(covariates = covariates, rolling.window = rolling.window, horizon = horizon)
+      forecast_combinations.control_panel = instantiate.forecast_combinations.control_panel(covariates = covariates)
       message('forecast_combinations.control_panel was instantiated and default values will be used to train ML forecast combination techniques.')
     }
 
@@ -380,7 +363,8 @@ forecast_combine = function(
   }
 
   # return results
-  results = purrr::reduce(results.list, dplyr::bind_rows)
+  results = purrr::reduce(results.list, dplyr::bind_rows) %>%
+    dplyr::mutate(model = paste0(model, '.combo'))
   rownames(results) = c(1:nrow(results))
   return(results)
 }

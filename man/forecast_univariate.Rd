@@ -27,7 +27,7 @@ forecast_univariate(
 )
 }
 \arguments{
-\item{Data}{data.frame: data frame of variable to forecast and a date column}
+\item{Data}{data.frame: data frame of variable to forecast and a date column; may alternatively be a \code{ts}, \code{xts}, or \code{zoo} object to forecast}
 
 \item{forecast.dates}{date: dates forecasts are created}
 

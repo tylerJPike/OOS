@@ -170,7 +170,7 @@ instantiate.forecast_multivariate.var.control_panel = function(){
 #' The function will take in a data frame of the target variable, exogenous variables, and a 'date' column,
 #' while outputting a data frame with a date column and one column per forecast method selected.
 #'
-#' @param Data             data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
+#' @param Data             data.frame: data frame of target variable, exogenous variables, and observed date (named 'date'); may alternatively be a `ts`, `xts`, or `zoo` object to forecast
 #' @param forecast.dates   date: dates forecasts are created
 #' @param target           string: column name in Data of variable to forecast
 #' @param method           string or vector: methods to use; 'var', 'ols', 'ridge', 'lasso', 'elastic', 'RF', 'GBM', 'NN'
@@ -201,7 +201,7 @@ instantiate.forecast_multivariate.var.control_panel = function(){
 #' @export
 
 forecast_multivariate = function(
-  Data,                 # data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
+  Data,                 # data.frame: data frame of target variable, exogenous variables, and observed date (named 'date'); may alternatively be a `ts`, `xts`, or `zoo` object to forecast
   forecast.dates,       # date: dates forecasts are created
   target,               # string: column name in `Data` of variable to forecast
   horizon,              # int: number of periods into the future to forecast
@@ -241,8 +241,10 @@ forecast_multivariate = function(
 
 ){
 
-  # results list
-  results.list = list()
+  # convert from ts, xts, or zoo object
+  if(xts::is.xts(Data) | zoo::is.zoo(Data) | stats::is.ts(Data)){
+    Data = data.frame(date = zoo::index(Data), Data)
+  }
 
   # training parameter creation and warnings
   if(exists("forecast_multivariate.ml.control_panel")){
@@ -274,6 +276,8 @@ forecast_multivariate = function(
     future::plan(strategy = 'sequential')
   }
 
+  # results list
+  results.list = list()
 
   # Create forecasts
   forecasts = forecast.dates %>%

@@ -8,10 +8,6 @@ instantiate.forecast_combinations.control_panel(covariates = NULL)
 }
 \arguments{
 \item{covariates}{int: the number of features that will go into the model}
-
-\item{burn.in}{int: the number of periods to use in the first model estimation}
-
-\item{horizon}{int: number of periods into the future to forecast}
 }
 \value{
 forecast_combinations.control_panel

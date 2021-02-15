@@ -58,8 +58,6 @@ NBest = function(
 #' for user manipulation.
 #'
 #' @param covariates       int: the number of features that will go into the model
-#' @param burn.in         int: the number of periods to use in the first model estimation
-#' @param horizon          int: number of periods into the future to forecast
 #'
 #' @return forecast_combinations.control_panel
 #'
@@ -173,7 +171,7 @@ instantiate.forecast_combinations.control_panel = function(covariates = NULL){
 #' @param forecasts       data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods
 #' @param method          string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'
 #' @param n.max           int: maximum number of forecasts to select
-#' @param window          int: size of rolling window to evaluate forecast error over, use entire period if NA
+#' @param rolling.window          int: size of rolling window to evaluate forecast error over, use entire period if NA
 #' @param trim            numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)
 #' @param burn.in         int: the number of periods to use in the first model estimation
 #' @param parallel.dates  int: the number of cores available for parallel estimation

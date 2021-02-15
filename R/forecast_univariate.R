@@ -84,7 +84,7 @@ instantiate.forecast_univariate.control_panel = function(){
 #' and a observation date column (named 'date'), while outputting a data frame with a date column and
 #' one column per forecast method selected.
 #'
-#' @param Data            data.frame: data frame of variable to forecast and a date column
+#' @param Data            data.frame: data frame of variable to forecast and a date column; may alternatively be a `ts`, `xts`, or `zoo` object to forecast
 #' @param forecast.dates  date: dates forecasts are created
 #' @param methods         string or vector: models to estimate forecasts
 #' @param horizon         int: number of periods to forecast
@@ -109,7 +109,7 @@ instantiate.forecast_univariate.control_panel = function(){
 #' @export
 
 forecast_univariate = function(
-  Data,                   # data.frame: data frame of variable to forecast and a date column
+  Data,                   # data.frame: data frame of variable to forecast and a date column; may alternatively be a `ts`, `xts`, or `zoo` object to forecast
   forecast.dates,         # date: dates forecasts are created
   methods,                # string or vector: models to estimate forecasts with; currently supports all and only functions from the `forecast` package
   horizon,                # int: number of periods to forecast
@@ -140,6 +140,11 @@ forecast_univariate = function(
   return.data = FALSE              # boolean: if True then return list of information.set for each forecast.date
 
 ){
+
+  # convert from ts, xts, or zoo object
+  if(xts::is.xts(Data) | zoo::is.zoo(Data) | stats::is.ts(Data)){
+    Data = data.frame(date = zoo::index(Data), Data)
+  }
 
   # training parameter creation and warnings
   if(exists("forecast_univariate.control_panel")){

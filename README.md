@@ -116,7 +116,10 @@ A brief example using the `Random Forest` to combine forecasts:
 	quantmod::getSymbols.FRED(
 		c('UNRATE','INDPRO','GS10'), 
 		env = globalenv())
-	Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
+	Data = cbind(UNRATE, INDPRO, GS10)
+
+	# a ts, xts, or zoo object may be used in OOS forecasting methods, 
+	# but a data.frame with a `date` column may also be used, as shown below
 	Data = data.frame(Data, date = zoo::index(Data)) %>%
 		dplyr::filter(lubridate::year(date) >= 1990)
 
@@ -232,10 +235,9 @@ A brief example using the `Random Forest` to combine forecasts:
 ## Future Extensions
 High priority
 1. Code
-   1. accept `ts` and `xts` objects
+   1. ~~accept `ts` and `xts` objects~~
    2. ~~update ML default training parameters~~
-   3. smooth out user-defined functions
-   4. when combo model has same name as forecast model, add .combo to its name
+   3. ~~when combo model has same name as forecast model, add .combo to its name~~
 2. Create vingettes
 	1. Basic example
 	2. User defined functions
@@ -249,13 +251,14 @@ High priority
 	5. add google analytics
 	6. add search bar (maybe)
 	7. fix 'wall of text' feel
-	8. make sure ml function names passed to forecast_multivariate are clear to user
+	8. ~~make sure ml function names passed to forecast_multivariate are clear to user~~
 
 Medium Priority
 1. Charting
 	1. error plot
 	2. term-by-term decomposition time series (see Determinants as example)
 	3. SHAP decomposition time series
+2. smooth out user-defined functions
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  

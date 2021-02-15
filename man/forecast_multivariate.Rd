@@ -33,7 +33,7 @@ forecast_multivariate(
 )
 }
 \arguments{
-\item{Data}{data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')}
+\item{Data}{data.frame: data frame of target variable, exogenous variables, and observed date (named 'date'); may alternatively be a \code{ts}, \code{xts}, or \code{zoo} object to forecast}
 
 \item{forecast.dates}{date: dates forecasts are created}
 

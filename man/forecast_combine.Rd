@@ -21,13 +21,13 @@ forecast_combine(
 
 \item{n.max}{int: maximum number of forecasts to select}
 
+\item{rolling.window}{int: size of rolling window to evaluate forecast error over, use entire period if NA}
+
 \item{trim}{numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)}
 
 \item{burn.in}{int: the number of periods to use in the first model estimation}
 
 \item{parallel.dates}{int: the number of cores available for parallel estimation}
-
-\item{window}{int: size of rolling window to evaluate forecast error over, use entire period if NA}
 }
 \value{
 data.frame with a date column and one column per forecast method selected

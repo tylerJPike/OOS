@@ -2,11 +2,11 @@ Package: OOS
 Title: Out-Of-Sample Time Series Forecasting Workbench
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Tyler",
+    person(given = "Tyler J.",
            family = "Pike",
            role = c("aut", "cre"),
            email = "tjpike7@gmail.com")
-Description: This package creates a paradigm to provide a structured and automatd approach 
+Description: This package creates a paradigm to provide a structured and automated approach 
   to out-of-sample time series forecasting, a common, important, 
   and subtle task. In many ways, this package is merely a wrapper
   for the excellent extant time series forecasting routines on CRAN -- 
@@ -20,24 +20,25 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports:
-  magrittr,
-  lubridate,
+  caret,
   dplyr,
-  purrr,
+  forecast,
   furrr,
   future,
   ggplot2,
-  tidyr,
-  plsr,
-  forecast,
-  zoo,
   glmnet,
-  caret,
-  lmtest,
-  sandwich, 
   imputeTS,
+  lmtest,
+  lubridate,
+  magrittr,
+  plsr,
+  purrr,
+  sandwich, 
   stats,
-  vars
+  tidyr,
+  vars,
+  xts,
+  zoo,
 Suggests: 
     testthat,
     covr

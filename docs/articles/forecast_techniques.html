@@ -59,6 +59,7 @@
     <li class="dropdown-header">1. Getting Starting</li>
     <li class="dropdown-header">2. User-Defined Methods</li>
     <li class="dropdown-header">3. Binary Outcomes</li>
+    <li class="dropdown-header">4. Dimension Reduction</li>
   </ul>
 </li>
 <li class="dropdown">
@@ -71,13 +72,13 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href=".././pages/data_cleaning.html">Data Cleaning Techniques</a>
+      <a href=".././articles/data_cleaning.html">Data Cleaning Techniques</a>
     </li>
     <li>
-      <a href=".././pages/forecast_techniques.html">Forecasting Techniques</a>
+      <a href=".././articles/forecast_techniques.html">Forecasting Techniques</a>
     </li>
     <li>
-      <a href=".././pages/error_analysis.html">Error Analysis Techniques</a>
+      <a href=".././articles/error_analysis.html">Error Analysis Techniques</a>
     </li>
     <li class="divider">
     <li>
@@ -119,41 +120,44 @@
 <h2 class="hasAnchor">
 <a href="#off-the-shelf-forecasting-routines" class="anchor"></a>Off-the-shelf forecasting routines</h2>
 <p>The OOS package workflow begins with a user generating out-of-sample forecasts. To this end, OOS can handle both univariate and multivariate models, and comes off-the-shelf ready to estimate and forecast with several popular models via the <code>forecast_univariate</code>, <code>forecast_multivariate</code>, and <code>forecast_combine</code> functions.</p>
+<p><em>Method names recognized by <code>forecast_univariate</code>, <code>forecast_multivariate</code>, and <code>forecast_combine</code> are shown in brackets.</em></p>
 <p><strong>Default univariate techniques</strong><br>
-1. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/rwf">Random Walk</a><br>
-2. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/auto.arima">ARIMA</a><br>
-3. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/ets">ETS</a><br>
-4. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/spline">Spline</a><br>
-5. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/thetaf">Theta Method</a><br>
-6. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/tbats">TBATS</a><br>
-7. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/stlm">STL</a><br>
-8. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/nnetar">AR Perceptron</a></p>
+1. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/rwf">Random Walk</a> [naive, rwf]<br>
+2. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/auto.arima">ARIMA</a> [auto.arima, arima]<br>
+3. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/ets">ETS</a> [ets]<br>
+4. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/spline">Spline</a> [spline]<br>
+5. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/thetaf">Theta Method</a> [theta]<br>
+6. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/tbats">TBATS</a> [tbats]<br>
+7. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/stlm">STL</a> [stl]<br>
+8. <a href="https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/nnetar">AR Perceptron</a> [nnetar]</p>
 <p>Notes: All univariate forecasting routines may be accessed via the OOS function <code>forecast_univariate</code>. Currently all default univariate forecasting techniques are implemented via the <a href="https://cran.r-project.org/web/packages/forecast/forecast.pdf">forecasts</a> package.</p>
 <p><strong>Default multivariate techniques</strong><br>
-1. <a href="https://www.rdocumentation.org/packages/vars/versions/1.5-3/topics/VAR">Vector Autoregression (VAR)</a><br>
-2. <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">Linear Regression (OLS)</a><br>
-3. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">LASSO Regression</a><br>
-4. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">Ridge Regression</a><br>
-5. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">Elastic Net</a><br>
-6. <a href="https://www.rdocumentation.org/packages/analogue/versions/0.17-5/topics/pcr">Principal Component Regression</a><br>
-7. <a href="https://www.rdocumentation.org/packages/mixOmics/versions/6.3.2/topics/pls">Partial Least Squares Regression</a><br>
-8. <a href="https://www.rdocumentation.org/packages/randomForest/versions/4.6-14/topics/randomForest">Random Forest</a><br>
-9. <a href="https://www.rdocumentation.org/packages/gbm/versions/2.1.8/topics/gbm">Tree-Based Gradient Boosting Machine</a><br>
-10. <a href="https://www.rdocumentation.org/packages/caret/versions/6.0-86/topics/avNNet">Averaged Single Layered Neural Network</a></p>
+1. <a href="https://www.rdocumentation.org/packages/vars/versions/1.5-3/topics/VAR">Vector Autoregression</a> [var]<br>
+2. <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">Linear Regression</a> [ols]<br>
+3. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">LASSO Regression</a> [lasso]<br>
+4. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">Ridge Regression</a> [ridge]<br>
+5. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">Elastic Net</a> [elastic]<br>
+6. <a href="https://www.rdocumentation.org/packages/analogue/versions/0.17-5/topics/pcr">Principal Component Regression</a> [pcr]<br>
+7. <a href="https://www.rdocumentation.org/packages/mixOmics/versions/6.3.2/topics/pls">Partial Least Squares Regression</a> [pls]<br>
+8. <a href="https://www.rdocumentation.org/packages/randomForest/versions/4.6-14/topics/randomForest">Random Forest</a> [RF]<br>
+9. <a href="https://www.rdocumentation.org/packages/gbm/versions/2.1.8/topics/gbm">Tree-Based Gradient Boosting Machine</a> [GBM]<br>
+10. <a href="https://www.rdocumentation.org/packages/caret/versions/6.0-86/topics/avNNet">Averaged Single Layered Neural Network</a> [NN]</p>
 <p>Notes: All multivariate forecasting routines may be accessed via the OOS function <code>forecast_multivariate</code>. VAR estimation is implemented via the <a href="https://cran.r-project.org/web/packages/vars/vars.pdf">vars</a> package. The LASSO, Ridge, and Elastic Net penalized regressions are all implemented via the <a href="https://cran.r-project.org/web/packages/glmnet/index.html">glmnet</a> package, but interfaced with through <a href="https://cran.r-project.org/web/packages/caret/caret.pdf">caret</a>. PCA and PLS dimension reduction regressions, Random Forest, Tree-Based Gradient Boosting Machine, and averaged Single Layered Neural Network all use their standard implementations in R and take their standard default CV values for training unless otherwise specified by the user through <a href="https://cran.r-project.org/web/packages/caret/caret.pdf">caret</a> style commands.</p>
 <p><strong>Default forecast combination techniques</strong><br>
-1. Mean<br>
-2. Median<br>
-3. Trimmed (Winsorized) Mean<br>
-4. <a href="https://www.sas.upenn.edu/~fdiebold/papers2/DieboldShinEgalitarianLasso.pdf">N-best</a><br>
-5. <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">Linear Regression (OLS)</a><br>
-6. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">LASSO Regression</a><br>
-7. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">Ridge Regression</a><br>
-8. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">Elastic Net</a><br>
-9. <a href="https://www.sas.upenn.edu/~fdiebold/papers2/DieboldShinEgalitarianLasso.pdf">peLASSO</a><br>
-10. <a href="https://www.rdocumentation.org/packages/randomForest/versions/4.6-14/topics/randomForest">Random Forest</a><br>
-11. <a href="https://www.rdocumentation.org/packages/gbm/versions/2.1.8/topics/gbm">Tree-Based Gradient Boosting Machine</a><br>
-12. <a href="https://www.rdocumentation.org/packages/caret/versions/6.0-86/topics/avNNet">Averaged Single Layered Neural Network</a></p>
+1. Mean [uniform]<br>
+2. Median [median]<br>
+3. Trimmed (Winsorized) Mean [trimmed.mean]<br>
+4. <a href="https://www.sas.upenn.edu/~fdiebold/papers2/DieboldShinEgalitarianLasso.pdf">N-best</a> [n.best]<br>
+5. <a href="https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">Linear Regression (OLS)</a> [ols]<br>
+6. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">LASSO Regression</a> [lasso]<br>
+7. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">Ridge Regression</a> [ridge]<br>
+8. <a href="https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet">Elastic Net</a> [elastic]<br>
+9. <a href="https://www.sas.upenn.edu/~fdiebold/papers2/DieboldShinEgalitarianLasso.pdf">peLASSO</a> [peLasso]<br>
+10. <a href="https://www.rdocumentation.org/packages/analogue/versions/0.17-5/topics/pcr">Principal Component Regression</a> [pcr]<br>
+11. <a href="https://www.rdocumentation.org/packages/mixOmics/versions/6.3.2/topics/pls">Partial Least Squares Regression</a> [pls]<br>
+12. <a href="https://www.rdocumentation.org/packages/randomForest/versions/4.6-14/topics/randomForest">Random Forest</a> [RF]<br>
+13. <a href="https://www.rdocumentation.org/packages/gbm/versions/2.1.8/topics/gbm">Tree-Based Gradient Boosting Machine</a> [GBM]<br>
+14. <a href="https://www.rdocumentation.org/packages/caret/versions/6.0-86/topics/avNNet">Averaged Single Layered Neural Network</a> [NN]</p>
 <p>Notes: All forecast combination routines may be accessed via the OOS function <code>forecast_combine</code>. The LASSO, Ridge, and Elastic Net penalized regressions are all implemented via the <a href="https://cran.r-project.org/web/packages/glmnet/index.html">glmnet</a> package, but interfaced with through <a href="https://cran.r-project.org/web/packages/caret/caret.pdf">caret</a>. The N-best and Partial Egalitarian LASSO methods were introduced by <a href="https://www.sas.upenn.edu/~fdiebold/papers2/DieboldShinEgalitarianLasso.pdf">Diebold and Shin (2019)</a>. The Random Forest, Tree-Based Gradient Boosting Machine, and averaged Single Layered Neural Network all use their standard implementations in R and take their standard default CV values for training unless otherwise specified by the user through <a href="https://cran.r-project.org/web/packages/caret/caret.pdf">caret</a> style commands.</p>
 </div>
 <div id="user-defined-forecasting-routines" class="section level2">
@@ -179,7 +183,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Tyler Pike.</p>
+  <p>Developed by Tyler J. Pike.</p>
 </div>
 
 <div class="pkgdown">

@@ -9,77 +9,50 @@
 
 This package creates a paradigm to provide a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics. 
 
+---
 ## Workflow and available Tools
 
 ### 0. Data preparation
 
-Clean Outliers
-1. Winsorize
-2. Trim  
+| Clean Outliers | Impute Missing Observations (via [imputeTS](https://github.com/SteffenMoritz/imputeTS)) | Dimension Reduction | 
+|----------------------|------------------------|-----------------------|
+| Winsorize | Linear Interpolation | Princepal Components |
+| Trim | Kalman Filter | |
+|  | Fill-Forward | |
+|  | Average | |
+|  | Moving Average | |
+|  | Seasonal Decomposition | |
 
-Impute Missing Observations 
-1. Interpolation
-2. Kalman Filter
-3. Fill-Forward
-4. Average
-5. Moving Average
-6. Seasonal Decomposition
 
-Dimension Reduction
-1. Principal Components
+### 1. Forecasting 
 
-### 1. Forecasting models 
-Univariate 
-1. Random Walk 
-2. ARIMA
-3. ETS  
-4. Spline
-5. Theta Method
-6. TBATS
-7. STL           
-8. AR Perceptron 
+| Univariate Forecasts (via [forecast](https://github.com/robjhyndman/forecast)) | Multivariate Forecasts (via [caret](https://github.com/topepo/caret)) | Forecast Combinations |
+|----------------------|------------------------|-----------------------|
+| Random Walk | Vector Autoregression | Mean|
+| ARIMA | Linear Regression | Median |
+| ETS | LASSO Regression | Trimmed (Winsorized) Mean |
+| Spline | Ridge Regression | N-Best |
+| Theta Method | Elastic Net | Linear Regression |
+| TBATS | Principal Component Regression | LASSO Regression |
+| STL | Partial Least Squares Regression | Ridge Regression |
+| AR Perceptron | Random Forest | Partial Egalitarian LASSO |
+|  | Tree-Based Gradient Boosting Machine | Principal Component Regression | 
+|   |  Single Layered Neural Network  | Partial Least Squares Regression  |
+|  | | Random Forest |
+|  | | Tree-Based Gradient Boosting Machine |
+|  | | Single Layered Neural Network  |
 
-Multivariate  
-1. Vector Autoregression (VAR)  
-2. Linear Regression  (OLS)
-3. LASSO Regression  
-4. Ridge Regression  
-5. Elastic Net   
-6. Principal Component Regression  
-7. Partial Least Squares Regression  
-8. Random Forest
-9. Tree-Based Gradient Boosting Machine 
-10. Single Layered Neural Network  
 
-### 2. Forecast combination techniques
-1. Mean
-2. Median
-3. Trimmed (Winsorized) Mean 
-4. N-best
-5. Linear Regression
-6. Ridge Regression 
-7. Lasso Regression
-8. Elastic Net
-9. peLASSO
-10. Principal Component Regression  
-11. Partial Least Squares Regression
-12. Random Forest
-13. Tree-Based Gradient Boosting Machine 
-14. Single Layered Neural Network  
+### 3. Analyze Forecasts
 
-### 3. Chart forecasts
+| Forecast Accuracy | Compare Forecasts | Chart |
+|----------------------|------------------------|-----------------------|
+| Mean Square Error (MSE) | Forecast Error Ratios | Forecasts |
+| Root Mean Square Error (RMSE) | Diebold-Mariano Test (for unnested models) | Errors* |
+| Mean Absolute Error (MAE) | Clark and West Test (for nested models) | SHAP decomposition* |
+| Mean Absolute Percentage Error (MAPE) |  | |
 
-### 4. Accuracy metrics and comparisons
-Loss Functions
-1. Mean Square Error (MSE)
-2. Root Mean Square Error (RMSE)
-3. Mean Absolute Error (MAE)
-4. Mean Absolute Percentage Error (MAPE)
-
-Forecast Comparison Methods
-1. Forecast Error Ratios
-2. Diebold-Mariano Test (for unnested models)
-3. Clark and West Test (for nested models)
+---
 
 ## Model estimation flexibility and accessibility
 
@@ -231,15 +204,19 @@ A brief example using the `Random Forest` to combine forecasts:
 	chart
 
 ---
+## Contact
+If you should have questions, concerns, or wish to collaborate, please contact [Tyler J. Pike](https://tylerjpike.github.io/)
 
+---
 ## Future Extensions
 High priority
 1. Code
    1. ~~accept `ts` and `xts` objects~~
    2. ~~update ML default training parameters~~
    3. ~~when combo model has same name as forecast model, add .combo to its name~~
+   4. error plot
 2. Create vingettes
-	1. Basic example
+	1. ~~Basic example~~
 	2. User defined functions
 	3. Forecasting binary outputs - prob of recession example
 	4. High dimensional forecasting
@@ -251,13 +228,11 @@ High priority
 	5. add google analytics
 	6. add search bar (maybe)
 	7. fix 'wall of text' feel
-	8. ~~make sure ml function names passed to forecast_multivariate are clear to user~~
 
 Medium Priority
 1. Charting
-	1. error plot
-	2. term-by-term decomposition time series (see Determinants as example)
-	3. SHAP decomposition time series
+	1. term-by-term decomposition time series (see Determinants as example)
+	2. SHAP decomposition time series
 2. smooth out user-defined functions
 
 Low priority

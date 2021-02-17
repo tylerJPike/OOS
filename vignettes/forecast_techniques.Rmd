@@ -1,0 +1,67 @@
+---
+title: "Forecasting Models"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Off-the-shelf forecasting routines
+The OOS package workflow begins with a user generating out-of-sample forecasts. To this end, OOS can handle both univariate and multivariate models, and comes off-the-shelf ready to estimate and forecast with several popular models via the `forecast_univariate`, `forecast_multivariate`, and `forecast_combine` functions.
+
+*Method names recognized by `forecast_univariate`, `forecast_multivariate`, and `forecast_combine` are shown in brackets.*
+
+**Default univariate techniques**  
+1. [Random Walk](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/rwf)   [naive, rwf]  
+2. [ARIMA](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/auto.arima)  [auto.arima, arima]  
+3. [ETS](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/ets)    [ets]  
+4. [Spline](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/spline)   [spline]  
+5. [Theta Method](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/thetaf)  [theta]  
+6. [TBATS](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/tbats)  [tbats]  
+7. [STL](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/stlm)           [stl]    
+8. [AR Perceptron](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/nnetar)  [nnetar]  
+
+Notes: All univariate forecasting routines may be accessed via the OOS function `forecast_univariate`. Currently all default univariate forecasting techniques are implemented via the [forecasts](https://cran.r-project.org/web/packages/forecast/forecast.pdf) package. 
+
+**Default multivariate techniques**  
+1. [Vector Autoregression](https://www.rdocumentation.org/packages/vars/versions/1.5-3/topics/VAR) [var]   
+2. [Linear Regression](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm)  [ols]  
+3. [LASSO Regression](https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet)  [lasso]  
+4. [Ridge Regression](https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet)  [ridge]  
+5. [Elastic Net](https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet)   [elastic]  
+6. [Principal Component Regression](https://www.rdocumentation.org/packages/analogue/versions/0.17-5/topics/pcr)  [pcr]  
+7. [Partial Least Squares Regression](https://www.rdocumentation.org/packages/mixOmics/versions/6.3.2/topics/pls)  [pls]  
+8. [Random Forest](https://www.rdocumentation.org/packages/randomForest/versions/4.6-14/topics/randomForest)  [RF]   
+9. [Tree-Based Gradient Boosting Machine](https://www.rdocumentation.org/packages/gbm/versions/2.1.8/topics/gbm)  [GBM]    
+10. [Averaged Single Layered Neural Network](https://www.rdocumentation.org/packages/caret/versions/6.0-86/topics/avNNet) [NN]    
+
+Notes: All multivariate forecasting routines may be accessed via the OOS function `forecast_multivariate`. VAR estimation is implemented via the [vars](https://cran.r-project.org/web/packages/vars/vars.pdf) package. The LASSO, Ridge, and Elastic Net penalized regressions are all implemented via the [glmnet](https://cran.r-project.org/web/packages/glmnet/index.html) package, but interfaced with through [caret](https://cran.r-project.org/web/packages/caret/caret.pdf). PCA and PLS dimension reduction regressions, Random Forest, Tree-Based Gradient Boosting Machine, and averaged Single Layered Neural Network all use their standard implementations in R and take their standard default CV values for training unless otherwise specified by the user through [caret](https://cran.r-project.org/web/packages/caret/caret.pdf) style commands.   
+
+**Default forecast combination techniques**  
+1. Mean  [uniform]  
+2. Median  [median]  
+3. Trimmed (Winsorized) Mean [trimmed.mean]    
+4. [N-best](https://www.sas.upenn.edu/~fdiebold/papers2/DieboldShinEgalitarianLasso.pdf)  [n.best]  
+5. [Linear Regression  (OLS)](https://www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm)  [ols]  
+6. [LASSO Regression](https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet) [lasso]   
+7. [Ridge Regression](https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet)  [ridge]  
+8. [Elastic Net](https://www.rdocumentation.org/packages/glmnet/versions/4.1/topics/glmnet)   [elastic]  
+9. [peLASSO](https://www.sas.upenn.edu/~fdiebold/papers2/DieboldShinEgalitarianLasso.pdf)   [peLasso]  
+10. [Principal Component Regression](https://www.rdocumentation.org/packages/analogue/versions/0.17-5/topics/pcr)  [pcr]  
+11. [Partial Least Squares Regression](https://www.rdocumentation.org/packages/mixOmics/versions/6.3.2/topics/pls)  [pls]  
+12. [Random Forest](https://www.rdocumentation.org/packages/randomForest/versions/4.6-14/topics/randomForest) [RF]     
+13. [Tree-Based Gradient Boosting Machine](https://www.rdocumentation.org/packages/gbm/versions/2.1.8/topics/gbm) [GBM]       
+14. [Averaged Single Layered Neural Network](https://www.rdocumentation.org/packages/caret/versions/6.0-86/topics/avNNet) [NN]     
+
+Notes: All forecast combination routines may be accessed via the OOS function `forecast_combine`. The LASSO, Ridge, and Elastic Net penalized regressions are all implemented via the [glmnet](https://cran.r-project.org/web/packages/glmnet/index.html) package, but interfaced with through [caret](https://cran.r-project.org/web/packages/caret/caret.pdf). The N-best and Partial Egalitarian LASSO methods were introduced by [Diebold and Shin (2019)](https://www.sas.upenn.edu/~fdiebold/papers2/DieboldShinEgalitarianLasso.pdf).  The Random Forest, Tree-Based Gradient Boosting Machine, and averaged Single Layered Neural Network all use their standard implementations in R and take their standard default CV values for training unless otherwise specified by the user through [caret](https://cran.r-project.org/web/packages/caret/caret.pdf) style commands.
+
+
+## User-defined forecasting routines
+While one may rely on default models and training routines, a practitioner may also implement custom forecasting models and edit default training routines through a series of user-facing control panes (list objects).      
+
+**User-facing control panels**  
+1. forecast_univariate.control_panel  
+2. forecast_multivariate.ml.control_panel  
+3. forecast_multivariate.var.control_panel  
+4. forecast_combinations.control_panel  

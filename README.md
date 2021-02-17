@@ -12,7 +12,7 @@ This package creates a paradigm to provide a structured and automated approach t
 ---
 ## Workflow and available Tools
 
-### 0. Data preparation
+### 0. Prepare Data
 
 | Clean Outliers | Impute Missing Observations (via [imputeTS](https://github.com/SteffenMoritz/imputeTS)) | Dimension Reduction | 
 |----------------------|------------------------|-----------------------|
@@ -24,7 +24,7 @@ This package creates a paradigm to provide a structured and automated approach t
 |  | Seasonal Decomposition | |
 
 
-### 1. Forecasting 
+### 1. Forecast
 
 | Univariate Forecasts (via [forecast](https://github.com/robjhyndman/forecast)) | Multivariate Forecasts (via [caret](https://github.com/topepo/caret)) | Forecast Combinations |
 |----------------------|------------------------|-----------------------|
@@ -43,9 +43,9 @@ This package creates a paradigm to provide a structured and automated approach t
 |  | | Single Layered Neural Network  |
 
 
-### 3. Analyze Forecasts
+### 3. Analyze
 
-| Forecast Accuracy | Compare Forecasts | Chart |
+| Accuracy | Compare | Visualize |
 |----------------------|------------------------|-----------------------|
 | Mean Square Error (MSE) | Forecast Error Ratios | Forecasts |
 | Root Mean Square Error (RMSE) | Diebold-Mariano Test (for unnested models) | Errors* |

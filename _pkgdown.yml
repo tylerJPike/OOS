@@ -42,15 +42,19 @@ navbar:
       text: Workflow
       menu:
       - text: Articles
-      - text: 1. Data Cleaning
-      - text: 2. Forecasting
-      - text: 3. Error Analysis
-      - text: 4. Charting
+      - text: 0. Introduction
+        href: ./articles/0_introduction.html
+      - text: 1. Prepare Data
+      - text: 2. Create Forecasts
+        href: ./articles/2_forecasting.html
+      - text: 3. Forecast Analysis
+        href: ./articles/3_analysis.html
       - text: ---------
       - text: Vignettes
       - text: 1. Getting Starting
+        href: ./articles/getting_started.html
       - text: 2. User-Defined Methods
-      - text: 3. Binary Outcomes
+      - text: 3. Dimension Reduction
     - icon: fa-cog
       text: Tools
       menu:

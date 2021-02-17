@@ -57,18 +57,23 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="dropdown-header">Articles</li>
-    <li class="dropdown-header">1. Data Cleaning</li>
-    <li class="dropdown-header">2. Forecasting</li>
-    <li class="dropdown-header">3. Error Analysis</li>
-    <li class="dropdown-header">4. Charting</li>
+    <li>
+      <a href="./articles/0_introduction.html">0. Introduction</a>
+    </li>
+    <li class="dropdown-header">1. Prepare Data</li>
+    <li>
+      <a href="./articles/2_forecasting.html">2. Create Forecasts</a>
+    </li>
+    <li>
+      <a href="./articles/3_analysis.html">3. Forecast Analysis</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Vignettes</li>
     <li>
       <a href="./articles/getting_started.html">1. Getting Starting</a>
     </li>
     <li class="dropdown-header">2. User-Defined Methods</li>
-    <li class="dropdown-header">3. Binary Outcomes</li>
-    <li class="dropdown-header">4. Dimension Reduction</li>
+    <li class="dropdown-header">3. Dimension Reduction</li>
   </ul>
 </li>
 <li class="dropdown">
@@ -121,21 +126,6 @@
 <p>This package creates a paradigm to provide a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination tools and forecast comparison metrics.</p>
 <p>Available tools and techniques may be reviewed under the <strong>Tools</strong> tab. While vignettes and other extended documentation of the OOS package’s capabilities may be found under the <strong>Workflow</strong> tab.</p>
 <hr>
-<div id="why-use-oos" class="section level2">
-<h2 class="hasAnchor">
-<a href="#why-use-oos" class="anchor"></a>Why use OOS</h2>
-<p>It is a simple fact that in-sample time series forecasting overstates model accuracy. Moreover, standard data cleaning routines and cross-validation techniques do not respect and avoid look-ahead bias, infecting the information set of study.</p>
-<p>As it stands (as of Feb. 2021), most would agree that the clostest package or collection of packages to a comprehensive and cohesive time series forecasting workflow in R is the maturing TidyModels. While TidyModels provides a flexible framework for data cleaning, model estimation, and prediction, it has not been built with out-of-sample time series forecasting in mind. That is, one still needs to write for-loop, apply function, or map routine to re-estimate thier desired forecasting workflow each time step, and then collect, clean, and deliver the mess of output that comes out of such a practice.</p>
-<p>In an answer to R’s lack of out-of-sample time series forecasting frameworks, OOS provides a clean, comprehensive, and robust workflow for out-of-sample forecasting.</p>
-<p>In addition to systematizing and democratizing out-of-sample time series forecasting with traditional econometric tools and modern machine learning methods, OOS also:</p>
-<ol>
-<li>plays nicely with the tidyverse - facilitating integration with existing codebases<br>
-</li>
-<li>provides sensible off-the-shelf defaults for new forecasters, while giving advanced users full control over all model and trianing function parameters for maximum flexibility</li>
-<li>gives users control over what pieces of information to return in easy to handle data.frames or lists</li>
-</ol>
-<hr>
-</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>

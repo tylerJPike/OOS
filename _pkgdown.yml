@@ -41,10 +41,11 @@ navbar:
     - icon: fa-cogs
       text: Workflow
       menu:
-      - text: Articles
+      - text: Getting Started
       - text: 0. Introduction
         href: ./articles/0_introduction.html
       - text: 1. Prepare Data
+        href: ./articles/1_data.html
       - text: 2. Create Forecasts
         href: ./articles/2_forecasting.html
       - text: 3. Forecast Analysis
@@ -53,8 +54,8 @@ navbar:
       - text: Vignettes
       - text: 1. Getting Starting
         href: ./articles/getting_started.html
-      - text: 2. User-Defined Methods
-      - text: 3. Dimension Reduction
+      - text: 2. Model Customization and Control
+        href: ./articles/model_control.html
     - icon: fa-cog
       text: Tools
       menu:

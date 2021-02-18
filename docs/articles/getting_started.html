@@ -49,18 +49,27 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="dropdown-header">Articles</li>
-    <li class="dropdown-header">1. Data Cleaning</li>
-    <li class="dropdown-header">2. Forecasting</li>
-    <li class="dropdown-header">3. Error Analysis</li>
-    <li class="dropdown-header">4. Charting</li>
+<li class="dropdown-header">Getting Started</li>
+    <li>
+      <a href=".././articles/0_introduction.html">0. Introduction</a>
+    </li>
+    <li>
+      <a href=".././articles/1_data.html">1. Prepare Data</a>
+    </li>
+    <li>
+      <a href=".././articles/2_forecasting.html">2. Create Forecasts</a>
+    </li>
+    <li>
+      <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Vignettes</li>
     <li>
       <a href=".././articles/getting_started.html">1. Getting Starting</a>
     </li>
-    <li class="dropdown-header">2. User-Defined Methods</li>
-    <li class="dropdown-header">3. Dimension Reduction</li>
+    <li>
+      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -147,12 +156,13 @@
 <code class="sourceCode R"><span class="co"># format data </span>
 <span class="va">Data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">UNRATE</span>, <span class="va">INDPRO</span>, <span class="va">GS10</span><span class="op">)</span> 
 <span class="va">Data</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">Data</span>, date <span class="op">=</span> <span class="fu">zoo</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/zoo/man/index.html">index</a></span><span class="op">(</span><span class="va">Data</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>One will note that once we downloaded the data from FRED, we additionally combine all of the series into a data.frame with a column named <code>date</code>. We do this because OOS forecasting routines can accept two general data formats.</p>
+<p>One will note that once we downloaded the data from FRED, we additionally combined all of the series into a data.frame with a column named <code>date</code>. We do this because OOS forecasting routines can accept two general data formats:</p>
 <ol style="list-style-type: decimal">
 <li>a standard R time series object, including <code>ts</code>, <code>xts</code>, or <code>zoo</code> objects</li>
-<li>a generic data.frame with only one requirement, there is a date column named “date”, used to index the forecasting data (as this is non-standard, it is what we demonstrate in this vignette).</li>
+<li>a generic data.frame with only one requirement, there is a date column named “date”, used to index the forecasting data</li>
 </ol>
-<p>Then, before we move on to the fun part, we will inspect our new data.</p>
+<p>As the data.frame option is non-standard, it is what we demonstrate in this vignette.</p>
+<p>Having downloaded our time series, we next inspect our new data.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># basic plot of the unemployment time series </span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">UNRATE</span><span class="op">)</span></code></pre></div>
@@ -217,7 +227,7 @@
         <span class="co"># information set treatment</span>
         rolling.window <span class="op">=</span> <span class="cn">NA</span>,
         freq <span class="op">=</span> <span class="st">'month'</span><span class="op">)</span></code></pre></div>
-<pre><code>## &lt;warning: univariate.forecast.training was instantiated and default values will be used for model estimation.&gt;</code></pre>
+<pre><code>## &lt;warning: forecast_univariate.control_panel was instantiated and default values will be used for model estimation.&gt;</code></pre>
 <p>One may notice that after running <code>forecast_univariate</code> we received the warning:</p>
 <pre><code>&lt;warning: univariate.forecast.training was instantiated and default values will be used for model estimation.&gt;</code></pre>
 <p>This warns us that we are using default parameters when training the random walk, ARIMA, and exponential smoothing models. More on this topic, including how a user may change the training parameters as they would like, will be covered in a separate vignette - as such, this type of warning will be suppressed for the remainder of the exercise. We next examine our output.</p>
@@ -283,12 +293,12 @@
 <code class="sourceCode R"><span class="co"># view top of forecast output</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">forecast.multi</span><span class="op">)</span></code></pre></div>
 <pre><code>##         date forecast.date   model forecast         se
-## 1 2015-02-01    2015-01-01     ols 5.697031 0.03688140
-## 2 2015-02-01    2015-01-01 elastic 5.713657         NA
-## 3 2015-02-01    2015-01-01      RF 5.554333         NA
-## 4 2015-03-01    2015-02-01     ols 5.958763 0.04550295
-## 5 2015-03-01    2015-02-01 elastic 5.874236         NA
-## 6 2015-03-01    2015-02-01      RF 5.556747         NA</code></pre>
+## 1 2015-02-01    2015-01-01     ols 5.656417 0.01631269
+## 2 2015-02-01    2015-01-01 elastic 5.708525         NA
+## 3 2015-02-01    2015-01-01      RF 5.608740         NA
+## 4 2015-03-01    2015-02-01     ols 5.830979 0.02033377
+## 5 2015-03-01    2015-02-01 elastic 5.789285         NA
+## 6 2015-03-01    2015-02-01      RF 5.768400         NA</code></pre>
 <p>And it appears that we again have been successful in forecasting the US unemployment rate!</p>
 </div>
 <div id="forecast-combinations" class="section level3">
@@ -332,13 +342,13 @@
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># view top of forecast output</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">forecast.combo</span><span class="op">)</span></code></pre></div>
-<pre><code>##         date forecast   model se
-## 1 2015-02-01 5.662029 uniform NA
-## 2 2015-03-01 5.640391 uniform NA
-## 3 2015-04-01 5.530853 uniform NA
-## 4 2015-05-01 5.475135 uniform NA
-## 5 2015-06-01 5.553408 uniform NA
-## 6 2015-07-01 5.506431 uniform NA</code></pre>
+<pre><code>##         date forecast         model se
+## 1 2015-02-01 5.663472 uniform.combo NA
+## 2 2015-03-01 5.640211 uniform.combo NA
+## 3 2015-04-01 5.544712 uniform.combo NA
+## 4 2015-05-01 5.445940 uniform.combo NA
+## 5 2015-06-01 5.560712 uniform.combo NA
+## 6 2015-07-01 5.568532 uniform.combo NA</code></pre>
 <p>We have forecast combinations for the US unemployment rate! This is nice progress, but now that we have all of these forecasts, how do we know which ones are good and which ones we should use to make decisions?</p>
 <p>For that we next turn to OOS’s suite of forecast evaluation metrics.</p>
 </div>
@@ -361,22 +371,22 @@
     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span><span class="op">(</span><span class="fu">vars</span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">MSE</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 14 x 5
-##    model          MSE  RMSE   MAE  MAPE
-##    &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 N.best       0.008 0.088 0.071 0.016
-##  2 N1           0.008 0.091 0.071 0.016
-##  3 N2           0.009 0.094 0.077 0.018
-##  4 RF           0.009 0.096 0.074 0.017
-##  5 lasso        0.01  0.1   0.076 0.017
-##  6 peLasso      0.012 0.109 0.091 0.021
-##  7 median       0.014 0.119 0.095 0.022
-##  8 auto.arima   0.016 0.128 0.107 0.024
-##  9 ets          0.016 0.128 0.107 0.024
-## 10 naive        0.016 0.126 0.103 0.024
-## 11 trimmed.mean 0.023 0.152 0.126 0.029
-## 12 uniform      0.023 0.152 0.126 0.029
-## 13 ols          0.091 0.301 0.253 0.059
-## 14 elastic      0.097 0.312 0.267 0.062</code></pre>
+##    model                MSE  RMSE   MAE  MAPE
+##    &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 peLasso.combo      0.014 0.117 0.097 0.023
+##  2 N1.combo           0.015 0.124 0.102 0.023
+##  3 auto.arima         0.016 0.128 0.107 0.024
+##  4 ets                0.016 0.128 0.107 0.024
+##  5 N.best.combo       0.016 0.125 0.103 0.024
+##  6 N2.combo           0.016 0.125 0.105 0.024
+##  7 naive              0.016 0.126 0.103 0.024
+##  8 lasso.combo        0.02  0.143 0.116 0.027
+##  9 median.combo       0.024 0.153 0.125 0.028
+## 10 trimmed.mean.combo 0.034 0.184 0.154 0.036
+## 11 uniform.combo      0.034 0.184 0.154 0.036
+## 12 ols                0.054 0.232 0.189 0.043
+## 13 RF                 0.058 0.242 0.194 0.044
+## 14 elastic            0.226 0.476 0.453 0.107</code></pre>
 <p>Through comparing errors we can see that the N-best forecast combination outperformed the rest of the pack, while the random forest was the best performing single forecast, and the simple ARIMA and ETS models outperform all other multivariate methods. Moreover, we can additionally comparing forecasts in statistical tests or error ratios. Here we see how all of our forecasts compare to a baseline random walk, where an error ratio smaller than one signals that a forecast method has a smaller error (that is, does better) than the random walk.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compare forecasts to the baseline (a random walk)</span>
@@ -387,21 +397,21 @@
     loss <span class="op">=</span> <span class="st">'MSE'</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu">arrange</span><span class="op">(</span><span class="va">error.ratio</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span><span class="op">(</span><span class="fu">vars</span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code>##           model error.ratio
-## 1        N.best       0.485
-## 2            N1       0.517
-## 3            N2       0.550
-## 4            RF       0.572
-## 5         lasso       0.649
-## 6       peLasso       0.771
-## 7        median       0.890
-## 8         naive       1.000
-## 9           ets       1.021
-## 10   auto.arima       1.022
-## 11 trimmed.mean       1.445
-## 12      uniform       1.445
-## 13          ols       5.661
-## 14      elastic       6.083</code></pre>
+<pre><code>##                 model error.ratio
+## 1       peLasso.combo       0.883
+## 2            N1.combo       0.961
+## 3        N.best.combo       0.969
+## 4            N2.combo       0.982
+## 5               naive       1.000
+## 6                 ets       1.021
+## 7          auto.arima       1.022
+## 8         lasso.combo       1.310
+## 9        median.combo       1.472
+## 10 trimmed.mean.combo       2.126
+## 11      uniform.combo       2.126
+## 12                ols       3.363
+## 13                 RF       3.647
+## 14            elastic      14.132</code></pre>
 <p>Then, after comparing forecasts based on errors, we can visualize our output.</p>
 </div>
 <div id="visualizing-forecasts" class="section level3">

@@ -14,7 +14,7 @@ The OOS package workflow begins with a user generating out-of-sample forecasts. 
 
 **Default univariate techniques**  
 1. [Random Walk](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/rwf)   [naive, rwf]  
-2. [ARIMA](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/auto.arima)  [auto.arima, arima]  
+2. [ARIMA](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/auto.arima)  [auto.arima, Arima]  
 3. [ETS](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/ets)    [ets]  
 4. [Spline](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/spline)   [spline]  
 5. [Theta Method](https://www.rdocumentation.org/packages/forecast/versions/8.13/topics/thetaf)  [theta]  

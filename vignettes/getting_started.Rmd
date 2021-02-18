@@ -45,12 +45,15 @@ Data = data.frame(Data, date = zoo::index(Data))
 
 ```
 
-One will note that once we downloaded the data from FRED, we additionally combine all of the series into a data.frame with a column named `date`. We do this because OOS forecasting routines can accept two general data formats. 
+One will note that once we downloaded the data from FRED, we additionally combined all of the series into a data.frame with a column named `date`. We do this because OOS forecasting routines can accept two general data formats: 
 
 1. a standard R time series object, including `ts`, `xts`, or `zoo` objects
-2. a generic data.frame with only one requirement, there is a date column named "date", used to index the forecasting data (as this is non-standard, it is what we demonstrate in this vignette).     
+2. a generic data.frame with only one requirement, there is a date column named "date", used to index the forecasting data 
 
-Then, before we move on to the fun part, we will inspect our new data. 
+
+As the data.frame option is non-standard, it is what we demonstrate in this vignette.     
+
+Having downloaded our time series, we next inspect our new data. 
 
 ```{r}
 

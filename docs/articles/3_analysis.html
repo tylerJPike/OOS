@@ -49,18 +49,27 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="dropdown-header">Articles</li>
-    <li class="dropdown-header">1. Data Cleaning</li>
-    <li class="dropdown-header">2. Forecasting</li>
-    <li class="dropdown-header">3. Error Analysis</li>
-    <li class="dropdown-header">4. Charting</li>
+<li class="dropdown-header">Getting Started</li>
+    <li>
+      <a href=".././articles/0_introduction.html">0. Introduction</a>
+    </li>
+    <li>
+      <a href=".././articles/1_data.html">1. Prepare Data</a>
+    </li>
+    <li>
+      <a href=".././articles/2_forecasting.html">2. Create Forecasts</a>
+    </li>
+    <li>
+      <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Vignettes</li>
     <li>
       <a href=".././articles/getting_started.html">1. Getting Starting</a>
     </li>
-    <li class="dropdown-header">2. User-Defined Methods</li>
-    <li class="dropdown-header">3. Dimension Reduction</li>
+    <li>
+      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -117,7 +126,7 @@
 
     
     
-<p><a href="./2_forecasting.html">Create Forecasts</a></p>
+<p>← <a href="./2_forecasting.html">Create Forecasts</a></p>
 <div id="forecast-evaluation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#forecast-evaluation" class="anchor"></a>3. Forecast Evaluation</h2>
@@ -136,22 +145,22 @@
     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span><span class="op">(</span><span class="fu">vars</span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">MSE</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 14 x 5
-##    model          MSE  RMSE   MAE  MAPE
-##    &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 N.best       0.008 0.091 0.073 0.017
-##  2 lasso        0.009 0.097 0.075 0.017
-##  3 N1           0.009 0.096 0.076 0.018
-##  4 N2           0.009 0.095 0.077 0.018
-##  5 RF           0.01  0.099 0.078 0.018
-##  6 peLasso      0.012 0.107 0.09  0.021
-##  7 median       0.014 0.118 0.094 0.021
-##  8 auto.arima   0.016 0.128 0.107 0.024
-##  9 ets          0.016 0.128 0.107 0.024
-## 10 naive        0.016 0.126 0.103 0.024
-## 11 trimmed.mean 0.023 0.151 0.124 0.029
-## 12 uniform      0.023 0.151 0.124 0.029
-## 13 ols          0.091 0.301 0.253 0.059
-## 14 elastic      0.094 0.306 0.263 0.061</code></pre>
+##    model                MSE  RMSE   MAE  MAPE
+##    &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 peLasso.combo      0.014 0.118 0.098 0.023
+##  2 N1.combo           0.015 0.124 0.102 0.023
+##  3 auto.arima         0.016 0.128 0.107 0.024
+##  4 ets                0.016 0.128 0.107 0.024
+##  5 N.best.combo       0.016 0.125 0.103 0.024
+##  6 N2.combo           0.016 0.125 0.105 0.024
+##  7 naive              0.016 0.126 0.103 0.024
+##  8 lasso.combo        0.02  0.143 0.117 0.027
+##  9 median.combo       0.023 0.153 0.124 0.028
+## 10 trimmed.mean.combo 0.034 0.185 0.154 0.036
+## 11 uniform.combo      0.034 0.185 0.154 0.036
+## 12 ols                0.054 0.232 0.189 0.043
+## 13 RF                 0.059 0.243 0.194 0.044
+## 14 elastic            0.226 0.476 0.453 0.107</code></pre>
 <p>Through comparing errors we can see that the N-best forecast combination outperformed the rest of the pack, while the random forest was the best performing single forecast, and the simple ARIMA and ETS models outperform all other multivariate methods. Moreover, we can additionally comparing forecasts in statistical tests or error ratios. Here we see how all of our forecasts compare to a baseline random walk, where an error ratio smaller than one signals that a forecast method has a smaller error (that is, does better) than the random walk.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compare forecasts to the baseline (a random walk)</span>
@@ -162,21 +171,21 @@
     loss <span class="op">=</span> <span class="st">'MSE'</span><span class="op">)</span> <span class="op">%&gt;%</span> 
     <span class="fu">arrange</span><span class="op">(</span><span class="va">error.ratio</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span><span class="op">(</span><span class="fu">vars</span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code>##           model error.ratio
-## 1        N.best       0.516
-## 2            N2       0.560
-## 3            N1       0.580
-## 4         lasso       0.602
-## 5            RF       0.611
-## 6       peLasso       0.741
-## 7        median       0.871
-## 8         naive       1.000
-## 9           ets       1.021
-## 10   auto.arima       1.022
-## 11 trimmed.mean       1.418
-## 12      uniform       1.418
-## 13          ols       5.661
-## 14      elastic       5.871</code></pre>
+<pre><code>##                 model error.ratio
+## 1       peLasso.combo       0.890
+## 2            N1.combo       0.963
+## 3        N.best.combo       0.971
+## 4            N2.combo       0.983
+## 5               naive       1.000
+## 6                 ets       1.021
+## 7          auto.arima       1.022
+## 8         lasso.combo       1.316
+## 9        median.combo       1.462
+## 10 trimmed.mean.combo       2.133
+## 11      uniform.combo       2.133
+## 12                ols       3.363
+## 13                 RF       3.690
+## 14            elastic      14.132</code></pre>
 <p>Then, after comparing forecasts based on errors, we can visualize our output.</p>
 </div>
 <div id="visualizing-forecasts" class="section level3">

@@ -49,18 +49,27 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="dropdown-header">Articles</li>
-    <li class="dropdown-header">1. Data Cleaning</li>
-    <li class="dropdown-header">2. Forecasting</li>
-    <li class="dropdown-header">3. Error Analysis</li>
-    <li class="dropdown-header">4. Charting</li>
+<li class="dropdown-header">Getting Started</li>
+    <li>
+      <a href=".././articles/0_introduction.html">0. Introduction</a>
+    </li>
+    <li>
+      <a href=".././articles/1_data.html">1. Prepare Data</a>
+    </li>
+    <li>
+      <a href=".././articles/2_forecasting.html">2. Create Forecasts</a>
+    </li>
+    <li>
+      <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
+    </li>
     <li class="divider">
     <li class="dropdown-header">Vignettes</li>
     <li>
       <a href=".././articles/getting_started.html">1. Getting Starting</a>
     </li>
-    <li class="dropdown-header">2. User-Defined Methods</li>
-    <li class="dropdown-header">3. Dimension Reduction</li>
+    <li>
+      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -117,7 +126,7 @@
 
     
     
-<p>← <a href="./1_data.html">Data Preparation</a> <a href="./3_analysis.html">Forecast Analysis</a> →</p>
+<p>← <a href="./1_data.html">Data Preparation</a> <span style="float:right"><a href="./3_analysis.html">Forecast Analysis</a> →</span></p>
 <div id="forecasting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#forecasting" class="anchor"></a>2. Forecasting</h2>
@@ -160,7 +169,7 @@
         <span class="co"># information set treatment</span>
         rolling.window <span class="op">=</span> <span class="cn">NA</span>,
         freq <span class="op">=</span> <span class="st">'month'</span><span class="op">)</span></code></pre></div>
-<pre><code>## &lt;warning: univariate.forecast.training was instantiated and default values will be used for model estimation.&gt;</code></pre>
+<pre><code>## &lt;warning: forecast_univariate.control_panel was instantiated and default values will be used for model estimation.&gt;</code></pre>
 <p>One may notice that after running <code>forecast_univariate</code> we received the warning:</p>
 <pre><code>&lt;warning: univariate.forecast.training was instantiated and default values will be used for model estimation.&gt;</code></pre>
 <p>This warns us that we are using default parameters when training the random walk, ARIMA, and exponential smoothing models. More on this topic, including how a user may change the training parameters as they would like, will be covered in a separate vignette - as such, this type of warning will be suppressed for the remainder of the exercise. We next examine our output.</p>
@@ -226,12 +235,12 @@
 <code class="sourceCode R"><span class="co"># view top of forecast output</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">forecast.multi</span><span class="op">)</span></code></pre></div>
 <pre><code>##         date forecast.date   model forecast         se
-## 1 2015-02-01    2015-01-01     ols 5.697031 0.03688140
-## 2 2015-02-01    2015-01-01 elastic 5.699710         NA
-## 3 2015-02-01    2015-01-01      RF 5.547640         NA
-## 4 2015-03-01    2015-02-01     ols 5.958763 0.04550295
-## 5 2015-03-01    2015-02-01 elastic 5.939811         NA
-## 6 2015-03-01    2015-02-01      RF 5.538497         NA</code></pre>
+## 1 2015-02-01    2015-01-01     ols 5.656417 0.01631269
+## 2 2015-02-01    2015-01-01 elastic 5.708525         NA
+## 3 2015-02-01    2015-01-01      RF 5.617480         NA
+## 4 2015-03-01    2015-02-01     ols 5.830979 0.02033377
+## 5 2015-03-01    2015-02-01 elastic 5.789285         NA
+## 6 2015-03-01    2015-02-01      RF 5.753757         NA</code></pre>
 <p>And it appears that we again have been successful in forecasting the US unemployment rate!</p>
 </div>
 <div id="forecast-combinations" class="section level3">
@@ -275,16 +284,16 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># view top of forecast output</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">forecast.combo</span><span class="op">)</span></code></pre></div>
-<pre><code>##         date forecast   model se
-## 1 2015-02-01 5.658589 uniform NA
-## 2 2015-03-01 5.648279 uniform NA
-## 3 2015-04-01 5.533481 uniform NA
-## 4 2015-05-01 5.476617 uniform NA
-## 5 2015-06-01 5.552350 uniform NA
-## 6 2015-07-01 5.500056 uniform NA</code></pre>
+<pre><code>##         date forecast         model se
+## 1 2015-02-01 5.664929 uniform.combo NA
+## 2 2015-03-01 5.637771 uniform.combo NA
+## 3 2015-04-01 5.544586 uniform.combo NA
+## 4 2015-05-01 5.449603 uniform.combo NA
+## 5 2015-06-01 5.562772 uniform.combo NA
+## 6 2015-07-01 5.569438 uniform.combo NA</code></pre>
 <p>We have forecast combinations for the US unemployment rate! This is nice progress, but now that we have all of these forecasts, how do we know which ones are good and which ones we should use to make decisions?</p>
 <p>For that we next turn to OOS’s suite of forecast evaluation metrics.</p>
-<p>← <a href="./1_data.html">Data Preparation</a> <a href="./3_analysis.html">Forecast Analysis</a> →</p>
+<p>← <a href="./1_data.html">Data Preparation</a> <span style="float:right"><a href="./3_analysis.html">Forecast Analysis</a> →</span></p>
 </div>
 </div>
   </div>

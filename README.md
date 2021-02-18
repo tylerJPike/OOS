@@ -227,13 +227,14 @@ High priority
 	4. create sigil
 	5. add google analytics
 	6. add search bar (maybe)
-	7. fix 'wall of text' feel
 
 Medium Priority
 1. Charting
 	1. term-by-term decomposition time series (see Determinants as example)
 	2. SHAP decomposition time series
 2. smooth out user-defined functions
+3. regime swtiching methods
+4. hierarchical forecasting
 
 Low priority
 1. Add a basic genetic algorithm for forecast combinations  

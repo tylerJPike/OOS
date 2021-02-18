@@ -76,9 +76,9 @@ A brief example using the `Random Forest` to combine forecasts:
 
 	# 2. select an item to edit, for example the random forest tuning grid   
 		# view default tuning grid  
-		forecast_combinations.control_panel$tune.grid[['RF']]  
+		forecast_combinations.control_panel$tuning.grids[['RF']]  
 		# edit tuning grid   
-		forecast_combinations.control_panel$tune.grid[['RF']] = expand.grid(mtry = c(1:6))  
+		forecast_combinations.control_panel$tuning.grids[['RF']] = expand.grid(mtry = c(1:6))  
 ---
 ## Basic usage example
 

@@ -6,7 +6,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-&#8592; [Data Preparation](./0_introduction.html) [[Forecast Analysis](./2_forecasting.html) &#8594;]{style="float:right"}
+&#8592; [Introduction](./0_introduction.html) [[Forecast Analysis](./2_forecasting.html) &#8594;]{style="float:right"}
 
 # OOS, an easy start
 
@@ -90,4 +90,4 @@ Data = filter(Data, date >= as.Date('1954-01-01'))
 
 Now that we have our data, we can forecast. 
 
-&#8592; [Data Preparation](./0_introduction.html) [[Forecast Analysis](./2_forecasting.html) &#8594;]{style="float:right"}
+&#8592; [Introduction](./0_introduction.html) [[Forecast Analysis](./2_forecasting.html) &#8594;]{style="float:right"}

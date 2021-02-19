@@ -16,6 +16,7 @@ reference:
       - '`forecast_accuracy`'
       - '`forecast_comparison`'
       - '`forecast_chart`'
+      - '`forecast_error_chart`'
   - title: Model Accessibility
     desc: Functions to instantiate lists that users may edit to control model estimation routines
     contents:
@@ -24,12 +25,20 @@ reference:
       - '`instantiate.forecast_multivariate.ml.control_panel`'
       - '`instantiate.forecast_multivariate.var.control_panel`'
       - '`instantiate.forecast_combinations.control_panel`'
-  - title: Data Cleaning (Internal)
+  - title: Data Cleaning
     desc: Functions used for data cleaning in `forecast_univariate` and `forecast_multivariate`
     contents:
       - '`data_outliers`'
       - '`data_impute`'
       - '`data_reduction`'
+  - title: Helper Functions
+    desc: Helpful functions used for miscellaneous tasks internally
+    contents: 
+      - '`loss_function`'
+      - '`NBest`'
+      - '`n.lag`'
+      - '`standardize`'
+      - '`winsorize`'
 
 
 navbar:
@@ -51,10 +60,7 @@ navbar:
       - text: 3. Forecast Analysis
         href: ./articles/3_analysis.html
       - text: ---------
-      - text: Vignettes
-      - text: 1. Getting Starting
-        href: ./articles/getting_started.html
-      - text: 2. Model Customization and Control
+      - text: Model Customization and Control
         href: ./articles/model_control.html
     - icon: fa-cog
       text: Tools

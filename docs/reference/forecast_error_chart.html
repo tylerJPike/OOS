@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Forecast with univariate models — forecast_univariate • OOS</title>
+<title>Chart forecast errors — forecast_error_chart • OOS</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,8 @@
 
 
 
-<meta property="og:title" content="Forecast with univariate models — forecast_univariate" />
-<meta property="og:description" content="A function to estimate univariate forecasts out-of-sample. Methods available include all forecast
-methods from the forecast package. The function will take in a data frame of the target variable,
-and a observation date column (named 'date'), while outputting a data frame with a date column and
-one column per forecast method selected." />
+<meta property="og:title" content="Chart forecast errors — forecast_error_chart" />
+<meta property="og:description" content="Chart forecast errors" />
 
 
 
@@ -159,124 +156,45 @@ one column per forecast method selected." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Forecast with univariate models</h1>
+    <h1>Chart forecast errors</h1>
     
-    <div class="hidden name"><code>forecast_univariate.Rd</code></div>
+    <div class="hidden name"><code>forecast_error_chart.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A function to estimate univariate forecasts out-of-sample. Methods available include all forecast
-methods from the <code>forecast</code> package. The function will take in a data frame of the target variable,
-and a observation date column (named 'date'), while outputting a data frame with a date column and
-one column per forecast method selected.</p>
+    <p>Chart forecast errors</p>
     </div>
 
-    <pre class="usage"><span class='fu'>forecast_univariate</span><span class='op'>(</span>
-  <span class='va'>Data</span>,
-  <span class='va'>forecast.dates</span>,
-  <span class='va'>methods</span>,
-  <span class='va'>horizon</span>,
-  recursive <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  rolling.window <span class='op'>=</span> <span class='cn'>NA</span>,
-  <span class='va'>freq</span>,
-  outlier.clean <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  outlier.variables <span class='op'>=</span> <span class='cn'>NULL</span>,
-  outlier.bounds <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.05</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
-  outlier.trim <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  outlier.cross_section <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  impute.missing <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  impute.method <span class='op'>=</span> <span class='st'>"kalman"</span>,
-  impute.variables <span class='op'>=</span> <span class='cn'>NULL</span>,
-  impute.verbose <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  parallel.dates <span class='op'>=</span> <span class='cn'>NULL</span>,
-  return.models <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  return.data <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>forecast_error_chart</span><span class='op'>(</span><span class='va'>Data</span>, <span class='va'>Title</span>, <span class='va'>Ylab</span>, <span class='va'>Freq</span>, zeroline <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>Data</th>
-      <td><p>data.frame: data frame of variable to forecast and a date column; may alternatively be a <code>ts</code>, <code>xts</code>, or <code>zoo</code> object to forecast</p></td>
+      <td><p>data.frame: oos.forecast object</p></td>
     </tr>
     <tr>
-      <th>forecast.dates</th>
-      <td><p>date: dates forecasts are created</p></td>
+      <th>Title</th>
+      <td><p>string: chart title</p></td>
     </tr>
     <tr>
-      <th>methods</th>
-      <td><p>string or vector: models to estimate forecasts</p></td>
+      <th>Ylab</th>
+      <td><p>string: y-axis label</p></td>
     </tr>
     <tr>
-      <th>horizon</th>
-      <td><p>int: number of periods to forecast</p></td>
+      <th>Freq</th>
+      <td><p>string: frequency (acts as sub-title)</p></td>
     </tr>
     <tr>
-      <th>recursive</th>
-      <td><p>boolean: use sequential one-step-ahead forecast if TRUE, use direct projections if FALSE</p></td>
-    </tr>
-    <tr>
-      <th>rolling.window</th>
-      <td><p>int: size of rolling window, NA if expanding window is used</p></td>
-    </tr>
-    <tr>
-      <th>freq</th>
-      <td><p>string: time series frequency; day, week, month, quarter, year</p></td>
-    </tr>
-    <tr>
-      <th>outlier.clean</th>
-      <td><p>boolean: if TRUE then clean outliers</p></td>
-    </tr>
-    <tr>
-      <th>outlier.variables</th>
-      <td><p>string: vector of variables to standardize, default is all but 'date' column</p></td>
-    </tr>
-    <tr>
-      <th>outlier.bounds</th>
-      <td><p>double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)</p></td>
-    </tr>
-    <tr>
-      <th>outlier.trim</th>
-      <td><p>boolean: if TRUE then replace outliers with NA instead of winsorizing bound</p></td>
-    </tr>
-    <tr>
-      <th>outlier.cross_section</th>
-      <td><p>boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)</p></td>
-    </tr>
-    <tr>
-      <th>impute.missing</th>
-      <td><p>boolean: if TRUE then impute missing values</p></td>
-    </tr>
-    <tr>
-      <th>impute.method</th>
-      <td><p>string: select which method to use from the imputeTS package; 'interpolation', 'kalman', 'locf', 'ma', 'mean', 'random', 'remove','replace', 'seadec', 'seasplit'</p></td>
-    </tr>
-    <tr>
-      <th>impute.variables</th>
-      <td><p>string: vector of variables to impute missing values, default is all numeric columns</p></td>
-    </tr>
-    <tr>
-      <th>impute.verbose</th>
-      <td><p>boolean: show start-up status of impute.missing.routine</p></td>
-    </tr>
-    <tr>
-      <th>parallel.dates</th>
-      <td><p>int: the number of cores available for parallel estimation</p></td>
-    </tr>
-    <tr>
-      <th>return.models</th>
-      <td><p>boolean: if TRUE then return list of models estimated each forecast.date</p></td>
-    </tr>
-    <tr>
-      <th>return.data</th>
-      <td><p>boolean: if True then return list of information.set for each forecast.date</p></td>
+      <th>zeroline</th>
+      <td><p>boolean: if TRUE then add a horizontal line at zero</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>data.frame with a date column and one column per forecast method selected</p>
+    <p>ggplot2 chart</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

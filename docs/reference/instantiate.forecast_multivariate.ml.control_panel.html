@@ -62,7 +62,7 @@ arguments list for user manipulation." />
   <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -73,33 +73,74 @@ arguments list for user manipulation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">OOS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
+        <li class="dropdown-header"></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="../reference/index.html">
-    <span class="fa fa-file-code-o"></span>
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cogs"></span>
      
-    functions
+    Workflow
+     
+    <span class="caret"></span>
   </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Getting Started</li>
+    <li>
+      <a href=".././articles/0_introduction.html">0. Introduction</a>
+    </li>
+    <li>
+      <a href=".././articles/1_data.html">1. Prepare Data</a>
+    </li>
+    <li>
+      <a href=".././articles/2_forecasting.html">2. Create Forecasts</a>
+    </li>
+    <li>
+      <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Vignettes</li>
+    <li>
+      <a href=".././articles/getting_started.html">1. Getting Starting</a>
+    </li>
+    <li>
+      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cog"></span>
+     
+    Tools
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href=".././articles/data_cleaning.html">Data Cleaning Techniques</a>
+    </li>
+    <li>
+      <a href=".././articles/forecast_techniques.html">Forecasting Techniques</a>
+    </li>
+    <li>
+      <a href=".././articles/error_analysis.html">Error Analysis Techniques</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href=".././reference/index.html">Function Documentation</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="https://github.com/tylerJPike/OOS">
-    <span class="fa fa-github fa-2x"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -126,8 +167,28 @@ arguments list for user manipulation." />
 arguments list for user manipulation.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>instantiate.forecast_multivariate.ml.control_panel</span><span class='op'>(</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>instantiate.forecast_multivariate.ml.control_panel</span><span class='op'>(</span>
+  covariates <span class='op'>=</span> <span class='cn'>NULL</span>,
+  rolling.window <span class='op'>=</span> <span class='cn'>NULL</span>,
+  horizon <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>covariates</th>
+      <td><p>int: the number of features that will go into the model</p></td>
+    </tr>
+    <tr>
+      <th>rolling.window</th>
+      <td><p>int: size of rolling window, NA if expanding window is used</p></td>
+    </tr>
+    <tr>
+      <th>horizon</th>
+      <td><p>int: number of periods into the future to forecast</p></td>
+    </tr>
+    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
@@ -144,7 +205,7 @@ arguments list for user manipulation.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Tyler Pike.</p>
+  <p>Developed by Tyler J. Pike.</p>
 </div>
 
 <div class="pkgdown">

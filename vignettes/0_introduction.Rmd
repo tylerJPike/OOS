@@ -27,6 +27,6 @@ In addition to systematizing and democratizing out-of-sample time series forecas
 
 ## Getting Started
 
-A user can choose to either work through the introductory vignette 'OOS, an easy start' by topic through a series of articles found under the OOS website's **workflow** tab, or as a single document, [Getting Started](./articles/getting_started.htm) found in the same location. Alternatively, a user may access a simplified code example on [Github](https://github.com/tylerJPike/OOS) if sparsity better suite their style. 
+A user can work through the introductory vignette 'OOS, an easy start' by topic through a series of articles found under the OOS website's **workflow** tab, flipping through sections as desired via arrows at the top and bottom of each page. Alternatively, a user may access a simplified code example on [Github](https://github.com/tylerJPike/OOS) if sparsity better suite their style. 
 
 [[Data Preparation](./1_data.html)  &#8594;]{style="float:right"}

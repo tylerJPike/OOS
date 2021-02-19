@@ -23,7 +23,7 @@ test_that("forecast chart", {
     )
 
   # chart forecasts
-  chart =
+  chart.forecast =
     forecast_chart(
       forecasts,
       Title = 'test',
@@ -32,5 +32,15 @@ test_that("forecast chart", {
       zeroline = TRUE)
 
   expect_true(exists('chart'), 'Chart is not created.')
+
+  chart.errors =
+    forecast_error_chart(
+      forecasts,
+      Title = 'test',
+      Ylab = 'Index',
+      Freq = 'Monthly',
+      zeroline = TRUE)
+
+  expect_true(exists('chart.errors'), 'Chart is not created.')
 
 })

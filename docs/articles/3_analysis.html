@@ -161,7 +161,7 @@
 ## 12 ols                0.054 0.232 0.189 0.043
 ## 13 RF                 0.059 0.243 0.194 0.044
 ## 14 elastic            0.226 0.476 0.453 0.107</code></pre>
-<p>Through comparing errors we can see that the N-best forecast combination outperformed the rest of the pack, while the random forest was the best performing single forecast, and the simple ARIMA and ETS models outperform all other multivariate methods. Moreover, we can additionally comparing forecasts in statistical tests or error ratios. Here we see how all of our forecasts compare to a baseline random walk, where an error ratio smaller than one signals that a forecast method has a smaller error (that is, does better) than the random walk.</p>
+<p>Through comparing errors we can see that the partial egalitarian LASSO forecast combination outperformed the rest of the pack, while the the simple ARIMA, ETS, and random walk models outperform all multivariate methods. Moreover, we can additionally comparing forecasts in statistical tests or error ratios. Here we see how all of our forecasts compare to a baseline random walk, where an error ratio smaller than one signals that a forecast method has a smaller error (that is, does better) than the random walk.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compare forecasts to the baseline (a random walk)</span>
 <span class="fu"><a href="../reference/forecast_comparison.html">forecast_comparison</a></span><span class="op">(</span>
@@ -191,7 +191,7 @@
 <div id="visualizing-forecasts" class="section level3">
 <h3 class="hasAnchor">
 <a href="#visualizing-forecasts" class="anchor"></a>3.2 Visualizing Forecasts</h3>
-<p>Lamentably, current OOS charting capabilities are somewhat limited, but this will change in future versions of the package. For now, we will focus our attention on our forecasts themselves.</p>
+<p>Currently OOS helps us quickly visualize both our new forecasts, as well as the associated forecast errors. We will first view our forecasts.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># chart forecasts</span>
     <span class="va">chart</span> <span class="op">=</span> 
@@ -202,13 +202,26 @@
             Freq <span class="op">=</span> <span class="st">'Monthly'</span><span class="op">)</span>
 
     <span class="va">chart</span></code></pre></div>
-<p><img src="3_analysis_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="3_analysis_files/figure-html/unnamed-chunk-4-1.png" width="700"> Viewing our forecasts maks it apparent that the elastic net was a clear outlier, and it is no surprise it did not perform well in ex post analysis. We next turn to our forecast errors.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># chart forecasts</span>
+    <span class="va">chart.errors</span> <span class="op">=</span> 
+        <span class="fu"><a href="../reference/forecast_error_chart.html">forecast_error_chart</a></span><span class="op">(</span>
+            <span class="va">forecasts</span>,              
+            Title <span class="op">=</span> <span class="st">'US Unemployment Rate Forecast Errors'</span>,
+            Ylab <span class="op">=</span> <span class="st">'Percentage points'</span>,
+            Freq <span class="op">=</span> <span class="st">'Monthly'</span>,
+            zeroline <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+    <span class="va">chart.errors</span></code></pre></div>
+<p><img src="3_analysis_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p>From our errors plot we can see that there appears to be a positive bias across our forecasts, and perhaps this is a signal that we should revisit our forecast model selections, training routines, or exogenous variables. Iterating across model and training design to optimize our forecast pool is outside the scope of this introduction, but we encourage those interested in practicing with OOS to tackle the problem, all the tools are there!</p>
 </div>
 </div>
 <div id="conclusion" class="section level2">
 <h2 class="hasAnchor">
 <a href="#conclusion" class="anchor"></a>Conclusion</h2>
-<p>During our brief walk through the basic OOS workflow, we have successfully created out-of-sample forecasts for the US unemployment rate over a five year period using univariate, multivariate, and ensemble methods. Then we were able to compare these methods and discern that while forecast combinations were on whole the best performing class of forecasts, the simple ARIMA, ETS, and random walk all did very well in comparison to the pool of multivariate models (save the random forest).</p>
+<p>During our brief walk through of the basic OOS workflow, we have successfully created out-of-sample forecasts for the US unemployment rate over a five year period using univariate, multivariate, and ensemble methods. Then we were able to compare these methods and discern that while forecast combinations were on whole the best performing class of forecasts, the simple ARIMA, ETS, and random walk all did very well in comparison to the pool of multivariate models.</p>
 <p>Through this exercise we have demonstrated just how easy OOS makes it to test times series forecasting methods in pseudo-real time. However, this walk through only touches on the surface level capabilities of OOS, please see additional articles and vignettes for a deeper dive into user-defined forecasting methods, additional possible output, and real-time dimension reduction techniques, among other topics.</p>
 <p>← <a href="./2_forecasting.html">Create Forecasts</a></p>
 </div>

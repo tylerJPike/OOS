@@ -51,7 +51,7 @@ See the OOS package [website](https://tylerjpike.github.io/OOS/) for comprehensi
 |----------------------|------------------------|-----------------------|
 | Mean Square Error (MSE) | Forecast Error Ratios | Forecasts |
 | Root Mean Square Error (RMSE) | Diebold-Mariano Test (for unnested models) | Errors* |
-| Mean Absolute Error (MAE) | Clark and West Test (for nested models) | SHAP decomposition* |
+| Mean Absolute Error (MAE) | Clark and West Test (for nested models) |  |
 | Mean Absolute Percentage Error (MAPE) |  | |
 
 ---

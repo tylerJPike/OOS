@@ -89,16 +89,27 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Articles</li>
-    <li class="dropdown-header">1. Data Cleaning</li>
-    <li class="dropdown-header">2. Forecasting</li>
-    <li class="dropdown-header">3. Error Analysis</li>
-    <li class="dropdown-header">4. Charting</li>
+    <li class="dropdown-header">Getting Started</li>
+    <li>
+      <a href=".././articles/0_introduction.html">0. Introduction</a>
+    </li>
+    <li>
+      <a href=".././articles/1_data.html">1. Prepare Data</a>
+    </li>
+    <li>
+      <a href=".././articles/2_forecasting.html">2. Create Forecasts</a>
+    </li>
+    <li>
+      <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
+    </li>
     <li class="divider"></li>
     <li class="dropdown-header">Vignettes</li>
-    <li class="dropdown-header">1. Getting Starting</li>
-    <li class="dropdown-header">2. User-Defined Methods</li>
-    <li class="dropdown-header">3. Binary Outcomes</li>
+    <li>
+      <a href=".././articles/getting_started.html">1. Getting Starting</a>
+    </li>
+    <li>
+      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -203,6 +214,12 @@
           <p><code><a href="forecast_chart.html">forecast_chart()</a></code> </p>
         </td>
         <td><p>Chart forecasts</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="forecast_error_chart.html">forecast_error_chart()</a></code> </p>
+        </td>
+        <td><p>Chart forecast errors</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -250,7 +267,7 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-data-cleaning-internal-" class="hasAnchor"><a href="#section-data-cleaning-internal-" class="anchor"></a>Data Cleaning (Internal)</h2>
+          <h2 id="section-data-cleaning" class="hasAnchor"><a href="#section-data-cleaning" class="anchor"></a>Data Cleaning</h2>
           <p class="section-desc"><p>Functions used for data cleaning in <code>forecast_univariate</code> and <code>forecast_multivariate</code></p></p>
         </th>
       </tr>
@@ -278,6 +295,49 @@
         </td>
         <td><p>Dimension reduction via principal components</p></td>
       </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-helper-functions" class="hasAnchor"><a href="#section-helper-functions" class="anchor"></a>Helper Functions</h2>
+          <p class="section-desc"><p>Helpful functions used for miscellaneous tasks internally</p></p>
+        </th>
+      </tr>
+      
+      
+    </tbody><tbody>
+      
+      
+      <tr>
+        
+        <td>
+          <p><code><a href="loss_function.html">loss_function()</a></code> </p>
+        </td>
+        <td><p>Calculate error via loss functions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="NBest.html">NBest()</a></code> </p>
+        </td>
+        <td><p>Select N-best forecasts</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="n.lag.html">n.lag()</a></code> </p>
+        </td>
+        <td><p>Create n lags</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="standardize.html">standardize()</a></code> </p>
+        </td>
+        <td><p>Standardize variables (mean 0, variance 1)</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="winsorize.html">winsorize()</a></code> </p>
+        </td>
+        <td><p>Winsorize or trim variables</p></td>
+      </tr>
     </tbody>
     </table>
   </div>
@@ -292,7 +352,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Tyler Pike.</p>
+  <p>Developed by Tyler J. Pike.</p>
 </div>
 
 <div class="pkgdown">

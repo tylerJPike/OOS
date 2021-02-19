@@ -67,7 +67,7 @@ with a date column and one column per combination method selected." />
   <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -78,26 +78,74 @@ with a date column and one column per combination method selected." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">OOS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-  <a href="../reference/index.html">Reference</a>
-</li>
+        <li class="dropdown-header"></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li>
+        <li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cogs"></span>
+     
+    Workflow
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Getting Started</li>
+    <li>
+      <a href=".././articles/0_introduction.html">0. Introduction</a>
+    </li>
+    <li>
+      <a href=".././articles/1_data.html">1. Prepare Data</a>
+    </li>
+    <li>
+      <a href=".././articles/2_forecasting.html">2. Create Forecasts</a>
+    </li>
+    <li>
+      <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Vignettes</li>
+    <li>
+      <a href=".././articles/getting_started.html">1. Getting Starting</a>
+    </li>
+    <li>
+      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cog"></span>
+     
+    Tools
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href=".././articles/data_cleaning.html">Data Cleaning Techniques</a>
+    </li>
+    <li>
+      <a href=".././articles/forecast_techniques.html">Forecasting Techniques</a>
+    </li>
+    <li>
+      <a href=".././articles/error_analysis.html">Error Analysis Techniques</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href=".././reference/index.html">Function Documentation</a>
+    </li>
+  </ul>
+</li>
+<li>
   <a href="https://github.com/tylerJPike/OOS">
-    <span class="fa fa-github fa-2x"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +181,7 @@ with a date column and one column per combination method selected.</p>
   <span class='va'>forecasts</span>,
   method <span class='op'>=</span> <span class='st'>"unform"</span>,
   n.max <span class='op'>=</span> <span class='cn'>NULL</span>,
-  window <span class='op'>=</span> <span class='cn'>NA</span>,
+  rolling.window <span class='op'>=</span> <span class='cn'>NA</span>,
   trim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.95</span><span class='op'>)</span>,
   burn.in <span class='op'>=</span> <span class='fl'>1</span>,
   parallel.dates <span class='op'>=</span> <span class='cn'>NULL</span>
@@ -155,7 +203,7 @@ with a date column and one column per combination method selected.</p>
       <td><p>int: maximum number of forecasts to select</p></td>
     </tr>
     <tr>
-      <th>window</th>
+      <th>rolling.window</th>
       <td><p>int: size of rolling window to evaluate forecast error over, use entire period if NA</p></td>
     </tr>
     <tr>
@@ -187,7 +235,7 @@ with a date column and one column per combination method selected.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Tyler Pike.</p>
+  <p>Developed by Tyler J. Pike.</p>
 </div>
 
 <div class="pkgdown">

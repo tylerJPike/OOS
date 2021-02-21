@@ -82,8 +82,7 @@ A brief example using the `Random Forest` to combine forecasts:
 		# edit tuning grid   
 		forecast_combinations.control_panel$tuning.grids[['RF']] = expand.grid(mtry = c(1:6))  
 ---
-## Basic usage example
-
+## Basic workflow
 	#----------------------------------------
 	### Forecasting Example
 	#----------------------------------------
@@ -92,16 +91,13 @@ A brief example using the `Random Forest` to combine forecasts:
 		c('UNRATE','INDPRO','GS10'), 
 		env = globalenv())
 	Data = cbind(UNRATE, INDPRO, GS10)
-
-	# a ts, xts, or zoo object may be used in OOS forecasting methods, 
-	# but a data.frame with a `date` column may also be used, as shown below
 	Data = data.frame(Data, date = zoo::index(Data)) %>%
 		dplyr::filter(lubridate::year(date) >= 1990)
 
 	# run univariate forecasts 
 	forecast.uni = 
 		forecast_univariate(
-			Data = dplyr::select(Data, date, INDPRO),
+			Data = dplyr::select(Data, date, UNRATE),
 			forecast.dates = tail(Data$date,15), 
 			method = c('naive','auto.arima', 'ets'),      
 			horizon = 1,                         
@@ -129,7 +125,7 @@ A brief example using the `Random Forest` to combine forecasts:
 		forecast_multivariate(
 			Data = Data,           
 			forecast.date = tail(Data$date,15),
-			target = 'INDPRO',
+			target = 'UNRATE',
 			horizon = 1,
 			method = c('ols','lasso','ridge','elastic','GBM'),
 
@@ -162,10 +158,10 @@ A brief example using the `Random Forest` to combine forecasts:
 			forecast.uni,
 			forecast.multi) %>%
 		dplyr::left_join( 
-			dplyr::select(Data, date, observed = INDPRO))
+			dplyr::select(Data, date, observed = UNRATE))
 
 	# forecast combinations 
-	combinations.indpro = 
+	forecast.combo = 
 		forecast_combine(
 			forecasts, 
 			method = c('uniform','median','trimmed.mean',
@@ -199,7 +195,7 @@ A brief example using the `Random Forest` to combine forecasts:
 	chart = 
 		forecast_chart(
 			forecasts,              
-			Title = 'Industrial Production',
+			Title = 'US Unemployment Rate',
 			Ylab = 'Index',
 			Freq = 'Monthly')
 

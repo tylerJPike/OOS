@@ -26,7 +26,7 @@ or
 
 ---
 	
-## Basic workflow example
+## Basic workflow
 	#----------------------------------------
 	### Forecasting Example
 	#----------------------------------------
@@ -34,14 +34,14 @@ or
 	quantmod::getSymbols.FRED(
 		c('UNRATE','INDPRO','GS10'), 
 		env = globalenv())
-	Data = cbind(UNRATE, INDPRO) %>% cbind(GS10)
+	Data = cbind(UNRATE, INDPRO, GS10)
 	Data = data.frame(Data, date = zoo::index(Data)) %>%
 		dplyr::filter(lubridate::year(date) >= 1990)
 
 	# run univariate forecasts 
 	forecast.uni = 
 		forecast_univariate(
-			Data = dplyr::select(Data, date, INDPRO),
+			Data = dplyr::select(Data, date, UNRATE),
 			forecast.dates = tail(Data$date,15), 
 			method = c('naive','auto.arima', 'ets'),      
 			horizon = 1,                         
@@ -69,7 +69,7 @@ or
 		forecast_multivariate(
 			Data = Data,           
 			forecast.date = tail(Data$date,15),
-			target = 'INDPRO',
+			target = 'UNRATE',
 			horizon = 1,
 			method = c('ols','lasso','ridge','elastic','GBM'),
 
@@ -102,10 +102,10 @@ or
 			forecast.uni,
 			forecast.multi) %>%
 		dplyr::left_join( 
-			dplyr::select(Data, date, observed = INDPRO))
+			dplyr::select(Data, date, observed = UNRATE))
 
 	# forecast combinations 
-	combinations.indpro = 
+	forecast.combo = 
 		forecast_combine(
 			forecasts, 
 			method = c('uniform','median','trimmed.mean',
@@ -139,7 +139,7 @@ or
 	chart = 
 		forecast_chart(
 			forecasts,              
-			Title = 'Inudstrial Production',
+			Title = 'US Unemployment Rate',
 			Ylab = 'Index',
 			Freq = 'Monthly')
 

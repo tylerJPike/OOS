@@ -16,7 +16,13 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-XH0MN4JJBQ"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XH0MN4JJBQ');
+</script>
 </head>
 <body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
@@ -63,12 +69,8 @@
       <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Vignettes</li>
     <li>
-      <a href=".././articles/getting_started.html">1. Getting Starting</a>
-    </li>
-    <li>
-      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+      <a href=".././articles/model_control.html">Model Customization and Control</a>
     </li>
   </ul>
 </li>
@@ -133,7 +135,7 @@
 <p>Now that we have a collection of forecasts, we would like to know which ones to use. OOS has two ways to evaluate forecasts, error analysis and visualization.</p>
 <div id="error-analysis" class="section level3">
 <h3 class="hasAnchor">
-<a href="#error-analysis" class="anchor"></a>3.1 Error analysis</h3>
+<a href="#error-analysis" class="anchor"></a>3.1 Error Analysis</h3>
 <p>First, we can calculate various loss functions for each model found in a long-form data.frame in the same style as <code>forecast_univariate</code>, <code>forecast_multivariate</code>, and <code>forecast_combine</code> output.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># calculate forecast errors</span>

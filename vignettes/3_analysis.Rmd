@@ -25,7 +25,7 @@ forecasts = readr::read_csv('getting_started_forecasts.csv')
 
 Now that we have a collection of forecasts, we would like to know which ones to use. OOS has two ways to evaluate forecasts, error analysis and visualization.
 
-### 3.1 Error analysis
+### 3.1 Error Analysis
 
 First, we can calculate various loss functions for each model found in a long-form data.frame in the same style as `forecast_univariate`, `forecast_multivariate`, and `forecast_combine` output. 
 

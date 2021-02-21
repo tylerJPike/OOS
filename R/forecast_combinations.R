@@ -168,10 +168,10 @@ instantiate.forecast_combinations.control_panel = function(covariates = NULL){
 #' and the observation date (i.e. the foretasted date, named 'date'), while outputting a data frame
 #' with a date column and one column per combination method selected.
 #'
-#' @param forecasts       data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods
+#' @param Data            data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods
 #' @param method          string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'
 #' @param n.max           int: maximum number of forecasts to select
-#' @param rolling.window          int: size of rolling window to evaluate forecast error over, use entire period if NA
+#' @param rolling.window  int: size of rolling window to evaluate forecast error over, use entire period if NA
 #' @param trim            numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)
 #' @param burn.in         int: the number of periods to use in the first model estimation
 #' @param parallel.dates  int: the number of cores available for parallel estimation
@@ -181,10 +181,10 @@ instantiate.forecast_combinations.control_panel = function(covariates = NULL){
 
 # assumes a column named observed
 forecast_combine = function(
-  forecasts,              # data.frame: data frame of forecasted values to combine, assumes `date` and `observed` columns, but `observed' is not necessary for all methods
+  Data,                   # data.frame: data frame of forecasted values to combine, assumes `date` and `observed` columns, but `observed' is not necessary for all methods
   method = 'unform',      # string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'
   n.max = NULL,           # int: maximum number of forecasts to select
-  rolling.window = NA,            # int: size of rolling window to evaluate forecast error over, use entire period if NA
+  rolling.window = NA,    # int: size of rolling window to evaluate forecast error over, use entire period if NA
   trim = c(0.5, 0.95),    # numeric: a two element vector with the winsorizing bounds for the trimmed mean method; c(min, max)
   burn.in = 1,            # int: the number of periods to use in the first model estimation
   parallel.dates = NULL   # int: the number of cores available for parallel estimation
@@ -198,7 +198,7 @@ forecast_combine = function(
   }
 
   # cast from long to wide
-  forecasts = forecasts %>%
+  forecasts = Data %>%
     dplyr::select(-se, -forecast.date) %>%
     tidyr::pivot_wider(names_from = model, values_from = forecast)
 

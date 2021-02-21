@@ -5,7 +5,7 @@
 \title{Forecast with forecast combinations}
 \usage{
 forecast_combine(
-  forecasts,
+  Data,
   method = "unform",
   n.max = NULL,
   rolling.window = NA,
@@ -15,7 +15,7 @@ forecast_combine(
 )
 }
 \arguments{
-\item{forecasts}{data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods}
+\item{Data}{data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods}
 
 \item{method}{string or vector: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'}
 

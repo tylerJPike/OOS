@@ -2,13 +2,10 @@
 template:
   params:
     bootswatch: flatly
+    ganalytics: G-XH0MN4JJBQ
 
 development:
   mode: auto
-
-template:
-  params:
-    ganalytics: G-XH0MN4JJBQ
 
 reference:
   - title: Forecasting Workflow

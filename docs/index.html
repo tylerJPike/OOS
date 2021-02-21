@@ -133,9 +133,9 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'tylerJPike/OOS'</span>)</span></code></pre></div>
 <hr>
 </div>
-<div id="basic-workflow-example" class="section level2">
+<div id="basic-workflow" class="section level2">
 <h2 class="hasAnchor">
-<a href="#basic-workflow-example" class="anchor"></a>Basic workflow example</h2>
+<a href="#basic-workflow" class="anchor"></a>Basic workflow</h2>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">### Forecasting Example</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------</span></span>
@@ -143,14 +143,14 @@
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>quantmod<span class="sc">::</span><span class="fu">getSymbols.FRED</span>(</span>
 <span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">'UNRATE'</span>,<span class="st">'INDPRO'</span>,<span class="st">'GS10'</span>), </span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">env =</span> <span class="fu">globalenv</span>())</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>Data <span class="ot">=</span> <span class="fu">cbind</span>(UNRATE, INDPRO) <span class="sc">%&gt;%</span> <span class="fu">cbind</span>(GS10)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>Data <span class="ot">=</span> <span class="fu">cbind</span>(UNRATE, INDPRO, GS10)</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>Data <span class="ot">=</span> <span class="fu">data.frame</span>(Data, <span class="at">date =</span> zoo<span class="sc">::</span><span class="fu">index</span>(Data)) <span class="sc">%&gt;%</span></span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(lubridate<span class="sc">::</span><span class="fu">year</span>(date) <span class="sc">&gt;=</span> <span class="dv">1990</span>)</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># run univariate forecasts </span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>forecast.uni <span class="ot">=</span> </span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast_univariate</span>(</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Data =</span> dplyr<span class="sc">::</span><span class="fu">select</span>(Data, date, INDPRO),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Data =</span> dplyr<span class="sc">::</span><span class="fu">select</span>(Data, date, UNRATE),</span>
 <span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">forecast.dates =</span> <span class="fu">tail</span>(Data<span class="sc">$</span>date,<span class="dv">15</span>), </span>
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="fu">c</span>(<span class="st">'naive'</span>,<span class="st">'auto.arima'</span>, <span class="st">'ets'</span>),      </span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">horizon =</span> <span class="dv">1</span>,                         </span>
@@ -178,7 +178,7 @@
 <span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast_multivariate</span>(</span>
 <span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">Data =</span> Data,           </span>
 <span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">forecast.date =</span> <span class="fu">tail</span>(Data<span class="sc">$</span>date,<span class="dv">15</span>),</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">target =</span> <span class="st">'INDPRO'</span>,</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">target =</span> <span class="st">'UNRATE'</span>,</span>
 <span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        <span class="at">horizon =</span> <span class="dv">1</span>,</span>
 <span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="fu">c</span>(<span class="st">'ols'</span>,<span class="st">'lasso'</span>,<span class="st">'ridge'</span>,<span class="st">'elastic'</span>,<span class="st">'GBM'</span>),</span>
 <span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
@@ -211,10 +211,10 @@
 <span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>        forecast.uni,</span>
 <span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>        forecast.multi) <span class="sc">%&gt;%</span></span>
 <span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">left_join</span>( </span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">select</span>(Data, date, <span class="at">observed =</span> INDPRO))</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">select</span>(Data, date, <span class="at">observed =</span> UNRATE))</span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="co"># forecast combinations </span></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>combinations.indpro <span class="ot">=</span> </span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>forecast.combo <span class="ot">=</span> </span>
 <span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast_combine</span>(</span>
 <span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>        forecasts, </span>
 <span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="fu">c</span>(<span class="st">'uniform'</span>,<span class="st">'median'</span>,<span class="st">'trimmed.mean'</span>,</span>
@@ -248,7 +248,7 @@
 <span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>chart <span class="ot">=</span> </span>
 <span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast_chart</span>(</span>
 <span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>        forecasts,              </span>
-<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>        <span class="at">Title =</span> <span class="st">'Inudstrial Production'</span>,</span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>        <span class="at">Title =</span> <span class="st">'US Unemployment Rate'</span>,</span>
 <span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>        <span class="at">Ylab =</span> <span class="st">'Index'</span>,</span>
 <span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>        <span class="at">Freq =</span> <span class="st">'Monthly'</span>)</span>
 <span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a></span>

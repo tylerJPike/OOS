@@ -61,7 +61,10 @@ navbar:
       - text: 3. Forecast Analysis
         href: ./articles/3_analysis.html
       - text: ---------
-      - text: Model Customization and Control
+      - text: Model Estimation
+      - text: 1. Off-The-Shelf ML Training
+        href: ./articles/model_default.html
+      - text: 2. Model Customization and Control
         href: ./articles/model_control.html
     - icon: fa-cog
       text: Tools

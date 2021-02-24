@@ -16,7 +16,13 @@
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-<![endif]-->
+<![endif]--><!-- Global site tag (gtag.js) - Google Analytics --><script async src="https://www.googletagmanager.com/gtag/js?id=G-XH0MN4JJBQ"></script><script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XH0MN4JJBQ');
+</script>
 </head>
 <body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
@@ -63,12 +69,11 @@
       <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
     </li>
     <li class="divider">
-    <li class="dropdown-header">Vignettes</li>
     <li>
-      <a href=".././articles/getting_started.html">1. Getting Starting</a>
+      <a href=".././articles/model_default.html">Off-The-Shelf ML Training</a>
     </li>
     <li>
-      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+      <a href=".././articles/model_control.html">Model Customization and Control</a>
     </li>
   </ul>
 </li>
@@ -134,10 +139,10 @@
 <h2 class="hasAnchor">
 <a href="#why-use-oos" class="anchor"></a>Why use OOS?</h2>
 <p>It is a simple fact that in-sample time series forecasting overstates model accuracy. Moreover, standard data cleaning routines and cross-validation techniques do not respect and avoid look-ahead bias, infecting the information set of study.</p>
-<p>As it stands (as of Feb. 2021), most would agree that the clostest package or collection of packages to a comprehensive and cohesive time series forecasting workflow in R is the maturing TidyModels. While TidyModels provides a flexible framework for data cleaning, model estimation, and prediction, it has not been built with out-of-sample time series forecasting in mind. That is, one still needs to write for-loop, apply function, or map routine to re-estimate thier desired forecasting workflow each time step, and then collect, clean, and deliver the mess of output that comes out of such a practice.</p>
+<p>As it stands (as of Feb. 2021), most would agree that the closest package or collection of packages to a comprehensive and cohesive time series forecasting workflow in R is the maturing TidyModels. While TidyModels provides a flexible framework for data cleaning, model estimation, and prediction, it has not been built with out-of-sample time series forecasting in mind. That is, one still needs to write for-loop, apply function, or map routine to re-estimate their desired forecasting workflow each time step, and then collect, clean, and deliver the mess of output that comes out of such a practice.</p>
 <p>In an answer to R’s lack of out-of-sample time series forecasting frameworks, OOS provides a clean, comprehensive, and robust workflow for out-of-sample forecasting.</p>
 <p>In addition to systematizing and democratizing out-of-sample time series forecasting with traditional econometric tools and modern machine learning methods, OOS also: 1. plays nicely with the tidyverse - facilitating integration with existing codebases<br>
-2. provides sensible off-the-shelf defaults for new forecasters, while giving advanced users full control over all model and trianing function parameters for maximum flexibility 3. gives users control over what pieces of information to return in easy to handle data.frames or lists</p>
+2. provides sensible off-the-shelf defaults for new forecasters, while giving advanced users full control over all model and training function parameters for maximum flexibility 3. gives users control over what pieces of information to return in easy to handle data.frames or lists</p>
 </div>
 <div id="getting-started" class="section level2">
 <h2 class="hasAnchor">

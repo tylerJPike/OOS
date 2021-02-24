@@ -1,0 +1,175 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rolling.window = 1
+horizon = 1
+covariates = NA
+```
+
+# Off-The-Shelf ML Training
+
+OOS provides users with access to several machine learning forecasting methods. Along with this access, OOS comes with pre-defined machine learning training routines so that practitioners may simply pick up the package and hit the ground running. 
+
+Machine learning parameter estimation is facilitated with the [caret](https://github.com/topepo/caret) package. As a result, all machine learning training can be controlled through a unified format, which OOS conveniently presented through a series of "control.panel" lists. That is, when one trains machine learning method via OOS, they first instantiating a training control panel (e.g. `forecast_multivariate.ml.control_panel` and `forecast_combinations.control_panel`), list with elements:   
+
+1. caret.engine: name of caret recognized method  
+2. tuning.grids: data.frame grid of hyperparameters for training caret recognized methods  
+3. control: list or arguments defining the parameter estimation routine    
+4. accuracy: regression loss function to minimize during learning  
+
+and these control panels in turn direct the actual machine learning training within the OOS forecast methods.  
+
+The remainder of this article will outline the default details of machine learning training in OOS, while documentation and examples of editing machine learning control panels in OOS may be found in the [Model Customization and Control](./model_control.html) vignette. 
+
+## 1. Default machine learning methods
+
+First, control panels hold a list of caret recognized method which may used by default in OOS. The following code snippet shows the caret.engine list created within OOS control panels:
+
+```{r}
+ # caret names
+  caret.engine = list(
+    ols = 'lm',
+    ridge = 'glmnet',
+    lasso = 'glmnet',
+    elastic = 'glmnet',
+    RF = 'rf',
+    GBM = 'gbm',
+    NN = 'avNNet',
+    pls = 'pls',
+    pcr = 'pcr'
+  )
+
+```
+
+
+## 2. Parameter estimation methods
+
+Second, control panels define the parameter estimation method used to create the actual forecasting models. 
+
+### forecast_multivariate 
+By default, `forecast_multivariate` uses the [timeslice](https://otexts.com/fpp2/accuracy.html) cross validation technique, designed specifically for time series forecasting. However, if the argument `rolling.window` is NULL in `instantiate.forecast_multivariate.ml.control_panel()`, then 5-fold cross validation will be used. This latter behavior will only occur if a user manually instantiates the control panel and then does not edit the control element. 
+
+The following code snippet shows the training control object created within `instantiate.forecast_multivariate.ml.control_panel()`:
+
+```{r}
+  # hyper-parameter selection routine
+  if(is.numeric(rolling.window)){
+    control =
+      caret::trainControl(
+        method = "timeslice",
+        horizon = horizon,
+        initialWindow = rolling.window,
+        allowParallel = TRUE)
+  }else if(!is.null(rolling.window)){
+    control =
+      caret::trainControl(
+        method = "timeslice",
+        horizon = horizon,
+        initialWindow = 5,
+        allowParallel = TRUE)
+  }else{
+    control =
+      caret::trainControl(
+        method = "cv",
+        number = 5,
+        allowParallel = TRUE)
+
+  }
+```
+
+
+### forecast_combine
+In comparison, by default the `forecast_combine` uses 5-fold cross validation to estimate and select model parameters.
+
+*Note that the partial egalitarian lasso is not sourced from caret and uses the default cross validation imposed in the [glmnet](https://cran.r-project.org/web/packages/glmnet/index.html) package.* 
+
+The following code snippet shows the training control object created within `instantiate.forecast_combinations.control_panel()`:
+
+```{r}
+  # hyper-parameter selection routine
+  control =
+    caret::trainControl(
+      method = "cv",
+      number = 5,
+      allowParallel = TRUE)
+```
+
+
+## 3. Hyperparameters
+
+Third, within training routines, models are estimated over a grid of potential hyperparameters. OOS attempts to use standard off-the-shelf training parameters when available, for example, in the case of the random forest and LASSO regression. However, this also means that the number of covariates must be passed to control panel instantiation, lest naive hyperparameters will be used (the number of covariates will always be used when the control panels are created inside `forecast_multivariate` or `forecast_combine`).
+
+The following tuning grids are used in both `forecast_multivariate` and `forecast_combine` when training machine learning techniques:
+
+```{r}
+ # tuning grids
+  tuning.grids = list(
+
+    ols = NULL,
+
+    ridge = expand.grid(
+      alpha = 0,
+      lambda = 10^seq(-3, 3, length = 100)),
+
+    lasso = expand.grid(
+      alpha = 1,
+      lambda = 10^seq(-3, 3, length = 100)),
+
+    elastic = NULL,
+
+    GBM =
+      expand.grid(
+        n.minobsinnode = c(1),
+        shrinkage = c(.1,.01),
+        n.trees = c(100, 250, 500),
+        interaction.depth = c(1,2,5)),
+
+    RF =
+      expand.grid(
+        mtry = c(1:4)),
+
+    NN =
+      expand.grid(
+        size = seq(2,10,5),
+        decay = c(.01,.001),
+        bag = c(100, 250, 500)),
+
+    pls =
+      expand.grid(
+        ncomp = c(1:5)),
+
+    pcr =
+      expand.grid(
+        ncomp = c(1:5))
+
+  )
+
+ # tuning grids if # of features is available
+  if(!is.null(covariates)){
+    tuning.grids[['RF']] =
+      expand.grid(
+        mtry = covariates/3)
+
+    tuning.grids[['NN']] =
+      expand.grid(
+        size = c(covariates, 2*covariates, 3*covariates),
+        decay = c(.01,.001),
+        bag = c(20, 100))
+
+  }
+
+```
+
+## 4. Accuracy
+
+Lastly, by default, OOS will use the root mean squared error (RMSE) loss function to train machine learning method, as it is a reasonable compromise between emphasizing and de-emphasizing outliers. 
+
+
+
+
+
+
+

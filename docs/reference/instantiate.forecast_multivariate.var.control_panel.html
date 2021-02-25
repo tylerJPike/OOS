@@ -37,6 +37,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="Create interface to control forecast_multivariate VAR estimation — instantiate.forecast_multivariate.var.control_panel" />
@@ -56,13 +62,23 @@ arguments list for user manipulation." />
 <![endif]-->
 
 
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XH0MN4JJBQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XH0MN4JJBQ');
+</script>
+
 
   </head>
 
   <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
-      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
@@ -73,37 +89,89 @@ arguments list for user manipulation." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">OOS</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+  <a href=".././index.html">
+    <span class="fa fa-home"></span>
      
   </a>
 </li>
-<li>
-  <a href="../reference/index.html">Reference</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cog"></span>
+     
+    Tools
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href=".././articles/data_cleaning.html">Data Cleaning Techniques</a>
+    </li>
+    <li>
+      <a href=".././articles/forecast_techniques.html">Forecasting Techniques</a>
+    </li>
+    <li>
+      <a href=".././articles/error_analysis.html">Error Analysis Techniques</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href=".././reference/index.html">Function Documentation</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cogs"></span>
+     
+    Workflow
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Getting Started</li>
+    <li>
+      <a href=".././articles/0_introduction.html">0. Introduction</a>
+    </li>
+    <li>
+      <a href=".././articles/1_data.html">1. Prepare Data</a>
+    </li>
+    <li>
+      <a href=".././articles/2_forecasting.html">2. Create Forecasts</a>
+    </li>
+    <li>
+      <a href=".././articles/3_analysis.html">3. Forecast Analysis</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Model Estimation</li>
+    <li>
+      <a href=".././articles/model_default.html">1. Off-The-Shelf ML Training</a>
+    </li>
+    <li>
+      <a href=".././articles/model_control.html">2. Model Customization and Control</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="../reference/index.html">
-    <span class="fa fa-file-code-o"></span>
-     
-    functions
-  </a>
-</li>
-<li>
   <a href="https://github.com/tylerJPike/OOS">
-    <span class="fa fa-github fa-2x"></span>
+    <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -144,7 +212,7 @@ arguments list for user manipulation.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Tyler Pike.</p>
+  <p>Developed by Tyler J. Pike.</p>
 </div>
 
 <div class="pkgdown">
@@ -155,6 +223,23 @@ arguments list for user manipulation.</p>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '6af66801c6959eb3c95ed13b1a53e4f5',
+    indexName: 'OOS',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

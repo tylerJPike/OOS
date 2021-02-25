@@ -3,9 +3,14 @@ template:
   params:
     bootswatch: flatly
     ganalytics: G-XH0MN4JJBQ
+    docsearch:
+      api_key:  '6af66801c6959eb3c95ed13b1a53e4f5'
+      index_name: 'OOS'
 
 development:
   mode: auto
+
+url: https://tylerjpike.github.io/OOS/
 
 reference:
   - title: Forecasting Workflow
@@ -46,8 +51,20 @@ navbar:
   title: "OOS"
   type: inverse
   left:
-    - text: ''
-  right:
+    - icon: fa-home
+      href: ./index.html
+    - icon: fa-cog
+      text: Tools
+      menu:
+      - text: Data Cleaning Techniques
+        href: ./articles/data_cleaning.html
+      - text: Forecasting Techniques
+        href: ./articles/forecast_techniques.html
+      - text: Error Analysis Techniques
+        href: ./articles/error_analysis.html
+      - text: ----------
+      - text: Function Documentation
+        href: ./reference/index.html
     - icon: fa-cogs
       text: Workflow
       menu:
@@ -66,17 +83,6 @@ navbar:
         href: ./articles/model_default.html
       - text: 2. Model Customization and Control
         href: ./articles/model_control.html
-    - icon: fa-cog
-      text: Tools
-      menu:
-      - text: Data Cleaning Techniques
-        href: ./articles/data_cleaning.html
-      - text: Forecasting Techniques
-        href: ./articles/forecast_techniques.html
-      - text: Error Analysis Techniques
-        href: ./articles/error_analysis.html
-      - text: ----------
-      - text: Function Documentation
-        href: ./reference/index.html
+  right:
     - icon: fa-github fa-lg
       href: https://github.com/tylerJPike/OOS

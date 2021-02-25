@@ -37,6 +37,12 @@
 <script src="pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 
 <meta property="og:title" content="GNU General Public License" />
@@ -87,10 +93,37 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="dropdown-header"></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li class="dropdown">
+        <li>
+  <a href="./index.html">
+    <span class="fa fa-home"></span>
+     
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    <span class="fa fa-cog"></span>
+     
+    Tools
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="./articles/data_cleaning.html">Data Cleaning Techniques</a>
+    </li>
+    <li>
+      <a href="./articles/forecast_techniques.html">Forecasting Techniques</a>
+    </li>
+    <li>
+      <a href="./articles/error_analysis.html">Error Analysis Techniques</a>
+    </li>
+    <li class="divider"></li>
+    <li>
+      <a href="./reference/index.html">Function Documentation</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
     <span class="fa fa-cogs"></span>
      
@@ -122,37 +155,21 @@
     </li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    <span class="fa fa-cog"></span>
-     
-    Tools
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="./articles/data_cleaning.html">Data Cleaning Techniques</a>
-    </li>
-    <li>
-      <a href="./articles/forecast_techniques.html">Forecasting Techniques</a>
-    </li>
-    <li>
-      <a href="./articles/error_analysis.html">Error Analysis Techniques</a>
-    </li>
-    <li class="divider"></li>
-    <li>
-      <a href="./reference/index.html">Function Documentation</a>
-    </li>
-  </ul>
-</li>
-<li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
   <a href="https://github.com/tylerJPike/OOS">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -417,6 +434,23 @@
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '6af66801c6959eb3c95ed13b1a53e4f5',
+    indexName: 'OOS',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
 
   </body>

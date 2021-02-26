@@ -74,3 +74,14 @@ methods from the \code{forecast} package. The function will take in a data frame
 and a observation date column (named 'date'), while outputting a data frame with a date column and
 one column per forecast method selected.
 }
+\examples{
+\dontrun{
+forecast_univariate(
+  Data = data,
+  forecast.dates = date.vector,
+  method = c('naive','auto.arima', 'ets'),
+  horizon = 1,
+  recursive = FALSE,
+  freq = 'month')}
+
+}

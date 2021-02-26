@@ -198,6 +198,17 @@ instantiate.forecast_multivariate.var.control_panel = function(){
 #'
 #' @return  data.frame with a date column and one column per forecast method selected
 #'
+#' @examples
+#' \dontrun{
+#'forecast_multivariate(
+#'  Data = data,
+#'  forecast.date = date.vector,
+#'  target = 'UNRATE',
+#'  horizon = 1,
+#'  method = c('ols','lasso','ridge','elastic','GBM'),
+#'  freq = 'month')}
+#'
+#'
 #' @export
 
 forecast_multivariate = function(

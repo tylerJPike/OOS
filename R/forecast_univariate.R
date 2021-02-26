@@ -106,6 +106,16 @@ instantiate.forecast_univariate.control_panel = function(){
 #'
 #' @return  data.frame with a date column and one column per forecast method selected
 #'
+#' @examples
+#' \dontrun{
+#' forecast_univariate(
+#'   Data = data,
+#'   forecast.dates = date.vector,
+#'   method = c('naive','auto.arima', 'ets'),
+#'   horizon = 1,
+#'   recursive = FALSE,
+#'   freq = 'month')}
+#'
 #' @export
 
 forecast_univariate = function(

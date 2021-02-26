@@ -41,3 +41,14 @@ The function will take in a data frame of forecasts, observed values (named 'obs
 and the observation date (i.e. the foretasted date, named 'date'), while outputting a data frame
 with a date column and one column per combination method selected.
 }
+\examples{
+\dontrun{
+forecast_combine(
+  forecasts,
+  method = c('uniform','median','trimmed.mean',
+             'n.best','lasso','peLasso','RF'),
+  burn.in = 5,
+  n.max = 2)}
+
+
+}

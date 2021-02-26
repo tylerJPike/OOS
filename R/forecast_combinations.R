@@ -177,6 +177,16 @@ instantiate.forecast_combinations.control_panel = function(covariates = NULL){
 #' @param parallel.dates  int: the number of cores available for parallel estimation
 #' @return  data.frame with a date column and one column per forecast method selected
 #'
+#' @examples
+#' \dontrun{
+#' forecast_combine(
+#'   forecasts,
+#'   method = c('uniform','median','trimmed.mean',
+#'              'n.best','lasso','peLasso','RF'),
+#'   burn.in = 5,
+#'   n.max = 2)}
+#'
+#'
 #' @export
 
 # assumes a column named observed

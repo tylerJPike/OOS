@@ -1,0 +1,310 @@
+---
+title: "OOS, an easy start"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In this simple vignette, we will get started with a simple forecasting example of interest to many people, the unemployment rate of the United States. We will proceed by 1) downloading economic data from FRED, 2) creating a collection of univariate and multivariate forecasts, 3) combining all our forecasts to create new, and hopefully more accurate, forecasts, 4) evaluate our forecast errors and, 5) visualize our most promising forecasts. 
+
+*Disclaimer: this writing is meant to be a simple example highlighting the workflow of the OOS package. That being said, the US macroeconomy is an erdogic system, a fact that is ignored for this analysis. As a result, there are several important steps to the time series analysis ignored and this should not be taken as advice on how to forecast the US unemployment rate for any type of actionable decision making.*
+
+## 0. Environment 
+
+For the purposes of this vignette, we will load the general purpose tidyverse for data cleaning and the OOS package for forecasting. However, note that **OOS does not require tidyverse be loaded globally**, this is purely for the ease of exposition. 
+
+```{r}
+
+# load packages
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(lubridate))
+library(OOS)
+
+```
+
+
+## 1. Data
+
+As we are are seeking to forecast the unemployment rate, we will obviously need to beging by acquiring the time series data. Moreover, as we will be taking advantage of multivariate techniques, we will also look towards aquiring related economic time series, namely industrial production (as a monthly proxy for output), and the 10-year constant maturity Treasury yield (as a proxy for interest rates). 
+
+For our data we will turn to [FRED](https://fred.stlouisfed.org/) (a repository of global economic data, currated by the Federal Reserve Bank of St. Louis). 
+
+
+```{r}
+
+# pull data 
+quantmod::getSymbols.FRED(
+	c('UNRATE','INDPRO','GS10'), 
+	env = globalenv())
+
+# format data 
+Data = cbind(UNRATE, INDPRO, GS10) 
+Data = data.frame(Data, date = zoo::index(Data))
+
+```
+
+One will note that once we downloaded the data from FRED, we additionally combined all of the series into a data.frame with a column named `date`. We do this because OOS forecasting routines can accept two general data formats: 
+
+1. a standard R time series object, including `ts`, `xts`, or `zoo` objects
+2. a generic data.frame with only one requirement, there is a date column named "date", used to index the forecasting data 
+
+
+As the data.frame option is non-standard, it is what we demonstrate in this vignette.     
+
+Having downloaded our time series, we next inspect our new data. 
+
+```{r}
+
+# basic plot of the unemployment time series 
+plot(UNRATE)
+
+# basic plot of the industrial production time series 
+plot(INDPRO)
+
+# basic plot of the 10-year Treasury yield time series 
+plot(GS10)
+
+
+```
+
+Upon inspection it becomes clear that industrial production and the 10-year Treasury yield are trending series (i.e. they are non-stationary). And yes, there are formal tests we could conduct to test this hypothesis, as well as with the unemployment rate, but for the purposes of this example we will take their trends, or lack thereof, as given. We will transform the industrial production to a year-over-year percent growth rate and the 10-year Treasury yield to a month-over-month percentage point change. 
+
+```{r}
+
+# make industrial production and 10-year Treasury stationary
+Data = Data %>%
+  mutate(GS10 = GS10 - dplyr::lag(GS10), 
+         INDPRO = (INDPRO - lag(INDPRO, 12))/lag(INDPRO, 12)) 
+
+# start data when all three variables are available
+# (this is not necessary, but it will suppress warnings for us)
+Data = filter(Data, date >= as.Date('1954-01-01'))
+
+```
+
+## 2. Create Forecasts
+
+### 2.1 Univariate Forecasts
+
+We will first forecast using a collection of univariate time series. As we have chosen to forecast a very clean series, we will not make use of OOS's ability to **clean outliers** and **impute missing values** in a real-time fashion. That is, we only need to focus on the bare bone requirements of OOS's univariate forecasting routine, `forecast_univariate`: 
+
+1. Data: a `ts`, `xts`, or `zoo` time series object, or a two column data.frame with a `date` column and the time series to forecast  
+2. forecast.dates: a vector of dates on which to simulate a historical forecast  
+3. method: a vector of forecast method names (see the package website for a list of currently supported methods)  
+4. horizon: an integer denoting how far into the future (measured in periods) to forecast  
+5. recursive: a boolean denoting if forecasts to a horizon greater than one should be conducted recursively with one-step-ahead forecasts or via direct projection (the default is recursive forecasting)
+6. rolling.window: an integer denoting the number of backward looking periods to use when training the forecasting model (if NA then the entire available history will be used)  
+7. freq: a string denoting the frequency of the time series being forecasted  
+
+For our demonstration, we will simulate forecasts of the unemployment rate one month into the future, using a random walk, ARIMA, and exponential smoothing, over a five year period from 2015 through 2019. 
+
+```{r}
+
+# run univariate forecasts
+forecast.uni =
+	forecast_univariate(
+		# forecasting data
+	  Data = dplyr::select(Data, date, UNRATE),
+		forecast.dates =
+		  seq.Date(from = as.Date('2015-01-01'),
+		           to = as.Date('2019-12-01-01'),
+		           by = 'month'),
+
+		# forecast method and type
+		method = c('naive','auto.arima', 'ets'),
+		horizon = 1,
+		recursive = FALSE,
+
+		# information set treatment
+		rolling.window = NA,
+		freq = 'month')
+
+```
+
+
+One may notice that after running `forecast_univariate` we received the warning:
+
+    <warning: univariate.forecast.training was instantiated and default values will be used for model estimation.>
+    
+This warns us that we are using default parameters when training the random walk, ARIMA, and exponential smoothing models. More on this topic, including how a user may change the training parameters as they would like, will be covered in a separate vignette - as such, this type of warning will be suppressed for the remainder of the exercise. We next examine our output.
+
+```{r}
+
+# view top of forecast output
+head(forecast.uni)
+
+```
+
+As one can see, we now have five years worth of one-month ahead forecasts for the US unemployment rate! The default output for OOS forecasting routines, `forecast_univariate`, `forecast_multivariate`, and `forecast_combination`, is a long form matrix with the columns:
+
+1. model: a string naming the model used to estimate the forecast  
+2. forecast: a numeric forecast  
+3. se: a numeric standard error, NA when models do not generate standard errors by default  
+4. forecast.date: a date denoting the day the forecast was (simulated) made  
+5. date: a date denoting the day being foretasted  
+
+Note that when forecasts are generated recursively for a horizon greater than one, all forecasts between forecast.date and date will be provided in the forecast output as well as the declared horizon.  
+
+### 2.2 Multivariate Forecasts 
+
+Having successfully created a pool of univariate forecasts, we next turn to a collection of multivariate forecasting models. While there are several similarities in univariate and multivariate forecasting in OOS, one will will note that there are four differences between key `forecast_univariate` and `forecast_multivariate`. 
+
+1. `forecast_multivariate` requires one to declare the name of the variable to be forecasted.
+2. `forecast_multivariate` allows the user to create an arbitrary number of lags for a chosen set (although the default is all) of variables in the design matrix. 
+3. `forecast_univariate` allows the user to use direct projections or recursive forecasting while `forecast_multivariate` only allows for direct projections (this may change in a future version of OOS).
+4.  `forecast_multivariate` allows users to perform dimension reduction on a chosen set (although the default is all) of variables in the design matrix, via principal components. 
+
+With these differences in mind, we will jump right into our multivariate forecasting with `forecast_multivariate`.
+
+```{r, results='hide', warning=FALSE, message=FALSE}
+
+# create multivariate forecasts
+forecast.multi = 
+	forecast_multivariate(
+		Data = Data,           
+		forecast.date = 
+		  seq.Date(from = as.Date('2015-01-01'),
+		           to = as.Date('2019-12-01'),
+		           by = 'month'),
+		target = 'UNRATE',
+		
+		# forecast method and type
+		horizon = 1,
+		method = c('ols','elastic','RF'),
+
+		# information set treatment       
+		rolling.window = NA,    
+		freq = 'month', 
+		lag.n = 1)    
+
+```
+
+```{r}
+
+# view top of forecast output
+head(forecast.multi)
+
+```
+
+
+And it appears that we again have been successful in forecasting the US unemployment rate!
+
+### 2.3 Forecast Combinations
+
+It is no secret that while one forecast can be good, several forecasts can be great. we next turn to combining forecasts through a series of (out-of-sample) forecast combination techniques using the OOS `forecast_combine` function. 
+
+To create a set of forecast combinations, we will first need to merge our existing forecasts into one data.frame. Additionally, as we will use combination methods that require minimizing a loss function, we will also merge in the true data realizations - although this is not necessary when a user relies on methods that do not need to learn (e.g. uniform weights or the forecast median).
+
+```{r}
+
+# combine forecasts and add in observed values
+forecasts = 
+	dplyr::bind_rows(
+		forecast.uni,
+		forecast.multi) %>%
+	dplyr::left_join( 
+		dplyr::select(Data, date, observed = UNRATE),
+		by = 'date')
+
+```
+
+Now that we have our forecasts all in one neat package, we may turn to creating forecast combinations. 
+
+Two things that a user may wish to note regarding the `forecast_combine` function are: 
+
+1. `forecast_combine` is designed to specifically take in output from `forecast_univariate` and `forecast_multivariate`,  however, if as long as a user has their data formatted in the same long-form style as the OOS forecasting functions, they can use `forecast_combine`.  
+2. When using any methods that require training, a user must specify a number of burn in observations, that is, the number of observations to use in the first model instantiation.   
+
+Bearing these notes in mind, we will use a collection of naive methods, uniform weights, the median forecast, and a winsorized mean, as well as a collection of trained combination models, n.best, LASSO, and peLASSO, with a burn in of 5 observations to combine our univariate and multivariate based forecasts. 
+
+```{r, results='hide', warning=FALSE, message=FALSE}
+
+# forecast combinations 
+forecast.combo = 
+	forecast_combine(
+		forecasts, 
+		method = c('uniform','median','trimmed.mean',
+				       'n.best','lasso','peLasso'), 
+		burn.in = 5, 
+		n.max = 2)
+
+# merge forecast combinations back into forecasts
+# (these will be used later)
+forecasts = 
+	forecasts %>%
+	dplyr::bind_rows(forecast.combo)
+
+```
+
+
+```{r}
+
+# view top of forecast output
+head(forecast.combo)
+
+```
+
+
+We have forecast combinations for the US unemployment rate! This is nice progress, but now that we have all of these forecasts, how do we know which ones are good and which ones we should use to make decisions?  
+
+For that we next turn to OOS's suite of forecast evaluation metrics. 
+
+## 3. Forecast Evaluation
+
+Now that we have a collection of forecasts, we would like to know which ones to use. OOS has two ways to evaluate forecasts, error analysis and visualization.
+
+### 3.1 Error analysis
+
+First, we can calculate various loss functions for each model found in a long-form data.frame in the same style as `forecast_univariate`, `forecast_multivariate`, and `forecast_combine` output. 
+
+```{r}
+# calculate forecast errors
+forecast.error = forecast_accuracy(forecasts)
+
+# view forecast errors from least to greatest 
+#   (best forecast to worst forecast method)
+forecast.error %>% 
+	dplyr::mutate_at(vars(-model), round, 3) %>%
+	dplyr::arrange(MSE)
+```
+
+
+Through comparing errors we can see that the N-best forecast combination outperformed the rest of the pack, while the random forest was the best performing single forecast, and the simple ARIMA and ETS models outperform all other multivariate methods. Moreover, we can additionally comparing forecasts in statistical tests or error ratios. Here we see how all of our forecasts compare to a baseline random walk, where an error ratio smaller than one signals that a forecast method has a smaller error (that is, does better) than the random walk.  
+
+```{r}
+# compare forecasts to the baseline (a random walk)
+forecast_comparison(
+	forecasts,
+	baseline.forecast = 'naive',  
+	test = 'ER',
+	loss = 'MSE') %>% 
+	arrange(error.ratio) %>%
+	dplyr::mutate_at(vars(-model), round, 3)
+```
+
+Then, after comparing forecasts based on errors, we can visualize our output.
+
+### 3.2 Visualizing Forecasts
+
+Lamentably, current OOS charting capabilities are somewhat limited, but this will change in future versions of the package. For now, we will focus our attention on our forecasts themselves.
+
+```{r, warning = FALSE}
+# chart forecasts
+	chart = 
+		forecast_chart(
+			forecasts,              
+			Title = 'US Unemployment Rate',
+			Ylab = 'Percent',
+			Freq = 'Monthly')
+
+	chart
+```
+
+## Conclusion
+
+During our brief walk through the basic OOS workflow, we have successfully created out-of-sample forecasts for the US unemployment rate over a five year period using univariate, multivariate, and ensemble methods. Then we were able to compare these methods and discern that while forecast combinations were on whole the best performing class of forecasts, the simple ARIMA, ETS, and random walk all did very well in comparison to the pool of multivariate models (save the random forest). 
+
+Through this exercise we have demonstrated just how easy OOS makes it to test times series forecasting methods in pseudo-real time. However, this walk through only touches on the surface level capabilities of OOS, please see additional articles and vignettes for a deeper dive into user-defined forecasting methods, additional possible output, and real-time dimension reduction techniques, among other topics.  
+

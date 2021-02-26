@@ -93,3 +93,15 @@ random forest, tree-based gradient boosting machine, and single-layer neural net
 The function will take in a data frame of the target variable, exogenous variables, and a 'date' column,
 while outputting a data frame with a date column and one column per forecast method selected.
 }
+\examples{
+\dontrun{
+forecast_multivariate(
+ Data = data,
+ forecast.date = date.vector,
+ target = 'UNRATE',
+ horizon = 1,
+ method = c('ols','lasso','ridge','elastic','GBM'),
+ freq = 'month')}
+
+
+}

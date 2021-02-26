@@ -6,7 +6,6 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
-^tests$
 index.md
 to-do.md
 ^LICENSE\.md$

@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">OOS</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
       </span>
     </div>
 
@@ -166,19 +166,19 @@
 <pre><code>## # A tibble: 14 x 5
 ##    model                MSE  RMSE   MAE  MAPE
 ##    &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 peLasso.combo      0.014 0.117 0.098 0.023
+##  1 peLasso.combo      0.014 0.117 0.097 0.023
 ##  2 N.best.combo       0.015 0.124 0.103 0.024
 ##  3 N1.combo           0.015 0.124 0.102 0.023
 ##  4 auto.arima         0.016 0.128 0.107 0.024
 ##  5 ets                0.016 0.128 0.107 0.024
 ##  6 N2.combo           0.016 0.125 0.104 0.024
 ##  7 naive              0.016 0.126 0.103 0.024
-##  8 lasso.combo        0.02  0.14  0.113 0.026
+##  8 lasso.combo        0.021 0.145 0.117 0.027
 ##  9 median.combo       0.024 0.153 0.125 0.028
-## 10 trimmed.mean.combo 0.034 0.185 0.154 0.036
-## 11 uniform.combo      0.034 0.185 0.154 0.036
+## 10 trimmed.mean.combo 0.034 0.184 0.154 0.036
+## 11 uniform.combo      0.034 0.184 0.154 0.036
 ## 12 ols                0.054 0.232 0.189 0.043
-## 13 RF                 0.06  0.245 0.197 0.044
+## 13 RF                 0.059 0.242 0.193 0.044
 ## 14 elastic            0.226 0.476 0.453 0.107</code></pre>
 <p>Through comparing errors we can see that the partial egalitarian LASSO forecast combination outperformed the rest of the pack, while the the simple ARIMA, ETS, and random walk models outperform all multivariate methods. Moreover, we can additionally comparing forecasts in statistical tests or error ratios. Here we see how all of our forecasts compare to a baseline random walk, where an error ratio smaller than one signals that a forecast method has a smaller error (that is, does better) than the random walk.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
@@ -191,19 +191,19 @@
     <span class="fu">arrange</span><span class="op">(</span><span class="va">error.ratio</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span><span class="op">(</span><span class="fu">vars</span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##                 model error.ratio
-## 1       peLasso.combo       0.886
-## 2            N1.combo       0.958
-## 3        N.best.combo       0.966
-## 4            N2.combo       0.980
+## 1       peLasso.combo       0.885
+## 2            N1.combo       0.961
+## 3        N.best.combo       0.969
+## 4            N2.combo       0.981
 ## 5               naive       1.000
 ## 6                 ets       1.021
 ## 7          auto.arima       1.022
-## 8         lasso.combo       1.262
-## 9        median.combo       1.469
-## 10 trimmed.mean.combo       2.136
-## 11      uniform.combo       2.136
+## 8         lasso.combo       1.351
+## 9        median.combo       1.471
+## 10 trimmed.mean.combo       2.128
+## 11      uniform.combo       2.128
 ## 12                ols       3.363
-## 13                 RF       3.745
+## 13                 RF       3.665
 ## 14            elastic      14.132</code></pre>
 <p>Then, after comparing forecasts based on errors, we can visualize our output.</p>
 </div>

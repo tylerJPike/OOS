@@ -9,10 +9,9 @@ articles:
   data_cleaning: data_cleaning.html
   error_analysis: error_analysis.html
   forecast_techniques: forecast_techniques.html
-  getting_started: getting_started.html
   model_control: model_control.html
   model_default: model_default.html
-last_built: 2021-02-25T00:44Z
+last_built: 2021-02-26T12:27Z
 urls:
   reference: https://tylerjpike.github.io/OOS//reference
   article: https://tylerjpike.github.io/OOS//articles

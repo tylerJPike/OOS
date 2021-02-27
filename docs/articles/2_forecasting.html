@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">OOS</a>
-        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
       </span>
     </div>
 
@@ -256,10 +256,10 @@
 <pre><code>##         date forecast.date   model forecast         se
 ## 1 2015-02-01    2015-01-01     ols 5.656417 0.01631269
 ## 2 2015-02-01    2015-01-01 elastic 5.708525         NA
-## 3 2015-02-01    2015-01-01      RF 5.592217         NA
+## 3 2015-02-01    2015-01-01      RF 5.606573         NA
 ## 4 2015-03-01    2015-02-01     ols 5.830979 0.02033377
 ## 5 2015-03-01    2015-02-01 elastic 5.789285         NA
-## 6 2015-03-01    2015-02-01      RF 5.749407         NA</code></pre>
+## 6 2015-03-01    2015-02-01      RF 5.776003         NA</code></pre>
 <p>And it appears that we again have been successful in forecasting the US unemployment rate!</p>
 </div>
 <div id="forecast-combinations" class="section level3">
@@ -304,12 +304,12 @@
 <code class="sourceCode R"><span class="co"># view top of forecast output</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">forecast.combo</span><span class="op">)</span></code></pre></div>
 <pre><code>##         date forecast         model se
-## 1 2015-02-01 5.660718 uniform.combo NA
-## 2 2015-03-01 5.637046 uniform.combo NA
-## 3 2015-04-01 5.543753 uniform.combo NA
-## 4 2015-05-01 5.448613 uniform.combo NA
-## 5 2015-06-01 5.563266 uniform.combo NA
-## 6 2015-07-01 5.569616 uniform.combo NA</code></pre>
+## 1 2015-02-01 5.663111 uniform.combo NA
+## 2 2015-03-01 5.641478 uniform.combo NA
+## 3 2015-04-01 5.545682 uniform.combo NA
+## 4 2015-05-01 5.449030 uniform.combo NA
+## 5 2015-06-01 5.560600 uniform.combo NA
+## 6 2015-07-01 5.569829 uniform.combo NA</code></pre>
 <p>We have forecast combinations for the US unemployment rate! This is nice progress, but now that we have all of these forecasts, how do we know which ones are good and which ones we should use to make decisions?</p>
 <p>For that we next turn to OOS’s suite of forecast evaluation metrics.</p>
 <p>← <a href="./1_data.html">Data Preparation</a> <span style="float:right"><a href="./3_analysis.html">Forecast Analysis</a> →</span></p>

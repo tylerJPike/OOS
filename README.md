@@ -7,7 +7,7 @@
 [![R-CMD-check](https://github.com/r-lib/usethis/workflows/R-CMD-check/badge.svg)](https://github.com/r-lib/usethis/actions)
 <!-- badges: end -->
 
-This package creates a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination techniques and forecast analysis tools. 
+OOS introduces a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination techniques and forecast analysis tools. 
 
 See the OOS package [website](https://tylerjpike.github.io/OOS/) for comprehensive documentation and examples.
 

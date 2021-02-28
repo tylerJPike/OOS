@@ -1,0 +1,152 @@
+---
+title: "Basic Introduction to OOS"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Window functions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE, warning = FALSE, message = FALSE, results = 'hide'}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This introduction demonstrates how one may conduct a basic forecasting exercise with OOS. For more detail examples and documentation, please see the [OOS](https://tylerjpike.github.io/OOS/) website. 
+
+```{r, warning=FALSE}
+
+library(OOS)
+
+#----------------------------------------
+### Forecasting Example
+#----------------------------------------
+# pull and prepare data from FRED
+quantmod::getSymbols.FRED(
+	c('UNRATE','INDPRO','GS10'), 
+	env = globalenv())
+Data = cbind(UNRATE, INDPRO, GS10)
+Data = data.frame(Data, date = zoo::index(Data)) %>%
+	dplyr::filter(lubridate::year(date) >= 1990)
+
+# make industrial production and 10-year Treasury stationary
+Data = Data %>%
+  dplyr::mutate(
+    GS10 = GS10 - dplyr::lag(GS10), 
+    INDPRO = (INDPRO - lag(INDPRO, 12))/lag(INDPRO, 12)) 
+
+# start data when all three variables are available
+# (this is not necessary, but it will suppress warnings for us)
+Data = dplyr::filter(Data, date >= as.Date('1954-01-01'))
+
+# run univariate forecasts 
+forecast.uni = 
+	forecast_univariate(
+		Data = dplyr::select(Data, date, UNRATE),
+		forecast.dates = tail(Data$date,15), 
+		method = c('naive','auto.arima', 'ets'),      
+		horizon = 1,                         
+		recursive = FALSE,
+
+		# information set       
+		rolling.window = NA,    
+		freq = 'month',                   
+		
+		# outlier cleaning
+		outlier.clean = FALSE,
+		outlier.variables = NULL,
+		outlier.bounds = c(0.05, 0.95),
+		outlier.trim = FALSE,
+		outlier.cross_section = FALSE,
+		
+		# impute missing
+		impute.missing = FALSE,
+		impute.method = 'kalman',
+		impute.variables = NULL,
+		impute.verbose = FALSE) 
+
+# create multivariate forecasts
+forecast.multi = 
+	forecast_multivariate(
+		Data = Data,           
+		forecast.date = tail(Data$date,15),
+		target = 'UNRATE',
+		horizon = 1,
+		method = c('lasso'),
+
+		# information set       
+		rolling.window = NA,    
+		freq = 'month',                   
+		
+		# outlier cleaning
+		outlier.clean = FALSE,
+		outlier.variables = NULL,
+		outlier.bounds = c(0.05, 0.95),
+		outlier.trim = FALSE,
+		outlier.cross_section = FALSE,
+		
+		# impute missing
+		impute.missing = FALSE,
+		impute.method = 'kalman',
+		impute.variables = NULL,
+		impute.verbose = FALSE,
+		
+		# dimension reduction
+		reduce.data = FALSE,
+		reduce.variables = NULL,
+		reduce.ncomp = NULL,
+		reduce.standardize = TRUE) 
+
+# combine forecasts and add in observed values
+forecasts = 
+	dplyr::bind_rows(
+		forecast.uni,
+		forecast.multi) %>%
+	dplyr::left_join( 
+		dplyr::select(Data, date, observed = UNRATE))
+
+# forecast combinations 
+forecast.combo = 
+	forecast_combine(
+		forecasts, 
+		method = c('uniform','median','trimmed.mean'), 
+		burn.in = 5)
+
+# merge forecast combinations back into forecasts
+forecasts = 
+	forecasts %>%
+	dplyr::bind_rows(forecast.combo)
+
+# calculate forecast errors
+forecast.error = forecast_accuracy(forecasts)
+
+# view forecast errors from least to greatest 
+#   (best forecast to worst forecast method)
+forecast.error %>% 
+	dplyr::mutate_at(vars(-model), round, 3) %>%
+	dplyr::arrange(MSE)
+
+# compare forecasts to the baseline (a random walk)
+forecast_comparison(
+	forecasts,
+	baseline.forecast = 'naive',  
+	test = 'ER',
+	loss = 'MSE') %>% 
+	dplyr::arrange(error.ratio)
+
+# chart forecasts
+chart = 
+	forecast_chart(
+		forecasts,              
+		Title = 'US Unemployment Rate',
+		Ylab = 'Index',
+		Freq = 'Monthly')
+
+```
+

@@ -18,7 +18,7 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
-VignetteBuilder: knitr
+VignetteBuilder: knitr  
 Imports:
   caret,
   dplyr,
@@ -39,3 +39,8 @@ Imports:
   vars,
   xts,
   zoo
+Suggests:
+  knitr,
+  require,
+  rmarkdown,
+  quantmod    

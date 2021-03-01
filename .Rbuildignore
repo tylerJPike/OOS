@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^\.github
 ^tests
+^articles    
 ^codecov\.yml$
 ^.travis\.yml$
 ^LICENSE\.md$

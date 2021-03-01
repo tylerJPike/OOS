@@ -46,7 +46,7 @@ Imports:
   zoo
 Suggests:
   knitr,
-  require,
+  testthat,
   rmarkdown,
   quantmod    
 

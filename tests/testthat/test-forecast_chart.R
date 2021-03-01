@@ -31,8 +31,9 @@ test_that("forecast chart", {
       Freq = 'Monthly',
       zeroline = TRUE)
 
-  expect_true(exists('chart'), 'Chart is not created.')
+  expect_true(exists('chart.forecast'), 'Chart is not created.')
 
+  # chart forecast errors
   chart.errors =
     forecast_error_chart(
       forecasts,

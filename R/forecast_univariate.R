@@ -158,10 +158,10 @@ forecast_univariate = function(
 
   # training parameter creation and warnings
   if(exists("forecast_univariate.control_panel")){
-    message(warningCondition('forecast_univariate.control_panel exists and will be used for model estimation in its present state.'))
+    message('forecast_univariate.control_panel exists and will be used for model estimation in its present state.')
   }else{
     forecast_univariate.control_panel = instantiate.forecast_univariate.control_panel()
-    message(warningCondition('forecast_univariate.control_panel was instantiated and default values will be used for model estimation.'))
+    message('forecast_univariate.control_panel was instantiated and default values will be used for model estimation.')
   }
 
   # create parallel back end

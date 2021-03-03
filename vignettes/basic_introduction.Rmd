@@ -20,20 +20,22 @@ knitr::opts_chunk$set(echo = TRUE)
 
 This introduction demonstrates how one may conduct a basic forecasting exercise with OOS. For more detail examples and documentation, please see the [OOS](https://tylerjpike.github.io/OOS/) website. 
 
-```{r, warning=FALSE}
-
+## 0. Environment
+```{r}
 library(OOS)
+```
 
-#----------------------------------------
-### Forecasting Example
-#----------------------------------------
+## 1. Data
+
+```{r}
 # pull and prepare data from FRED
 quantmod::getSymbols.FRED(
 	c('UNRATE','INDPRO','GS10'), 
 	env = globalenv())
 Data = cbind(UNRATE, INDPRO, GS10)
 Data = data.frame(Data, date = zoo::index(Data)) %>%
-	dplyr::filter(lubridate::year(date) >= 1990)
+	dplyr::filter(lubridate::year(date) >= 1990) %>% 
+  na.omit()
 
 # make industrial production and 10-year Treasury stationary
 Data = Data %>%
@@ -44,33 +46,25 @@ Data = Data %>%
 # start data when all three variables are available
 # (this is not necessary, but it will suppress warnings for us)
 Data = dplyr::filter(Data, date >= as.Date('1954-01-01'))
+```
 
+## 2. Forecasting
+
+```{r, warning=FALSE}
 # run univariate forecasts 
 forecast.uni = 
 	forecast_univariate(
 		Data = dplyr::select(Data, date, UNRATE),
 		forecast.dates = tail(Data$date,15), 
-		method = c('naive','auto.arima', 'ets'),      
+		method = c('naive'), #,'auto.arima', 'ets'),      
 		horizon = 1,                         
-		recursive = FALSE,
-
-		# information set       
+		recursive = FALSE,      
 		rolling.window = NA,    
-		freq = 'month',                   
-		
-		# outlier cleaning
-		outlier.clean = FALSE,
-		outlier.variables = NULL,
-		outlier.bounds = c(0.05, 0.95),
-		outlier.trim = FALSE,
-		outlier.cross_section = FALSE,
-		
-		# impute missing
-		impute.missing = FALSE,
-		impute.method = 'kalman',
-		impute.variables = NULL,
-		impute.verbose = FALSE) 
+		freq = 'month')
+```
 
+
+```{r, warning=FALSE}
 # create multivariate forecasts
 forecast.multi = 
 	forecast_multivariate(
@@ -78,31 +72,13 @@ forecast.multi =
 		forecast.date = tail(Data$date,15),
 		target = 'UNRATE',
 		horizon = 1,
-		method = c('lasso'),
-
-		# information set       
+		method = c('lasso'),       
 		rolling.window = NA,    
-		freq = 'month',                   
-		
-		# outlier cleaning
-		outlier.clean = FALSE,
-		outlier.variables = NULL,
-		outlier.bounds = c(0.05, 0.95),
-		outlier.trim = FALSE,
-		outlier.cross_section = FALSE,
-		
-		# impute missing
-		impute.missing = FALSE,
-		impute.method = 'kalman',
-		impute.variables = NULL,
-		impute.verbose = FALSE,
-		
-		# dimension reduction
-		reduce.data = FALSE,
-		reduce.variables = NULL,
-		reduce.ncomp = NULL,
-		reduce.standardize = TRUE) 
+		freq = 'month')
+```
 
+
+```{r, warning=FALSE}
 # combine forecasts and add in observed values
 forecasts = 
 	dplyr::bind_rows(
@@ -117,7 +93,10 @@ forecast.combo =
 		forecasts, 
 		method = c('uniform','median','trimmed.mean'), 
 		burn.in = 5)
+```
 
+## Forecast Analysis 
+```{r, warning=FALSE}
 # merge forecast combinations back into forecasts
 forecasts = 
 	forecasts %>%

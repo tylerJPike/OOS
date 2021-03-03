@@ -1,8 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^\.github
-^tests
-^articles    
+articles\  
+docs\  
 ^codecov\.yml$
 ^.travis\.yml$
 ^LICENSE\.md$

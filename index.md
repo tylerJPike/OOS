@@ -9,7 +9,7 @@
 [![Build Status](https://travis-ci.org/tylerJPike/OOS.svg?branch=main)](https://travis-ci.org/tylerJPike/OOS)
 <!-- badges: end -->
 
-This package creates a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination techniques and forecast analysis tools.  
+Out-of-Sample time series forecasting is a common, important, and subtle task. The OOS package introduces a comprehensive and cohesive API for the out-of-sample forecasting workflow: data preparation, forecasting - including both traditional econometric time series models and modern machine learning techniques - forecast combination, model and error analysis, and forecast visualization. 
 
 Available tools and techniques may be reviewed under the **Tools** tab. While vignettes and other extended documentation of the OOS package's capabilities may be found under the **Workflow** tab.
 
@@ -137,7 +137,7 @@ or
 
 	# chart forecasts
 	chart = 
-		forecast_chart(
+		chart_forecast(
 			forecasts,              
 			Title = 'US Unemployment Rate',
 			Ylab = 'Index',

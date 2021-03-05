@@ -138,7 +138,7 @@
       <h1 data-toc-skip></h1>
             
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/tylerJPike/OOS/blob/master/vignettes/3_analysis.Rmd"><code>vignettes/3_analysis.Rmd</code></a></small>
       <div class="hidden name"><code>3_analysis.Rmd</code></div>
 
     </div>
@@ -156,7 +156,7 @@
 <p>First, we can calculate various loss functions for each model found in a long-form data.frame in the same style as <code>forecast_univariate</code>, <code>forecast_multivariate</code>, and <code>forecast_combine</code> output.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># calculate forecast errors</span>
-<span class="va">forecast.error</span> <span class="op">=</span> <span class="fu"><a href="../reference/forecast_accuracy.html">forecast_accuracy</a></span><span class="op">(</span><span class="va">forecasts</span><span class="op">)</span>
+<span class="va">forecast.error</span> <span class="op">=</span> <span class="fu">forecast_accuracy</span><span class="op">(</span><span class="va">forecasts</span><span class="op">)</span>
 
 <span class="co"># view forecast errors from least to greatest </span>
 <span class="co">#   (best forecast to worst forecast method)</span>
@@ -166,24 +166,24 @@
 <pre><code>## # A tibble: 14 x 5
 ##    model                MSE  RMSE   MAE  MAPE
 ##    &lt;chr&gt;              &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1 peLasso.combo      0.014 0.117 0.097 0.023
+##  1 peLasso.combo      0.014 0.117 0.098 0.023
 ##  2 N.best.combo       0.015 0.124 0.103 0.024
 ##  3 N1.combo           0.015 0.124 0.102 0.023
 ##  4 auto.arima         0.016 0.128 0.107 0.024
 ##  5 ets                0.016 0.128 0.107 0.024
 ##  6 N2.combo           0.016 0.125 0.104 0.024
 ##  7 naive              0.016 0.126 0.103 0.024
-##  8 lasso.combo        0.021 0.145 0.117 0.027
+##  8 lasso.combo        0.021 0.144 0.117 0.027
 ##  9 median.combo       0.024 0.153 0.125 0.028
 ## 10 trimmed.mean.combo 0.034 0.184 0.154 0.036
 ## 11 uniform.combo      0.034 0.184 0.154 0.036
 ## 12 ols                0.054 0.232 0.189 0.043
-## 13 RF                 0.059 0.242 0.193 0.044
+## 13 RF                 0.058 0.242 0.192 0.043
 ## 14 elastic            0.226 0.476 0.453 0.107</code></pre>
 <p>Through comparing errors we can see that the partial egalitarian LASSO forecast combination outperformed the rest of the pack, while the the simple ARIMA, ETS, and random walk models outperform all multivariate methods. Moreover, we can additionally comparing forecasts in statistical tests or error ratios. Here we see how all of our forecasts compare to a baseline random walk, where an error ratio smaller than one signals that a forecast method has a smaller error (that is, does better) than the random walk.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># compare forecasts to the baseline (a random walk)</span>
-<span class="fu"><a href="../reference/forecast_comparison.html">forecast_comparison</a></span><span class="op">(</span>
+<span class="fu">forecast_comparison</span><span class="op">(</span>
     <span class="va">forecasts</span>,
     baseline.forecast <span class="op">=</span> <span class="st">'naive'</span>,  
     test <span class="op">=</span> <span class="st">'ER'</span>,
@@ -191,19 +191,19 @@
     <span class="fu">arrange</span><span class="op">(</span><span class="va">error.ratio</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate_all.html">mutate_at</a></span><span class="op">(</span><span class="fu">vars</span><span class="op">(</span><span class="op">-</span><span class="va">model</span><span class="op">)</span>, <span class="va">round</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##                 model error.ratio
-## 1       peLasso.combo       0.885
-## 2            N1.combo       0.961
-## 3        N.best.combo       0.969
-## 4            N2.combo       0.981
+## 1       peLasso.combo       0.887
+## 2            N1.combo       0.956
+## 3        N.best.combo       0.964
+## 4            N2.combo       0.978
 ## 5               naive       1.000
 ## 6                 ets       1.021
 ## 7          auto.arima       1.022
-## 8         lasso.combo       1.351
-## 9        median.combo       1.471
-## 10 trimmed.mean.combo       2.128
-## 11      uniform.combo       2.128
+## 8         lasso.combo       1.328
+## 9        median.combo       1.470
+## 10 trimmed.mean.combo       2.126
+## 11      uniform.combo       2.126
 ## 12                ols       3.363
-## 13                 RF       3.665
+## 13                 RF       3.650
 ## 14            elastic      14.132</code></pre>
 <p>Then, after comparing forecasts based on errors, we can visualize our output.</p>
 </div>
@@ -214,18 +214,18 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># chart forecasts</span>
     <span class="va">chart</span> <span class="op">=</span> 
-        <span class="fu"><a href="../reference/forecast_chart.html">forecast_chart</a></span><span class="op">(</span>
+        <span class="fu">chart_forecast</span><span class="op">(</span>
             <span class="va">forecasts</span>,              
             Title <span class="op">=</span> <span class="st">'US Unemployment Rate'</span>,
             Ylab <span class="op">=</span> <span class="st">'Percent'</span>,
             Freq <span class="op">=</span> <span class="st">'Monthly'</span><span class="op">)</span>
 
     <span class="va">chart</span></code></pre></div>
-<p><img src="3_analysis_files/figure-html/unnamed-chunk-4-1.png" width="700"> Viewing our forecasts maks it apparent that the elastic net was a clear outlier, and it is no surprise it did not perform well in ex post analysis. We next turn to our forecast errors.</p>
+<p><img src="3_analysis_files/figure-html/unnamed-chunk-4-1.png" width="700"> Viewing our forecasts makes it apparent that the elastic net was a clear outlier, and it is no surprise it did not perform well in ex post analysis. We next turn to our forecast errors.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># chart forecasts</span>
     <span class="va">chart.errors</span> <span class="op">=</span> 
-        <span class="fu"><a href="../reference/forecast_error_chart.html">forecast_error_chart</a></span><span class="op">(</span>
+        <span class="fu">chart_forecast_error</span><span class="op">(</span>
             <span class="va">forecasts</span>,              
             Title <span class="op">=</span> <span class="st">'US Unemployment Rate Forecast Errors'</span>,
             Ylab <span class="op">=</span> <span class="st">'Percentage points'</span>,

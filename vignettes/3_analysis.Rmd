@@ -63,7 +63,7 @@ Currently OOS helps us quickly visualize both our new forecasts, as well as the 
 ```{r, warning = FALSE}
 # chart forecasts
 	chart = 
-		forecast_chart(
+		chart_forecast(
 			forecasts,              
 			Title = 'US Unemployment Rate',
 			Ylab = 'Percent',
@@ -71,12 +71,12 @@ Currently OOS helps us quickly visualize both our new forecasts, as well as the 
 
 	chart
 ```
-Viewing our forecasts maks it apparent that the elastic net was a clear outlier, and it is no surprise it did not perform well in ex post analysis. We next turn to our forecast errors.
+Viewing our forecasts makes it apparent that the elastic net was a clear outlier, and it is no surprise it did not perform well in ex post analysis. We next turn to our forecast errors.
 
 ```{r, warning = FALSE}
 # chart forecasts
 	chart.errors = 
-		forecast_error_chart(
+		chart_forecast_error(
 			forecasts,              
 			Title = 'US Unemployment Rate Forecast Errors',
 			Ylab = 'Percentage points',

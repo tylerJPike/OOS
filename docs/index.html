@@ -144,7 +144,7 @@
 <a href="#out-of-sample-time-series-forecasting" class="anchor"></a>Out-of-sample time series forecasting</h1></div>
 <!-- badges: start -->
 
-<p>This package creates a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination techniques and forecast analysis tools.</p>
+<p>Out-of-Sample time series forecasting is a common, important, and subtle task. The OOS package introduces a comprehensive and cohesive API for the out-of-sample forecasting workflow: data preparation, forecasting - including both traditional econometric time series models and modern machine learning techniques - forecast combination, model and error analysis, and forecast visualization.</p>
 <p>Available tools and techniques may be reviewed under the <strong>Tools</strong> tab. While vignettes and other extended documentation of the OOS package’s capabilities may be found under the <strong>Workflow</strong> tab.</p>
 <hr>
 <div id="installation" class="section level2">
@@ -269,7 +269,7 @@
 <span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="co"># chart forecasts</span></span>
 <span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>chart <span class="ot">=</span> </span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast_chart</span>(</span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    <span class="fu">chart_forecast</span>(</span>
 <span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>        forecasts,              </span>
 <span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>        <span class="at">Title =</span> <span class="st">'US Unemployment Rate'</span>,</span>
 <span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>        <span class="at">Ylab =</span> <span class="st">'Index'</span>,</span>

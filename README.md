@@ -7,14 +7,14 @@
 [![Build Status](https://travis-ci.org/tylerJPike/OOS.svg?branch=main)](https://travis-ci.org/tylerJPike/OOS)
 <!-- badges: end -->
 
-OOS introduces a structured and automated approach to out-of-sample time series forecasting, a common, important, and subtle task. In many ways, this package is merely a wrapper for the excellent extant time series forecasting routines on CRAN - including both traditional econometric time series models and modern machine learning techniques. However, this package additionally provides a modern and comprehensive set of forecast combination techniques and forecast analysis tools. 
+Out-of-Sample time series forecasting is a common, important, and subtle task. The OOS package introduces a comprehensive and cohesive API for the out-of-sample forecasting workflow: data preparation, forecasting - including both traditional econometric time series models and modern machine learning techniques - forecast combination, model and error analysis, and forecast visualization. 
 
-See the OOS package [website](https://tylerjpike.github.io/OOS/) for comprehensive documentation and examples.
+See the OOS package [website](https://tylerjpike.github.io/OOS/) for examples and documentation.
 
 ---
 ## Workflow and available Tools
 
-### 0. Prepare Data
+### 1. Prepare Data
 
 | Clean Outliers | Impute Missing Observations (via [imputeTS](https://github.com/SteffenMoritz/imputeTS)) | Dimension Reduction | 
 |----------------------|------------------------|-----------------------|
@@ -26,7 +26,7 @@ See the OOS package [website](https://tylerjpike.github.io/OOS/) for comprehensi
 |  | Seasonal Decomposition | |
 
 
-### 1. Forecast
+### 2. Forecast
 
 | Univariate Forecasts (via [forecast](https://github.com/robjhyndman/forecast)) | Multivariate Forecasts (via [caret](https://github.com/topepo/caret)) | Forecast Combinations |
 |----------------------|------------------------|-----------------------|

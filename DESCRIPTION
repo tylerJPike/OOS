@@ -8,11 +8,10 @@ Authors@R:
            email = "tjpike7@gmail.com")
 Description: A structured and automated approach 
              to out-of-sample time series forecasting, a common, important, and subtle task. 
-             In many ways, this package is merely a wrapper for the excellent extant time 
-             series forecasting routines on CRAN - including both traditional econometric 
-             time series models and modern machine learning techniques. However, OOS 
-             additionally provides a modern and comprehensive set of forecast combination 
-             techniques and forecast analysis tools.  
+             The OOS package introduces a comprehensive and cohesive API for the out-of-sample forecasting workflow: 
+             data preparation, forecasting - including both traditional econometric time series models and 
+             modern machine learning techniques - forecast combination, model and error analysis, and 
+             forecast visualization. 
 License: GPL-3
 URL: https://github.com/tylerJPike/OOS,
      https://tylerjpike.github.io/OOS/

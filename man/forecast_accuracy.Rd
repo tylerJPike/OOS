@@ -13,6 +13,6 @@ forecast_accuracy(Data)
 data.frame of numeric error results
 }
 \description{
-A function to calculate various error loss functions. Options include:
-MSE, RMSE, MAE, and  MAPE. The default is MSE loss.
+A function to calculate various loss functions, including
+MSE, RMSE, MAE, and  MAPE.
 }

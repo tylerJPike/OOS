@@ -167,20 +167,19 @@ instantiate.forecast_multivariate.var.control_panel = function(){
 #' A function to estimate multivariate forecasts out-of-sample. Methods available include:
 #' vector auto-regression, linear regression, lasso regression, ridge regression, elastic net,
 #' random forest, tree-based gradient boosting machine, and single-layer neural network.
-#' The function will take in a data frame of the target variable, exogenous variables, and a 'date' column,
-#' while outputting a data frame with a date column and one column per forecast method selected.
+#' See package website for most up-to-date list of available models.
 #'
 #' @param Data             data.frame: data frame of target variable, exogenous variables, and observed date (named 'date'); may alternatively be a `ts`, `xts`, or `zoo` object to forecast
 #' @param forecast.dates   date: dates forecasts are created
 #' @param target           string: column name in Data of variable to forecast
-#' @param method           string or vector: methods to use; 'var', 'ols', 'ridge', 'lasso', 'elastic', 'RF', 'GBM', 'NN'
+#' @param method           string: methods to use
 #' @param rolling.window   int: size of rolling window, NA if expanding window is used
 #' @param freq             string: time series frequency; day, week, month, quarter, year
 #' @param horizon          int: number of periods into the future to forecast
 #' @param lag.variables    string: vector of variables to lag each time step, if lag.n is not null then the default is all non-date variables
 #' @param lag.n            int: number of lags to create
 #' @param outlier.clean         boolean: if TRUE then clean outliers
-#' @param outlier.variables     string: vector of variables to standardize, default is all but 'date' column
+#' @param outlier.variables     string: vector of variables to purge of outlier, default is all but 'date' column
 #' @param outlier.bounds        double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
 #' @param outlier.trim          boolean: if TRUE then replace outliers with NA instead of winsorizing bound
 #' @param outlier.cross_section boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)
@@ -196,14 +195,14 @@ instantiate.forecast_multivariate.var.control_panel = function(){
 #' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
 #' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
-#' @return  data.frame with a date column and one column per forecast method selected
+#' @return  data.frame with a row for each forecast by model and date
 #'
 #' @examples
 #' \dontrun{
 #'forecast_multivariate(
 #'  Data = data,
 #'  forecast.date = date.vector,
-#'  target = 'UNRATE',
+#'  target = 'target.column',
 #'  horizon = 1,
 #'  method = c('ols','lasso','ridge','elastic','GBM'),
 #'  freq = 'month')}

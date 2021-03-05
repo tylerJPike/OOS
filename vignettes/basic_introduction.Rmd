@@ -121,7 +121,7 @@ forecast_comparison(
 
 # chart forecasts
 chart = 
-	forecast_chart(
+	chart_forecast(
 		forecasts,              
 		Title = 'US Unemployment Rate',
 		Ylab = 'Index',

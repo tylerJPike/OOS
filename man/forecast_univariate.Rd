@@ -31,7 +31,7 @@ forecast_univariate(
 
 \item{forecast.dates}{date: dates forecasts are created}
 
-\item{methods}{string or vector: models to estimate forecasts}
+\item{methods}{string: models to estimate forecasts}
 
 \item{horizon}{int: number of periods to forecast}
 
@@ -43,7 +43,7 @@ forecast_univariate(
 
 \item{outlier.clean}{boolean: if TRUE then clean outliers}
 
-\item{outlier.variables}{string: vector of variables to standardize, default is all but 'date' column}
+\item{outlier.variables}{string: vector of variables to purge of outliers, default is all but 'date' column}
 
 \item{outlier.bounds}{double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)}
 
@@ -66,13 +66,11 @@ forecast_univariate(
 \item{return.data}{boolean: if True then return list of information.set for each forecast.date}
 }
 \value{
-data.frame with a date column and one column per forecast method selected
+data.frame with a row for each forecast by model and date
 }
 \description{
 A function to estimate univariate forecasts out-of-sample. Methods available include all forecast
-methods from the \code{forecast} package. The function will take in a data frame of the target variable,
-and a observation date column (named 'date'), while outputting a data frame with a date column and
-one column per forecast method selected.
+methods from the \code{forecast} package. See package website for most up-to-date list of available models.
 }
 \examples{
 \dontrun{

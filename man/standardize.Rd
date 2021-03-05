@@ -10,7 +10,7 @@ standardize(X)
 \item{X}{numeric: vector to be standardized}
 }
 \value{
-numeric vector of winsorized or trimmed values
+numeric vector of standardized values
 }
 \description{
 Standardize variables (mean 0, variance 1)

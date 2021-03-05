@@ -28,5 +28,5 @@ numeric test result
 }
 \description{
 A function to compare forecasts. Options include: simple forecast error ratios,
-Diebold-Mariano test, and Clark and West test for nested models
+\href{https://www.sas.upenn.edu/~fdiebold/papers/paper68/pa.dm.pdf}{Diebold-Mariano test}, and \href{https://www.nber.org/papers/t0326}{Clark and West test} for nested models
 }

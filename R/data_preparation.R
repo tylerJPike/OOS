@@ -5,7 +5,7 @@
 #'
 #' @param X    numeric: vector to be standardized
 #'
-#' @return  numeric vector of winsorized or trimmed values
+#' @return  numeric vector of standardized values
 #'
 #' @export
 standardize = function(X){return((X-mean(X, na.rm = T))/sd(X, na.rm = T))}
@@ -91,7 +91,7 @@ data_subset = function(
 #' @param horizon               int: priods ahead of forecast
 #' @param freq                  string: time series frequency; day, week, month, quarter, year; only needed for rolling window factors
 #'
-#' @return  date
+#' @return  date vector
 #'
 #'
 forecast_date = function(

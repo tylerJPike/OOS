@@ -13,7 +13,7 @@
 #'
 #' @export
 
-forecast_chart = function(
+chart_forecast = function(
   Data,              # data.frame: oos.forecast object
   Title,             # string: chart title
   Ylab,              # string: y-axis label
@@ -83,7 +83,7 @@ forecast_chart = function(
 #'
 #' @export
 
-forecast_error_chart = function(
+chart_forecast_error = function(
   Data,              # data.frame: oos.forecast function output
   Title,             # string: chart title
   Ylab,              # string: y-axis label

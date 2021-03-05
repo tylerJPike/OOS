@@ -80,19 +80,17 @@ instantiate.forecast_univariate.control_panel = function(){
 #' Forecast with univariate models
 #'
 #' A function to estimate univariate forecasts out-of-sample. Methods available include all forecast
-#' methods from the `forecast` package. The function will take in a data frame of the target variable,
-#' and a observation date column (named 'date'), while outputting a data frame with a date column and
-#' one column per forecast method selected.
+#' methods from the `forecast` package. See package website for most up-to-date list of available models.
 #'
 #' @param Data            data.frame: data frame of variable to forecast and a date column; may alternatively be a `ts`, `xts`, or `zoo` object to forecast
 #' @param forecast.dates  date: dates forecasts are created
-#' @param methods         string or vector: models to estimate forecasts
+#' @param methods         string: models to estimate forecasts
 #' @param horizon         int: number of periods to forecast
 #' @param rolling.window  int: size of rolling window, NA if expanding window is used
 #' @param freq            string: time series frequency; day, week, month, quarter, year
 #' @param recursive       boolean: use sequential one-step-ahead forecast if TRUE, use direct projections if FALSE
 #' @param outlier.clean         boolean: if TRUE then clean outliers
-#' @param outlier.variables     string: vector of variables to standardize, default is all but 'date' column
+#' @param outlier.variables     string: vector of variables to purge of outliers, default is all but 'date' column
 #' @param outlier.bounds        double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)
 #' @param outlier.trim          boolean: if TRUE then replace outliers with NA instead of winsorizing bound
 #' @param outlier.cross_section boolean: if TRUE then remove outliers based on cross-section (row-wise) instead of historical data (column-wise)
@@ -104,7 +102,7 @@ instantiate.forecast_univariate.control_panel = function(){
 #' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
 #' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
-#' @return  data.frame with a date column and one column per forecast method selected
+#' @return  data.frame with a row for each forecast by model and date
 #'
 #' @examples
 #' \dontrun{

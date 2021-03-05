@@ -44,8 +44,8 @@ loss_function = function(
 #-------------------------------------------
 #' Calculate forecast accuracy
 #'
-#' A function to calculate various error loss functions. Options include:
-#' MSE, RMSE, MAE, and  MAPE. The default is MSE loss.
+#' A function to calculate various loss functions, including
+#' MSE, RMSE, MAE, and  MAPE.
 #'
 #' @param Data  data.frame: data frame of forecasts, model names, and dates
 #'
@@ -105,7 +105,7 @@ forecast_accuracy = function(
 #' Compare forecast accuracy
 #'
 #' A function to compare forecasts. Options include: simple forecast error ratios,
-#' Diebold-Mariano test, and Clark and West test for nested models
+#' [Diebold-Mariano test](https://www.sas.upenn.edu/~fdiebold/papers/paper68/pa.dm.pdf), and [Clark and West test](https://www.nber.org/papers/t0326) for nested models
 #'
 #' @param Data                   data.frame: data frame of forecasts, model names, and dates
 #' @param baseline.forecast      string: column name of baseline (null hypothesis) forecasts

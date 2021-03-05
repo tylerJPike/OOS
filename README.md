@@ -50,7 +50,7 @@ See the OOS package [website](https://tylerjpike.github.io/OOS/) for comprehensi
 | Accuracy | Compare | Visualize |
 |----------------------|------------------------|-----------------------|
 | Mean Square Error (MSE) | Forecast Error Ratios | Forecasts |
-| Root Mean Square Error (RMSE) | Diebold-Mariano Test (for unnested models) | Errors* |
+| Root Mean Square Error (RMSE) | Diebold-Mariano Test (for unnested models) | Errors |
 | Mean Absolute Error (MAE) | Clark and West Test (for nested models) |  |
 | Mean Absolute Percentage Error (MAPE) |  | |
 
@@ -193,7 +193,7 @@ A brief example using the `Random Forest` to combine forecasts:
 
 	# chart forecasts
 	chart = 
-		forecast_chart(
+		chart_forecast(
 			forecasts,              
 			Title = 'US Unemployment Rate',
 			Ylab = 'Index',

@@ -41,7 +41,7 @@ forecast_multivariate(
 
 \item{horizon}{int: number of periods into the future to forecast}
 
-\item{method}{string or vector: methods to use; 'var', 'ols', 'ridge', 'lasso', 'elastic', 'RF', 'GBM', 'NN'}
+\item{method}{string: methods to use}
 
 \item{rolling.window}{int: size of rolling window, NA if expanding window is used}
 
@@ -53,7 +53,7 @@ forecast_multivariate(
 
 \item{outlier.clean}{boolean: if TRUE then clean outliers}
 
-\item{outlier.variables}{string: vector of variables to standardize, default is all but 'date' column}
+\item{outlier.variables}{string: vector of variables to purge of outlier, default is all but 'date' column}
 
 \item{outlier.bounds}{double: vector of winsorizing minimum and maximum bounds, c(min percentile, max percentile)}
 
@@ -84,21 +84,20 @@ forecast_multivariate(
 \item{return.data}{boolean: if True then return list of information.set for each forecast.date}
 }
 \value{
-data.frame with a date column and one column per forecast method selected
+data.frame with a row for each forecast by model and date
 }
 \description{
 A function to estimate multivariate forecasts out-of-sample. Methods available include:
 vector auto-regression, linear regression, lasso regression, ridge regression, elastic net,
 random forest, tree-based gradient boosting machine, and single-layer neural network.
-The function will take in a data frame of the target variable, exogenous variables, and a 'date' column,
-while outputting a data frame with a date column and one column per forecast method selected.
+See package website for most up-to-date list of available models.
 }
 \examples{
 \dontrun{
 forecast_multivariate(
  Data = data,
  forecast.date = date.vector,
- target = 'UNRATE',
+ target = 'target.column',
  horizon = 1,
  method = c('ols','lasso','ridge','elastic','GBM'),
  freq = 'month')}

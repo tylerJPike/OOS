@@ -24,7 +24,7 @@ test_that("forecast chart", {
 
   # chart forecasts
   chart.forecast =
-    forecast_chart(
+    chart_forecast(
       forecasts,
       Title = 'test',
       Ylab = 'Index',
@@ -35,7 +35,7 @@ test_that("forecast chart", {
 
   # chart forecast errors
   chart.errors =
-    forecast_error_chart(
+    chart_forecast_error(
       forecasts,
       Title = 'test',
       Ylab = 'Index',

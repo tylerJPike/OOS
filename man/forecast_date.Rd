@@ -14,7 +14,7 @@ forecast_date(forecast.date, horizon, freq)
 \item{freq}{string: time series frequency; day, week, month, quarter, year; only needed for rolling window factors}
 }
 \value{
-date
+date vector
 }
 \description{
 A function to subset data recurisvely or with a rolling window to create a valid information set. Is used as a data preparation

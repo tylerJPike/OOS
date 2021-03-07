@@ -1,6 +1,6 @@
 Package: OOS
 Title: Out-of-Sample Time Series Forecasting
-Version: 1.0
+Version: 1.0.0  
 Authors@R: 
     person(given = "Tyler J.",
            family = "Pike",
@@ -35,7 +35,6 @@ Imports:
   lmtest,
   lubridate,
   magrittr,
-  plsr,
   purrr,
   sandwich, 
   stats,

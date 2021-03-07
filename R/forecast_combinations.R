@@ -259,7 +259,7 @@ forecast_combine = function(
     results.list[['nbest']] = combination
   }
 
-  # peLASSO
+  # peLasso
   if('peLasso' %in% method){
     combination =
       forecasts$date[burn.in : nrow(forecasts)] %>%

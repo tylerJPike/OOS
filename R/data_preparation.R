@@ -36,7 +36,7 @@ winsorize = function(X, bounds, trim = FALSE){
 
 #' Create information set
 #'
-#' A function to subset data recurisvely or with a rolling window to create a valid information set. Is used as a data preparation
+#' A function to subset data recursively or with a rolling window to create a valid information set. Is used as a data preparation
 #' helper function and is called internally by forecast_univariate, forecast_multivariate, and forecast_combine.
 #'
 #' @param Data                  data.frame: data frame of target variable, exogenous variables, and observed date (named 'date')
@@ -88,7 +88,7 @@ data_subset = function(
 #' helper function and is called internally by forecast_univariate, forecast_multivariate, and forecast_combine.
 #'
 #' @param forecast.date         date: date forecast was made
-#' @param horizon               int: priods ahead of forecast
+#' @param horizon               int: periods ahead of forecast
 #' @param freq                  string: time series frequency; day, week, month, quarter, year; only needed for rolling window factors
 #'
 #' @return  date vector

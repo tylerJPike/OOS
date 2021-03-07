@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
-[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![codecov](https://codecov.io/gh/tylerJPike/OOS/branch/main/graph/badge.svg?token=AQ4PFWU3KS)](https://codecov.io/gh/tylerJPike/OOS)
 [![Build Status](https://travis-ci.org/tylerJPike/OOS.svg?branch=main)](https://travis-ci.org/tylerJPike/OOS)
 <!-- badges: end -->
@@ -18,7 +18,7 @@ See the OOS package [website](https://tylerjpike.github.io/OOS/) for examples an
 
 | Clean Outliers | Impute Missing Observations (via [imputeTS](https://github.com/SteffenMoritz/imputeTS)) | Dimension Reduction | 
 |----------------------|------------------------|-----------------------|
-| Winsorize | Linear Interpolation | Princepal Components |
+| Winsorize | Linear Interpolation | Principal Components |
 | Trim | Kalman Filter | |
 |  | Fill-Forward | |
 |  | Average | |

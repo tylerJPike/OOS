@@ -55,7 +55,7 @@ Data = dplyr::filter(Data, date >= as.Date('1954-01-01'))
 forecast.uni = 
 	forecast_univariate(
 		Data = dplyr::select(Data, date, UNRATE),
-		forecast.dates = tail(Data$date,15), 
+		forecast.dates = tail(Data$date,5), 
 		method = c('naive'), #,'auto.arima', 'ets'),      
 		horizon = 1,                         
 		recursive = FALSE,      
@@ -69,7 +69,7 @@ forecast.uni =
 forecast.multi = 
 	forecast_multivariate(
 		Data = Data,           
-		forecast.date = tail(Data$date,15),
+		forecast.date = tail(Data$date,5),
 		target = 'UNRATE',
 		horizon = 1,
 		method = c('lasso'),       
@@ -85,14 +85,14 @@ forecasts =
 		forecast.uni,
 		forecast.multi) %>%
 	dplyr::left_join( 
-		dplyr::select(Data, date, observed = UNRATE))
+		dplyr::select(Data, date, observed = UNRATE),
+		by = 'date')
 
 # forecast combinations 
 forecast.combo = 
 	forecast_combine(
 		forecasts, 
-		method = c('uniform','median','trimmed.mean'), 
-		burn.in = 5)
+		method = c('uniform','median','trimmed.mean'))
 ```
 
 ## Forecast Analysis 

@@ -9,7 +9,7 @@ forecast_date(forecast.date, horizon, freq)
 \arguments{
 \item{forecast.date}{date: date forecast was made}
 
-\item{horizon}{int: priods ahead of forecast}
+\item{horizon}{int: periods ahead of forecast}
 
 \item{freq}{string: time series frequency; day, week, month, quarter, year; only needed for rolling window factors}
 }

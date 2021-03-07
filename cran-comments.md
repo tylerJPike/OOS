@@ -1,3 +1,8 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* Removed 'OOS' from the DESCRIPTION.  
+* Shortened the runtime of the vignette.
+
 ## Test environments
 * local Windows install, R 4.0.3
 * win-builder (devel and release)

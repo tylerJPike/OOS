@@ -1,14 +1,12 @@
 Package: OOS
 Title: Out-of-Sample Time Series Forecasting
-Version: 1.0.0  
+Version: 1.0.0
 Authors@R: 
     person(given = "Tyler J.",
            family = "Pike",
            role = c("aut", "cre"),
            email = "tjpike7@gmail.com")
-Description: A structured and automated approach 
-             to out-of-sample time series forecasting, a common, important, and subtle task. 
-             The OOS package introduces a comprehensive and cohesive API for the out-of-sample forecasting workflow: 
+Description: A comprehensive and cohesive API for the out-of-sample forecasting workflow: 
              data preparation, forecasting - including both traditional econometric time series models and 
              modern machine learning techniques - forecast combination, model and error analysis, and 
              forecast visualization. 

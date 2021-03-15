@@ -1,11 +1,3 @@
-
-# dependencies:
-# dplyr
-# zoo
-# glmnet
-# caret
-# vars
-
 #----------------------------------------------
 # multivariate forecasting arguments - ML
 #----------------------------------------------
@@ -195,17 +187,33 @@ instantiate.forecast_multivariate.var.control_panel = function(){
 #' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
 #' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
-#' @return  data.frame with a row for each forecast by model and date
+#' @return  data.frame with a row for each forecast by model and forecasted date
 #'
 #' @examples
-#' \dontrun{
-#'forecast_multivariate(
-#'  Data = data,
-#'  forecast.date = date.vector,
-#'  target = 'target.column',
-#'  horizon = 1,
-#'  method = c('ols','lasso','ridge','elastic','GBM'),
-#'  freq = 'month')}
+#' \donttest{
+#'  # simple time series
+#'  A = c(1:100) + rnorm(100)
+#'  B = c(1:100) + rnorm(100)
+#'  C = c(1:100) + rnorm(100)
+#'  date = seq.Date(from = as.Date('2000-01-01'), by = 'month', length.out = 100)
+#'  Data = data.frame(date = date, A, B, C)
+#'
+#'  # run forecast_univariate
+#'  forecast.multi =
+#'      forecast_multivariate(
+#'        Data = Data,
+#'        target = 'A',
+#'        forecast.dates = tail(Data$date,5),
+#'        method = c('ols','var'),
+#'        horizon = 1,
+#'        # information set
+#'        rolling.window = NA,
+#'        freq = 'month',
+#'        # data prep
+#'        lag.n = 4,
+#'        outlier.clean = TRUE,
+#'        impute.missing = TRUE)
+#' }
 #'
 #'
 #' @export

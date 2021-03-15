@@ -30,3 +30,38 @@ numeric test result
 A function to compare forecasts. Options include: simple forecast error ratios,
 \href{https://www.sas.upenn.edu/~fdiebold/papers/paper68/pa.dm.pdf}{Diebold-Mariano test}, and \href{https://www.nber.org/papers/t0326}{Clark and West test} for nested models
 }
+\examples{
+\donttest{
+
+ # simple time series
+ A = c(1:100) + rnorm(100)
+ date = seq.Date(from = as.Date('2000-01-01'), by = 'month', length.out = 100)
+ Data = data.frame(date = date, A)
+
+ # run forecast_univariate
+ forecast.uni =
+   forecast_univariate(
+     Data = Data,
+     forecast.dates = tail(Data$date,10),
+     method = c('naive','auto.arima', 'ets'),
+     horizon = 1,
+     recursive = FALSE,
+     freq = 'month')
+
+ forecasts =
+   dplyr::left_join(
+     forecast.uni,
+     data.frame(date, observed = A),
+     by = 'date'
+   )
+
+ # run ER (MSE)
+ er.ratio.mse =
+   forecast_comparison(
+     forecasts,
+     baseline.forecast = 'naive',
+     test = 'ER',
+     loss = 'MSE')
+}
+
+}

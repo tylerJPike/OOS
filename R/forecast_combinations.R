@@ -1,10 +1,3 @@
-
-# dependencies:
-# dplyr
-# zoo
-# glmnet
-# caret
-
 #---------------------------------------------
 # Forecast combination helper functions
 #---------------------------------------------
@@ -163,7 +156,8 @@ instantiate.forecast_combinations.control_panel = function(covariates = NULL){
 #' A function to combine forecasts out-of-sample. Methods available include:
 #' uniform weights, median forecast, trimmed (winsorized) mean, n-best,
 #' ridge regression, lasso regression, elastic net, peLASSO,
-#' random forest, tree-based gradient boosting machine, and single-layer neural network. See package website for most up-to-date list of available models.
+#' random forest, tree-based gradient boosting machine, and single-layer neural network. 
+#' See package website for most up-to-date list of available models.
 #'
 #' @param Data            data.frame: data frame of forecasted values to combine, assumes 'date' and 'observed' columns, but `observed' is not necessary for all methods
 #' @param method          string: the method to use; 'uniform', 'median', 'trimmed.mean', 'n.best', 'peLasso', 'lasso', 'ridge', 'elastic', 'RF', 'GBM', 'NN'
@@ -176,12 +170,40 @@ instantiate.forecast_combinations.control_panel = function(covariates = NULL){
 #' @return  data.frame with a row for each combination method and forecasted date
 #'
 #' @examples
-#' \dontrun{
-#' forecast_combine(
-#'   forecasts,
-#'   method = c('uniform','n.best','RF'),
-#'   burn.in = 5,
-#'   n.max = 2)}
+#' \donttest{
+#'  # simple time series
+#'  A = c(1:100) + rnorm(100)
+#'  B = c(1:100) + rnorm(100)
+#'  C = c(1:100) + rnorm(100)
+#'  date = seq.Date(from = as.Date('2000-01-01'), by = 'month', length.out = 100)
+#'  Data = data.frame(date = date, A, B, C)
+#'
+#'  # run forecast_univariate
+#'  forecast.multi =
+#'      forecast_multivariate(
+#'        Data = Data,
+#'        target = 'A',
+#'        forecast.dates = tail(Data$date,5),
+#'        method = c('ols','var'),
+#'        horizon = 1,
+#'        freq = 'month')
+#'  # include observed valuesd
+#'  forecasts =
+#'    dplyr::left_join(
+#'      forecast.multi,
+#'      data.frame(date, observed = A),
+#'      by = 'date'
+#'    )
+#'
+#'  # combine forecasts
+#'  combinations =
+#'    forecast_combine(
+#'      forecasts,
+#'      method = c('uniform','median','trimmed.mean',
+#'                 'n.best','lasso','peLasso'),
+#'      burn.in = 5,
+#'      n.max = 2)
+#' }
 #'
 #'
 #' @export

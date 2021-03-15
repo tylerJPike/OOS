@@ -11,6 +11,42 @@
 #'
 #' @return ggplot2 chart
 #'
+#' @examples 
+#' \donttest{
+#' 
+#'  # simple time series
+#'  A = c(1:100) + rnorm(100)
+#'  date = seq.Date(from = as.Date('2000-01-01'), by = 'month', length.out = 100)
+#'  Data = data.frame(date = date, A)
+#'
+#'  # run forecast_univariate
+#'  forecast.uni =
+#'    forecast_univariate(
+#'      Data = Data,
+#'      forecast.dates = tail(Data$date,10),
+#'      method = c('naive','auto.arima', 'ets'),
+#'      horizon = 1,
+#'      recursive = FALSE,
+#'      freq = 'month')
+#'
+#'  forecasts =
+#'    dplyr::left_join(
+#'      forecast.uni,
+#'      data.frame(date, observed = A),
+#'      by = 'date'
+#'    )
+#'
+#'  # chart forecasts
+#'  chart.forecast =
+#'    chart_forecast(
+#'      forecasts,
+#'      Title = 'test',
+#'      Ylab = 'Index',
+#'      Freq = 'Monthly',
+#'      zeroline = TRUE)
+#' 
+#' }
+#' 
 #' @export
 
 chart_forecast = function(
@@ -80,6 +116,42 @@ chart_forecast = function(
 #' @param zeroline    boolean: if TRUE then add a horizontal line at zero
 #'
 #' @return ggplot2 chart
+#' 
+#' @examples 
+#' \donttest{
+#' 
+#'  # simple time series
+#'  A = c(1:100) + rnorm(100)
+#'  date = seq.Date(from = as.Date('2000-01-01'), by = 'month', length.out = 100)
+#'  Data = data.frame(date = date, A)
+#'
+#'  # run forecast_univariate
+#'  forecast.uni =
+#'    forecast_univariate(
+#'      Data = Data,
+#'      forecast.dates = tail(Data$date,10),
+#'      method = c('naive','auto.arima', 'ets'),
+#'      horizon = 1,
+#'      recursive = FALSE,
+#'      freq = 'month')
+#'
+#'  forecasts =
+#'    dplyr::left_join(
+#'      forecast.uni,
+#'      data.frame(date, observed = A),
+#'      by = 'date'
+#'    )
+#'
+#'  # chart forecast errors
+#'  chart.errors =
+#'    chart_forecast_error(
+#'      forecasts,
+#'      Title = 'test',
+#'      Ylab = 'Index',
+#'      Freq = 'Monthly',
+#'      zeroline = TRUE)
+#'
+#' }
 #'
 #' @export
 
@@ -109,12 +181,6 @@ chart_forecast_error = function(
   Data = Data %>%
     dplyr::mutate(errors = forecast - observed) %>%
     dplyr::select(date, errors, model)
-    # dplyr::bind_rows(
-    #   Data,
-    #   Data %>% dplyr::select(forecast = observed, date) %>%
-    #     dplyr::mutate(model = '*observed') %>%
-    #     dplyr::distinct()
-    # )
 
   # set chart
   chart =

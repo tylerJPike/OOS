@@ -5,12 +5,8 @@
 #' @name %>%
 #' @rdname pipe
 #' @keywords internal
+#' @return magrittr pipe operator %>%
 #' @export
 #' @importFrom magrittr %>%
 #' @usage lhs \%>\% rhs
 NULL
-
-
-#' @import stats
-NULL
-

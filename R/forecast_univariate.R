@@ -102,17 +102,30 @@ instantiate.forecast_univariate.control_panel = function(){
 #' @param return.models         boolean: if TRUE then return list of models estimated each forecast.date
 #' @param return.data           boolean: if True then return list of information.set for each forecast.date
 #'
-#' @return  data.frame with a row for each forecast by model and date
+#' @return  data.frame with a row for each forecast by model and forecasted date
 #'
 #' @examples
-#' \dontrun{
-#' forecast_univariate(
-#'   Data = data,
-#'   forecast.dates = date.vector,
-#'   method = c('naive','auto.arima', 'ets'),
-#'   horizon = 1,
-#'   recursive = FALSE,
-#'   freq = 'month')}
+#' \donttest{
+#'  # simple time series
+#'  A = c(1:100) + rnorm(100)
+#'  date = seq.Date(from = as.Date('2000-01-01'), by = 'month', length.out = 100)
+#'  Data = data.frame(date = date, A)
+#'
+#'  # estiamte univariate forecasts
+#'  forecast.uni =
+#'      forecast_univariate(
+#'        Data = Data,
+#'        forecast.dates = tail(Data$date,5),
+#'        method = c('naive','auto.arima', 'ets'),
+#'        horizon = 1,
+#'        recursive = FALSE,
+#'        # information set
+#'        rolling.window = NA,
+#'        freq = 'month',
+#'        # data prep
+#'        outlier.clean = TRUE,
+#'        impute.missing = TRUE)
+#' }
 #'
 #' @export
 

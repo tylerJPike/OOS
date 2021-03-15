@@ -16,3 +16,34 @@ data.frame of numeric error results
 A function to calculate various loss functions, including
 MSE, RMSE, MAE, and  MAPE.
 }
+\examples{
+\donttest{
+
+ # simple time series
+ A = c(1:100) + rnorm(100)
+ date = seq.Date(from = as.Date('2000-01-01'), by = 'month', length.out = 100)
+ Data = data.frame(date = date, A)
+
+ # run forecast_univariate
+ forecast.uni =
+   forecast_univariate(
+     Data = Data,
+     forecast.dates = tail(Data$date,10),
+     method = c('naive','auto.arima', 'ets'),
+     horizon = 1,
+     recursive = FALSE,
+     freq = 'month')
+
+ forecasts =
+   dplyr::left_join(
+     forecast.uni,
+     data.frame(date, observed = A),
+     by = 'date'
+   )
+
+ # forecast accuracy
+ forecast.accuracy = forecast_accuracy(forecasts)
+
+}
+
+}

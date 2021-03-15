@@ -17,6 +17,6 @@ forecast_date(forecast.date, horizon, freq)
 date vector
 }
 \description{
-A function to subset data recurisvely or with a rolling window to create a valid information set. Is used as a data preparation
+A function to subset data recursively or with a rolling window to create a valid information set. Is used as a data preparation
 helper function and is called internally by forecast_univariate, forecast_multivariate, and forecast_combine.
 }

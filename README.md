@@ -2,12 +2,15 @@
 
 <!-- badges: start -->
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+[![CRAN status](https://www.r-pkg.org/badges/version/OOS)](https://CRAN.R-project.org/package=OOS)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![codecov](https://codecov.io/gh/tylerJPike/OOS/branch/main/graph/badge.svg?token=AQ4PFWU3KS)](https://codecov.io/gh/tylerJPike/OOS)
 [![Build Status](https://travis-ci.org/tylerJPike/OOS.svg?branch=main)](https://travis-ci.org/tylerJPike/OOS)
 <!-- badges: end -->
 
 Out-of-Sample time series forecasting is a common, important, and subtle task. The OOS package introduces a comprehensive and cohesive API for the out-of-sample forecasting workflow: data preparation, forecasting - including both traditional econometric time series models and modern machine learning techniques - forecast combination, model and error analysis, and forecast visualization. 
+
+The key difference between OOS and the other time series forecasting packages is that it operates out-of-sample by construction. That is, it re-cleans data and re-trains models each forecast.date and is careful not to introduce look-ahead bias into its information set via data cleaning or forecasts via model training. Other packages tend to fit the model once, leaving the user to construct the out-of-sample data cleaning and forecast exercise on their own.
 
 See the OOS package [website](https://tylerjpike.github.io/OOS/) for examples and documentation.
 

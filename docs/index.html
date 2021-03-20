@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Out-of-Sample Time Series Forecasting • OOS</title>
+<title>OOS</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -145,138 +145,177 @@
 <!-- badges: start -->
 
 <p>Out-of-Sample time series forecasting is a common, important, and subtle task. The OOS package introduces a comprehensive and cohesive API for the out-of-sample forecasting workflow: data preparation, forecasting - including both traditional econometric time series models and modern machine learning techniques - forecast combination, model and error analysis, and forecast visualization.</p>
-<p>Available tools and techniques may be reviewed under the <strong>Tools</strong> tab. While vignettes and other extended documentation of the OOS package’s capabilities may be found under the <strong>Workflow</strong> tab.</p>
+<p>The key difference between OOS and the other time series forecasting packages is that it operates out-of-sample by construction. That is, OOS functions are designed to re-clean data and re-train models each forecast date and are careful not to introduce look-ahead bias into its information set via data cleaning or forecasts via model training. This framework is in contrast to other packages which tend to focus on cleaning data or fitting a forecast model once, leaving the user to construct the out-of-sample exercise on their own.</p>
+<p>Available tools and techniques are summarized below and may be reviewed under the <strong>Tools</strong> tab. While vignettes and other extended documentation of the OOS package’s capabilities may be found under the <strong>Workflow</strong> tab.</p>
 <hr>
-<div id="installation" class="section level2">
+<div id="workflow-and-available-tools" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<p>One may install OOS through the package’s <a href="https://github.com/tylerJPike/OOS">GitHub</a> page directly, or via either</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'tylerJPike/OOS'</span>)</span></code></pre></div>
-<p>or</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">'tylerJPike/OOS'</span>)</span></code></pre></div>
+<a href="#workflow-and-available-tools" class="anchor"></a>Workflow and available Tools</h2>
+<div id="1-prepare-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#1-prepare-data" class="anchor"></a>1. Prepare Data</h3>
+<table class="table">
+<thead><tr class="header">
+<th>Clean Outliers</th>
+<th>Impute Missing Data (via <a href="https://github.com/SteffenMoritz/imputeTS">imputeTS</a>)</th>
+<th>Dimension Reduction</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Winsorize</td>
+<td>Linear Interpolation</td>
+<td>Principal Components</td>
+</tr>
+<tr class="even">
+<td>Trim</td>
+<td>Kalman Filter</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Fill-Forward</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Average</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Moving Average</td>
+<td></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Seasonal Decomposition</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="2-forecast" class="section level3">
+<h3 class="hasAnchor">
+<a href="#2-forecast" class="anchor"></a>2. Forecast</h3>
+<table class="table">
+<colgroup>
+<col width="31%">
+<col width="34%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Univariate Forecasts (via <a href="https://github.com/robjhyndman/forecast">forecast</a>)</th>
+<th>Multivariate Forecasts (via <a href="https://github.com/topepo/caret">caret</a>)</th>
+<th>Forecast Combinations</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Random Walk</td>
+<td>Vector Autoregression</td>
+<td>Mean</td>
+</tr>
+<tr class="even">
+<td>ARIMA</td>
+<td>Linear Regression</td>
+<td>Median</td>
+</tr>
+<tr class="odd">
+<td>ETS</td>
+<td>LASSO Regression</td>
+<td>Trimmed (Winsorized) Mean</td>
+</tr>
+<tr class="even">
+<td>Spline</td>
+<td>Ridge Regression</td>
+<td>N-Best</td>
+</tr>
+<tr class="odd">
+<td>Theta Method</td>
+<td>Elastic Net</td>
+<td>Linear Regression</td>
+</tr>
+<tr class="even">
+<td>TBATS</td>
+<td>Principal Component Regression</td>
+<td>LASSO Regression</td>
+</tr>
+<tr class="odd">
+<td>STL</td>
+<td>Partial Least Squares Regression</td>
+<td>Ridge Regression</td>
+</tr>
+<tr class="even">
+<td>AR Perceptron</td>
+<td>Random Forest</td>
+<td>Partial Egalitarian LASSO</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Tree-Based Gradient Boosting Machine</td>
+<td>Principal Component Regression</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Single Layered Neural Network</td>
+<td>Partial Least Squares Regression</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>Random Forest</td>
+</tr>
+<tr class="even">
+<td></td>
+<td></td>
+<td>Tree-Based Gradient Boosting Machine</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td></td>
+<td>Single Layered Neural Network</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="3-analyze" class="section level3">
+<h3 class="hasAnchor">
+<a href="#3-analyze" class="anchor"></a>3. Analyze</h3>
+<table class="table">
+<colgroup>
+<col width="31%">
+<col width="34%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th>Accuracy</th>
+<th>Compare</th>
+<th>Visualize</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Mean Square Error (MSE)</td>
+<td>Forecast Error Ratios</td>
+<td>Forecasts</td>
+</tr>
+<tr class="even">
+<td>Root Mean Square Error (RMSE)</td>
+<td>Diebold-Mariano Test (for unnested models)</td>
+<td>Errors</td>
+</tr>
+<tr class="odd">
+<td>Mean Absolute Error (MAE)</td>
+<td>Clark and West Test (for nested models)</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Mean Absolute Percentage Error (MAPE)</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
 <hr>
 </div>
-<div id="basic-workflow" class="section level2">
-<h2 class="hasAnchor">
-<a href="#basic-workflow" class="anchor"></a>Basic workflow</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">### Forecasting Example</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#----------------------------------------</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># pull and prepare data from FRED</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>quantmod<span class="sc">::</span><span class="fu">getSymbols.FRED</span>(</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">'UNRATE'</span>,<span class="st">'INDPRO'</span>,<span class="st">'GS10'</span>), </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">env =</span> <span class="fu">globalenv</span>())</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>Data <span class="ot">=</span> <span class="fu">cbind</span>(UNRATE, INDPRO, GS10)</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>Data <span class="ot">=</span> <span class="fu">data.frame</span>(Data, <span class="at">date =</span> zoo<span class="sc">::</span><span class="fu">index</span>(Data)) <span class="sc">%&gt;%</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(lubridate<span class="sc">::</span><span class="fu">year</span>(date) <span class="sc">&gt;=</span> <span class="dv">1990</span>)</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># run univariate forecasts </span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>forecast.uni <span class="ot">=</span> </span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast_univariate</span>(</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">Data =</span> dplyr<span class="sc">::</span><span class="fu">select</span>(Data, date, UNRATE),</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">forecast.dates =</span> <span class="fu">tail</span>(Data<span class="sc">$</span>date,<span class="dv">15</span>), </span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="fu">c</span>(<span class="st">'naive'</span>,<span class="st">'auto.arima'</span>, <span class="st">'ets'</span>),      </span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">horizon =</span> <span class="dv">1</span>,                         </span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">recursive =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="co"># information set       </span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">rolling.window =</span> <span class="cn">NA</span>,    </span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">freq =</span> <span class="st">'month'</span>,                   </span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># outlier cleaning</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.clean =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.variables =</span> <span class="cn">NULL</span>,</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.bounds =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>),</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.trim =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.cross_section =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>        <span class="co"># impute missing</span></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>        <span class="at">impute.missing =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>        <span class="at">impute.method =</span> <span class="st">'kalman'</span>,</span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>        <span class="at">impute.variables =</span> <span class="cn">NULL</span>,</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>        <span class="at">impute.verbose =</span> <span class="cn">FALSE</span>) </span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co"># create multivariate forecasts</span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>forecast.multi <span class="ot">=</span> </span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast_multivariate</span>(</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">Data =</span> Data,           </span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">forecast.date =</span> <span class="fu">tail</span>(Data<span class="sc">$</span>date,<span class="dv">15</span>),</span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">target =</span> <span class="st">'UNRATE'</span>,</span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>        <span class="at">horizon =</span> <span class="dv">1</span>,</span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="fu">c</span>(<span class="st">'ols'</span>,<span class="st">'lasso'</span>,<span class="st">'ridge'</span>,<span class="st">'elastic'</span>,<span class="st">'GBM'</span>),</span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>        <span class="co"># information set       </span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>        <span class="at">rolling.window =</span> <span class="cn">NA</span>,    </span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>        <span class="at">freq =</span> <span class="st">'month'</span>,                   </span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>        <span class="co"># outlier cleaning</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.clean =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.variables =</span> <span class="cn">NULL</span>,</span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.bounds =</span> <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>),</span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.trim =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>        <span class="at">outlier.cross_section =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>        <span class="co"># impute missing</span></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>        <span class="at">impute.missing =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>        <span class="at">impute.method =</span> <span class="st">'kalman'</span>,</span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>        <span class="at">impute.variables =</span> <span class="cn">NULL</span>,</span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>        <span class="at">impute.verbose =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>        <span class="co"># dimension reduction</span></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>        <span class="at">reduce.data =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>        <span class="at">reduce.variables =</span> <span class="cn">NULL</span>,</span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>        <span class="at">reduce.ncomp =</span> <span class="cn">NULL</span>,</span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>        <span class="at">reduce.standardize =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="co"># combine forecasts and add in observed values</span></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>forecasts <span class="ot">=</span> </span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(</span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>        forecast.uni,</span>
-<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>        forecast.multi) <span class="sc">%&gt;%</span></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">left_join</span>( </span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>        dplyr<span class="sc">::</span><span class="fu">select</span>(Data, date, <span class="at">observed =</span> UNRATE))</span>
-<span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="co"># forecast combinations </span></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>forecast.combo <span class="ot">=</span> </span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a>    <span class="fu">forecast_combine</span>(</span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>        forecasts, </span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>        <span class="at">method =</span> <span class="fu">c</span>(<span class="st">'uniform'</span>,<span class="st">'median'</span>,<span class="st">'trimmed.mean'</span>,</span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>                   <span class="st">'n.best'</span>,<span class="st">'lasso'</span>,<span class="st">'peLasso'</span>,<span class="st">'RF'</span>), </span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>        <span class="at">burn.in =</span> <span class="dv">5</span>, </span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>        <span class="at">n.max =</span> <span class="dv">2</span>)</span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="co"># merge forecast combinations back into forecasts</span></span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>forecasts <span class="ot">=</span> </span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a>    forecasts <span class="sc">%&gt;%</span></span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(forecast.combo)</span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate forecast errors</span></span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>forecast.error <span class="ot">=</span> <span class="fu">forecast_accuracy</span>(forecasts)</span>
-<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a><span class="co"># view forecast errors from least to greatest </span></span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a><span class="co">#   (best forecast to worst forecast method)</span></span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>forecast.error <span class="sc">%&gt;%</span> </span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">mutate_at</span>(<span class="fu">vars</span>(<span class="sc">-</span>model), round, <span class="dv">3</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">arrange</span>(MSE)</span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="co"># compare forecasts to the baseline (a random walk)</span></span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="fu">forecast_comparison</span>(</span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a>    forecasts,</span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a>    <span class="at">baseline.forecast =</span> <span class="st">'naive'</span>,  </span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a>    <span class="at">test =</span> <span class="st">'ER'</span>,</span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a>    <span class="at">loss =</span> <span class="st">'MSE'</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(error.ratio)</span>
-<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="co"># chart forecasts</span></span>
-<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a>chart <span class="ot">=</span> </span>
-<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a>    <span class="fu">chart_forecast</span>(</span>
-<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a>        forecasts,              </span>
-<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a>        <span class="at">Title =</span> <span class="st">'US Unemployment Rate'</span>,</span>
-<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a>        <span class="at">Ylab =</span> <span class="st">'Index'</span>,</span>
-<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a>        <span class="at">Freq =</span> <span class="st">'Monthly'</span>)</span>
-<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a>chart</span></code></pre></div>
-<hr>
 </div>
 <div id="contact" class="section level2">
 <h2 class="hasAnchor">
@@ -290,6 +329,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=OOS">https://​cloud.r-project.org/​package=OOS</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/tylerJPike/OOS/">https://​github.com/​tylerJPike/​OOS/​</a>
 </li>
 <li>Report a bug at <br><a href="https://github.com/tylerJPike/OOS/issues%20%20%20%20%20">https://​github.com/​tylerJPike/​OOS/​issues     </a>
@@ -314,7 +355,8 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="http://www.gnu.org/licenses/gpl-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License: GPL v3"></a></li>
-<li><a href="https://www.tidyverse.org/lifecycle/#stable"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
+<li><a href="https://CRAN.R-project.org/package=OOS"><img src="https://www.r-pkg.org/badges/version/OOS" alt="CRAN status"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://codecov.io/gh/tylerJPike/OOS"><img src="https://codecov.io/gh/tylerJPike/OOS/branch/main/graph/badge.svg?token=AQ4PFWU3KS" alt="codecov"></a></li>
 <li><a href="https://travis-ci.org/tylerJPike/OOS"><img src="https://travis-ci.org/tylerJPike/OOS.svg?branch=main" alt="Build Status"></a></li>
 </ul>
